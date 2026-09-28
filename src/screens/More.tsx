@@ -5,15 +5,18 @@ import { Confirm, PageRef, Sheet, Stepper, toast } from '../components/ui'
 import { AdvancementSheet, FloorSheet, GrindSheet, LevelUpSheet, StatAllocSheet } from '../sheets/Progress'
 import { RaceClassWizard } from '../sheets/RaceClass'
 import { ShareSheet } from '../sheets/Share'
+import { decodeClaim, type LootClaim } from '../engine/lootclaim'
+import { ClaimReview } from './LootClaim'
 import { useStore } from '../store/characters'
 import { go } from '../router'
 import type { Ctx } from './ctx'
 
-type Open = null | 'level' | 'floor' | 'stats' | 'grind' | 'raceclass' | 'identity' | 'share' | 'delete' | { adv: AdvanceWindow }
+type Open = null | 'level' | 'floor' | 'stats' | 'grind' | 'raceclass' | 'identity' | 'share' | 'delete' | { adv: AdvanceWindow } | { claim: LootClaim }
 
 export function More(ctx: Ctx & { sub?: string }) {
   const { c, up, sub } = ctx
   const [open, setOpen] = useState<Open>(null)
+  const [lootLink, setLootLink] = useState('')
   const remove = useStore((s) => s.remove)
   const race = findRace(c.raceId)
   const klass = findClass(c.classId)
@@ -113,6 +116,19 @@ export function More(ctx: Ctx & { sub?: string }) {
         </section>
 
         <section className="card">
+          <div className="card-head"><h2>Claim loot</h2></div>
+          <p className="small muted">Got a loot box link from your GM? Paste it here. You'll check each reward before anything changes on your sheet.</p>
+          <div className="row">
+            <input className="grow" value={lootLink} onChange={(e) => setLootLink(e.target.value)} placeholder="Paste the loot link" aria-label="Loot link" />
+            <button className="btn" disabled={!lootLink.trim()} onClick={() => {
+              const claim = decodeClaim(lootLink)
+              if (claim) setOpen({ claim })
+              else toast("That doesn't look like a loot link")
+            }}>Review</button>
+          </div>
+        </section>
+
+        <section className="card">
           <div className="card-head"><h2>Share &amp; print</h2></div>
           <div className="grid2">
             <button className="btn" onClick={() => setOpen('share')}>Export / share</button>
@@ -142,6 +158,11 @@ export function More(ctx: Ctx & { sub?: string }) {
       {open === 'grind' && <GrindSheet {...ctx} onClose={() => setOpen(null)} />}
       {open === 'raceclass' && <RaceClassWizard {...ctx} onClose={() => setOpen(null)} />}
       {open === 'share' && <ShareSheet c={c} onClose={() => setOpen(null)} />}
+      {open && typeof open === 'object' && 'claim' in open && (
+        <Sheet title="Claim loot" wide onClose={() => setOpen(null)}>
+          <ClaimReview claim={open.claim} charId={c.id} onDone={() => { setOpen(null); setLootLink('') }} />
+        </Sheet>
+      )}
       {open === 'identity' && <IdentitySheet {...ctx} onClose={() => setOpen(null)} />}
       {open && typeof open === 'object' && 'adv' in open && (
         <AdvancementSheet {...ctx} window={open.adv} onClose={() => {

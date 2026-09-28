@@ -143,6 +143,8 @@ export interface Character {
   story: { trauma: string; looseEnds: string; regrets: string; notes: string }
   grindHoursTotal: number
   log: LogEntry[]
+  /** ids of GM loot boxes already claimed, so a claim link can't be applied twice */
+  lootClaims?: string[]
   createdAt: number
   updatedAt: number
 }

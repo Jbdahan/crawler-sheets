@@ -8,11 +8,13 @@ export type Route =
   | { name: 'catalog' }
   | { name: 'rolls' }
   | { name: 'loot' }
+  | { name: 'claim'; data: string }
   | { name: 'import'; data: string }
 
 export function parseHash(hash: string): Route {
   const h = hash.replace(/^#/, '')
   if (h.startsWith('import=')) return { name: 'import', data: h.slice(7) }
+  if (h.startsWith('loot=')) return { name: 'claim', data: h.slice(5) }
   const parts = h.replace(/^\//, '').split('/').filter(Boolean)
   if (parts[0] === 'new') return { name: 'new' }
   if (parts[0] === 'c' && parts[1]) return { name: 'char', id: parts[1], tab: parts[2] ?? 'hud' }

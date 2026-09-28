@@ -1,5 +1,8 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { DAMAGE_TYPES, ITEMS, SKILLS, SPELLS, STAT_KEYS, STAT_NAMES } from '../data'
+import QRCode from 'qrcode'
+import { uid } from '../engine/advancement'
+import { claimUrl } from '../engine/lootclaim'
 import { GEAR_SLOTS } from '../engine/types'
 import {
   LOOT_CATEGORIES, LOOT_TIERS, MOD_TARGETS, TYPED_TARGETS, lootBoxHtml, lootBoxText,
@@ -54,16 +57,20 @@ interface Draft {
   customReward: string
   image?: { src: string; width: number }
   rows: LootRow[]
+  /** identifies this loot box in claim links, so a crawler can't claim it twice */
+  claimId: string
+  /** put the claim link at the bottom of the Google Docs copy */
+  includeLink: boolean
 }
-const EMPTY: Draft = { name: '', description: '', tier: 'Bronze', category: 'Adventurer', customReward: '', rows: [] }
+const empty = (): Draft => ({ name: '', description: '', tier: 'Bronze', category: 'Adventurer', customReward: '', rows: [], claimId: uid(), includeLink: true })
 const KEY = 'lootbox.draft'
 
 function loadDraft(): Draft {
   try {
     const raw = localStorage.getItem(KEY)
-    if (raw) return { ...EMPTY, ...JSON.parse(raw) }
+    if (raw) return { ...empty(), ...JSON.parse(raw) }
   } catch { /* private mode or bad JSON */ }
-  return EMPTY
+  return empty()
 }
 
 const num = (v: string) => Number(v.replace(/[^\d-]/g, '')) || 0
@@ -142,11 +149,19 @@ export function LootBox() {
     image: d.image?.src ? d.image : undefined,
     rows: d.rows,
   }), [d])
-  const html = useMemo(() => lootBoxHtml(box), [box])
+  const link = useMemo(() => claimUrl({ v: 1, id: d.claimId, name: d.name.trim(), description: d.description.trim(), reward: box.reward.trim(), rows: d.rows }), [d, box.reward])
+  const html = useMemo(() => lootBoxHtml({ ...box, claimUrl: d.includeLink ? link : undefined }), [box, link, d.includeLink])
+  // QR codes top out near 2,900 characters; keep the image paired with the link it encodes
+  const [qrFor, setQrFor] = useState<{ link: string; src: string } | null>(null)
+  useEffect(() => {
+    if (link.length > 2900) return
+    QRCode.toDataURL(link, { margin: 1, width: 320, errorCorrectionLevel: 'L' }).then((src) => setQrFor({ link, src })).catch(() => {})
+  }, [link])
+  const qr = qrFor?.link === link ? qrFor.src : null
 
   const copy = async (rich: boolean) => {
     if (!d.name.trim()) { toast('Give the achievement a name first'); return }
-    const ok = await copyToClipboard(rich ? html : null, lootBoxText(box))
+    const ok = await copyToClipboard(rich ? html : null, lootBoxText({ ...box, claimUrl: d.includeLink ? link : undefined }))
     toast(ok ? (rich ? 'Copied! Now paste it into your Google Doc' : 'Copied as plain text') : "Couldn't copy. Select the preview and copy it by hand")
   }
 
@@ -169,7 +184,7 @@ export function LootBox() {
           <li><b>Add what's inside</b> with <i>+ Add item</i>. Pick Stats, Skills, Spells, gear and potions from the lists. For anything homebrew, choose <i>Custom</i>: a spell with a Mana cost, or an object with a special rule.</li>
           <li><b>Tap “Copy for Google Docs”</b>, open your Doc and paste. Use <kbd>Ctrl</kbd>+<kbd>V</kbd> on Windows, <kbd>⌘</kbd>+<kbd>V</kbd> on a Mac, or press and hold → Paste on a phone or iPad. The bold, italics, bullets and picture come with it.</li>
         </ol>
-        <p className="small muted">Nothing to install and no sign-in. Your draft stays on this device until you tap <i>Start over</i>.</p>
+        <p className="small muted">Want players to add the loot to their character sheets? See step 4. Nothing to install and no sign-in. Your draft stays on this device until you tap <i>Start over</i>.</p>
       </div>
 
       <div className="card stack">
@@ -247,9 +262,32 @@ export function LootBox() {
         <button className="btn primary" onClick={() => copy(true)}>Copy for Google Docs</button>
         <div className="grid2">
           <button className="btn" onClick={() => copy(false)}>Copy as plain text</button>
-          <button className="btn danger" onClick={() => { setD(EMPTY); setPicMode('none') }}>Start over</button>
+          <button className="btn danger" onClick={() => { setD(empty()); setPicMode('none') }}>Start over</button>
         </div>
         <p className="small muted">Plain text is handy for Discord or a text message.</p>
+      </div>
+
+      <div className="card stack">
+        <h2>4 · Let players add it to their sheet</h2>
+        <p className="small muted">
+          Players open the claim link (or scan the code) in Crawler Sheets, pick their crawler, and approve each reward one by one.
+          Stats, Skills, Spells, gear, potions and gold go straight onto their sheet, and every change is logged in their History with this achievement as the source.
+          The picture isn't included in the link.
+        </p>
+        <label className="row" style={{ gap: 10 }}>
+          <input type="checkbox" checked={d.includeLink} onChange={(e) => set({ includeLink: e.target.checked })} />
+          <span>Put the claim link at the bottom of the Google Docs copy</span>
+        </label>
+        <button className="btn" disabled={!d.name.trim()} onClick={async () => {
+          const ok = await copyToClipboard(null, link)
+          toast(ok ? 'Claim link copied' : "Couldn't copy the link")
+        }}>Copy claim link only</button>
+        {qr && d.name.trim() && (
+          <div className="center">
+            <img src={qr} alt="QR code that opens this loot box in Crawler Sheets" style={{ width: 200, height: 200, background: '#fff', borderRadius: 8, padding: 6 }} />
+            <div className="small muted">Players at the table can scan this with their phone camera.</div>
+          </div>
+        )}
       </div>
     </div>
   )

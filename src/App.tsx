@@ -6,6 +6,7 @@ import { Catalog } from './screens/Catalog'
 import { CharacterView } from './screens/CharacterView'
 import { CreateWizard } from './screens/CreateWizard'
 import { LootBox } from './screens/LootBox'
+import { LootClaimScreen } from './screens/LootClaim'
 import { Print } from './screens/Print'
 import { Roster } from './screens/Roster'
 import { decodeImport } from './sheets/Share'
@@ -27,6 +28,7 @@ export default function App() {
     case 'catalog': screen = <Catalog />; break
     case 'rolls': screen = <RollLog />; break
     case 'loot': screen = <LootBox />; break
+    case 'claim': screen = <LootClaimScreen data={route.data} />; break
     case 'import': screen = <><Roster /><ImportPrompt data={route.data} /></>; break
     default: screen = <Roster />
   }

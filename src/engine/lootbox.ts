@@ -48,6 +48,8 @@ export interface LootBox {
   /** data: URL or http(s) URL */
   image?: { src: string; width: number }
   rows: LootRow[]
+  /** link players open to add this loot to their character */
+  claimUrl?: string
 }
 
 /** One Contents bullet: bold head + plain text. */
@@ -120,6 +122,7 @@ export function lootBoxHtml(box: LootBox): string {
     out.push(p('<b>Contents:</b>'))
     out.push(`<ul style="margin:0">${lines.map((l) => `<li>${l.head ? `<b>${esc(l.head)}</b>` : ''}${esc(l.text)}</li>`).join('')}</ul>`)
   }
+  if (box.claimUrl) out.push(p(`<b>Claim it:</b> <a href="${esc(box.claimUrl)}">add this loot to your Crawler Sheet</a>`, 'margin-top:6pt'))
   return out.join('')
 }
 
@@ -130,5 +133,6 @@ export function lootBoxText(box: LootBox): string {
   if (box.reward.trim()) out.push(`Reward: ${box.reward.trim()}`)
   const lines = lootLines(box)
   if (lines.length) out.push('Contents:', ...lines.map((l) => `• ${l.head}${l.text}`))
+  if (box.claimUrl) out.push(`Claim it in Crawler Sheets: ${box.claimUrl}`)
   return out.join('\n')
 }

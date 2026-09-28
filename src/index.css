@@ -296,3 +296,5 @@ kbd { font: inherit; font-size: 0.8em; padding: 0 5px; border: 1px solid var(--b
 .paper { background: #fff; color: #202124; border-radius: var(--radius-sm); padding: 16px 18px; font-family: Arial, sans-serif; font-size: 11pt; line-height: 1.35; overflow-wrap: anywhere; }
 .paper img { max-width: 100%; height: auto; }
 .paper ul { padding-left: 1.4em; }
+.claim-item.ok { border-color: color-mix(in srgb, var(--good) 55%, var(--border)); }
+.claim-item.skip { opacity: 0.6; }
