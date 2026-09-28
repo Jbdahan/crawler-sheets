@@ -7,6 +7,7 @@ export type Route =
   | { name: 'print'; id: string }
   | { name: 'catalog' }
   | { name: 'rolls' }
+  | { name: 'loot' }
   | { name: 'import'; data: string }
 
 export function parseHash(hash: string): Route {
@@ -18,6 +19,7 @@ export function parseHash(hash: string): Route {
   if (parts[0] === 'print' && parts[1]) return { name: 'print', id: parts[1] }
   if (parts[0] === 'catalog') return { name: 'catalog' }
   if (parts[0] === 'rolls') return { name: 'rolls' }
+  if (parts[0] === 'loot') return { name: 'loot' }
   return { name: 'roster' }
 }
 

@@ -1,5 +1,7 @@
 # Loot Box generator for Google Docs
 
+> **Easier option:** Crawler Sheets has a built-in **Loot Box Maker** page (Home → GM: Loot Box Maker). Fill it in, tap **Copy for Google Docs**, and paste into any Doc. Nothing to install. Use this sidebar only if you want the generator inside the Doc itself.
+
 A sidebar for the GM's Google Doc. You fill in an achievement and its loot box with dropdowns, and **Insert into Doc** writes it at the cursor:
 
 ```

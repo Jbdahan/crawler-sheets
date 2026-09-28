@@ -64,6 +64,7 @@ export function Roster() {
           <button className="btn" onClick={() => fileRef.current?.click()}>Import file</button>
         </div>
         <button className="btn ghost" onClick={() => go('/rolls')}><Icon name="dice" size={18} /> Roll log</button>
+        <button className="btn ghost" onClick={() => go('/loot')}><Icon name="bag" size={18} /> GM: Loot Box Maker</button>
         <input ref={fileRef} type="file" accept=".json,application/json" hidden onChange={(e) => onFile(e.target.files?.[0])} />
       </div>
       <p className="small faint center" style={{ marginTop: 24 }}>

@@ -286,3 +286,13 @@ input[type='checkbox'] { width: 20px; height: 20px; min-height: 0; accent-color:
 @media print {
   .no-print { display: none !important; }
 }
+
+/* GM Loot Box Maker */
+.howto ol { margin: 8px 0; padding-left: 1.3rem; }
+.howto li + li { margin-top: 6px; }
+kbd { font: inherit; font-size: 0.8em; padding: 0 5px; border: 1px solid var(--border); border-bottom-width: 2px; border-radius: 4px; background: var(--surface-2); }
+.loot-row { border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface-2); padding: 8px; display: grid; gap: 8px; }
+.loot-row input, .loot-row select, .loot-row textarea { background: var(--surface); }
+.paper { background: #fff; color: #202124; border-radius: var(--radius-sm); padding: 16px 18px; font-family: Arial, sans-serif; font-size: 11pt; line-height: 1.35; overflow-wrap: anywhere; }
+.paper img { max-width: 100%; height: auto; }
+.paper ul { padding-left: 1.4em; }

@@ -35,7 +35,8 @@ npm run lint
 ```
 
 ## GM tools
-- [`gdocs-lootbox/`](gdocs-lootbox/): a Google Docs sidebar that writes achievement and loot box awards using dropdowns built from this app's Skills and Spells.
+- **Loot Box Maker** (Home → GM: Loot Box Maker, or `#/loot`): build an achievement + loot box with dropdowns, then Copy and paste it into Google Docs. Nothing to install.
+- [`gdocs-lootbox/`](gdocs-lootbox/): the same generator as a Google Docs sidebar (Apps Script), for GMs who want it inside the Doc.
 
 ## Rules data
 `src/data/*.json` is generated from the indexed rulebooks in `../dcc-rules`:
