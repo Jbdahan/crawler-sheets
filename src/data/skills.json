@@ -1,0 +1,3668 @@
+[
+ {
+  "id": "back-claw",
+  "name": "Back Claw",
+  "kind": "attack",
+  "group": "Animal Crawler & Pet Strike Skills",
+  "page": 177,
+  "keywords": [
+   "Melee Attack",
+   "Str"
+  ],
+  "stat": "str",
+  "passive": false,
+  "attack": true,
+  "attackType": "melee",
+  "checkType": "Evade",
+  "damage": {
+   "count": 1,
+   "sides": 6,
+   "stat": "str",
+   "types": [
+    "Slashing"
+   ],
+   "area": ""
+  },
+  "upgrades": {
+   "5": {
+    "text": "+1d6 base damage",
+    "dice": {
+     "count": 1,
+     "sides": 6
+    }
+   },
+   "10": {
+    "text": "+1d6 base damage",
+    "dice": {
+     "count": 1,
+     "sides": 6
+    }
+   },
+   "15": {
+    "text": "+1d6 base damage, and the target gains the Blood Trail Debuff.",
+    "dice": {
+     "count": 1,
+     "sides": 6
+    }
+   }
+  },
+  "summary": "Animal rear-claw rake."
+ },
+ {
+  "id": "bite",
+  "name": "Bite",
+  "kind": "attack",
+  "group": "Animal Crawler & Pet Strike Skills",
+  "page": 177,
+  "keywords": [
+   "Melee Attack",
+   "Str"
+  ],
+  "stat": "str",
+  "passive": false,
+  "attack": true,
+  "attackType": "melee",
+  "checkType": "Evade",
+  "limitations": "The target must have an appendage you can clamp down onto. You taste your victim’s blood. Better hope they’re not poisonous.",
+  "damage": {
+   "count": 1,
+   "sides": 8,
+   "stat": "str",
+   "types": [
+    "Piercing"
+   ],
+   "area": ""
+  },
+  "upgrades": {
+   "5": {
+    "text": "+1d8 base damage",
+    "dice": {
+     "count": 1,
+     "sides": 8
+    }
+   },
+   "10": {
+    "text": "+1d8 base damage. You may latch on to move when the foe moves during their next Action (then you let go).",
+    "dice": {
+     "count": 1,
+     "sides": 8
+    }
+   },
+   "15": {
+    "text": "+1d8 base damage, and the target gains the Woozy Debuff.",
+    "dice": {
+     "count": 1,
+     "sides": 8
+    }
+   }
+  },
+  "summary": "Animal bite; the target needs something you can clamp onto."
+ },
+ {
+  "id": "slice-attack",
+  "name": "Slice Attack",
+  "kind": "attack",
+  "group": "Animal Crawler & Pet Strike Skills",
+  "page": 177,
+  "keywords": [
+   "Melee Attack",
+   "Dex"
+  ],
+  "stat": "dex",
+  "passive": false,
+  "attack": true,
+  "attackType": "melee",
+  "checkType": "Evade",
+  "aiFavor": "1",
+  "damage": {
+   "count": 1,
+   "sides": 4,
+   "stat": "str",
+   "types": [
+    "Slashing"
+   ],
+   "area": ""
+  },
+  "upgrades": {
+   "5": {
+    "text": "+1d4 base damage",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   },
+   "10": {
+    "text": "+1d4 base damage",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   },
+   "15": {
+    "text": "+2d4 base damage",
+    "dice": {
+     "count": 2,
+     "sides": 4
+    }
+   }
+  },
+  "summary": "Animal claw swipe; a starting attack for animal crawlers."
+ },
+ {
+  "id": "club",
+  "name": "Club",
+  "kind": "attack",
+  "group": "Bashing Weapon Skills",
+  "page": 178,
+  "keywords": [
+   "Melee Attack",
+   "Str"
+  ],
+  "stat": "str",
+  "passive": false,
+  "attack": true,
+  "attackType": "melee",
+  "checkType": "Evade",
+  "damage": {
+   "count": 1,
+   "sides": 6,
+   "stat": "str",
+   "types": [
+    "Bludgeoning"
+   ],
+   "area": ""
+  },
+  "upgrades": {
+   "5": {
+    "text": "+1d6 base damage",
+    "dice": {
+     "count": 1,
+     "sides": 6
+    }
+   },
+   "10": {
+    "text": "+1d6 base damage, and the target gains the Woozy Debuff.",
+    "dice": {
+     "count": 1,
+     "sides": 6
+    }
+   },
+   "15": {
+    "text": "+1d6 base damage, and if the target loses at least 3 Health Bar slots, they gain the Take Down Debuff.",
+    "dice": {
+     "count": 1,
+     "sides": 6
+    }
+   }
+  },
+  "summary": "Blunt one-handed bashing weapon."
+ },
+ {
+  "id": "improvised-weapons",
+  "name": "Improvised Weapons",
+  "kind": "attack",
+  "group": "Bashing Weapon Skills",
+  "page": 178,
+  "keywords": [
+   "Melee Attack",
+   "Str"
+  ],
+  "stat": "str",
+  "passive": false,
+  "attack": true,
+  "attackType": "melee",
+  "checkType": "Evade",
+  "aiFavor": "1",
+  "damage": {
+   "count": 1,
+   "sides": 4,
+   "stat": "str",
+   "types": [
+    "Bludgeoning"
+   ],
+   "area": ""
+  },
+  "upgrades": {
+   "5": {
+    "text": "+1d4 base damage, and you can throw the item (using this Skill) up to a range of Rank ×5 feet.",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   },
+   "10": {
+    "text": "+1d4 base damage, and you roll your first Attack each combat with Advantage due to the unexpected nature of your Attacks.",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   },
+   "15": {
+    "text": "+1d4 base damage",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   }
+  },
+  "summary": "Hit someone with whatever you grab (1 lb up to your Str in lbs)."
+ },
+ {
+  "id": "warhammer",
+  "name": "Warhammer",
+  "kind": "attack",
+  "group": "Bashing Weapon Skills",
+  "page": 178,
+  "keywords": [
+   "Melee Attack",
+   "Str"
+  ],
+  "stat": "str",
+  "passive": false,
+  "attack": true,
+  "attackType": "melee",
+  "checkType": "Evade",
+  "limitations": "Requires two hands to wield.",
+  "damage": {
+   "count": 1,
+   "sides": 10,
+   "stat": "str",
+   "types": [
+    "Bludgeoning"
+   ],
+   "area": ""
+  },
+  "upgrades": {
+   "5": {
+    "text": "+1d10 base damage",
+    "dice": {
+     "count": 1,
+     "sides": 10
+    }
+   },
+   "10": {
+    "text": "+1d10 base damage",
+    "dice": {
+     "count": 1,
+     "sides": 10
+    }
+   },
+   "15": {
+    "text": "+1d10 base damage, and the target (of your size or smaller) is pushed 15 feet.",
+    "dice": {
+     "count": 1,
+     "sides": 10
+    }
+   }
+  },
+  "summary": "Heavy two-handed bashing weapon."
+ },
+ {
+  "id": "axe",
+  "name": "Axe",
+  "kind": "attack",
+  "group": "Edged Weapon Skills",
+  "page": 178,
+  "keywords": [
+   "Melee Attack",
+   "Str"
+  ],
+  "stat": "str",
+  "passive": false,
+  "attack": true,
+  "attackType": "melee",
+  "checkType": "Evade",
+  "damage": {
+   "count": 1,
+   "sides": 6,
+   "stat": "str",
+   "types": [
+    "Slashing"
+   ],
+   "area": ""
+  },
+  "upgrades": {
+   "5": {
+    "text": "+1d6 base damage",
+    "dice": {
+     "count": 1,
+     "sides": 6
+    }
+   },
+   "10": {
+    "text": "+1d6 base damage, and you may make an extra free Attack with Disadvantage against another foe adjacent to both you and the original target.",
+    "dice": {
+     "count": 1,
+     "sides": 6
+    }
+   },
+   "15": {
+    "text": "+1d6 base damage, and on an Amazing Success or better, sever an arm (or similar) of your foe (which disarms anyone with a two-handed weapon).",
+    "dice": {
+     "count": 1,
+     "sides": 6
+    }
+   }
+  },
+  "summary": "Chopping weapon."
+ },
+ {
+  "id": "dagger",
+  "name": "Dagger",
+  "kind": "attack",
+  "group": "Edged Weapon Skills",
+  "page": 178,
+  "keywords": [
+   "Melee Attack",
+   "Dex"
+  ],
+  "stat": "dex",
+  "passive": false,
+  "attack": true,
+  "attackType": "melee",
+  "checkType": "Evade",
+  "aiFavor": "1",
+  "damage": {
+   "count": 1,
+   "sides": 4,
+   "stat": "str",
+   "types": [
+    "Piercing"
+   ],
+   "area": ""
+  },
+  "upgrades": {
+   "5": {
+    "text": "+1d4 base damage, and this Attack deals Armor-Piercing damage (ignores DR).",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   },
+   "10": {
+    "text": "+1d4 base damage, and you can throw this weapon (using this Skill) up to a range of Rank × 5 feet.",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   },
+   "15": {
+    "text": "+1d4 base damage, and Attacks targeting the back of a foe deal ×2 damage.",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   }
+  },
+  "summary": "Light blade; later pierces armor and can be thrown."
+ },
+ {
+  "id": "longsword",
+  "name": "Longsword",
+  "kind": "attack",
+  "group": "Edged Weapon Skills",
+  "page": 178,
+  "keywords": [
+   "Melee Attack",
+   "Str"
+  ],
+  "stat": "str",
+  "passive": false,
+  "attack": true,
+  "attackType": "melee",
+  "checkType": "Evade",
+  "damage": {
+   "count": 1,
+   "sides": 8,
+   "stat": "str",
+   "types": [
+    "Slashing"
+   ],
+   "area": ""
+  },
+  "upgrades": {
+   "5": {
+    "text": "+1d8 base damage",
+    "dice": {
+     "count": 1,
+     "sides": 8
+    }
+   },
+   "10": {
+    "text": "+1d8 base damage",
+    "dice": {
+     "count": 1,
+     "sides": 8
+    }
+   },
+   "15": {
+    "text": "+1d8 base damage, and you gain a +1 Evade Buff.",
+    "dice": {
+     "count": 1,
+     "sides": 8
+    },
+    "evade": 1
+   }
+  },
+  "summary": "Classic blade."
+ },
+ {
+  "id": "rapier",
+  "name": "Rapier",
+  "kind": "attack",
+  "group": "Edged Weapon Skills",
+  "page": 178,
+  "keywords": [
+   "Melee Attack",
+   "Dex"
+  ],
+  "stat": "dex",
+  "passive": false,
+  "attack": true,
+  "attackType": "melee",
+  "checkType": "Evade",
+  "damage": {
+   "count": 1,
+   "sides": 6,
+   "stat": "dex",
+   "types": [
+    "Piercing"
+   ],
+   "area": ""
+  },
+  "upgrades": {
+   "5": {
+    "text": "+1d6 base damage",
+    "dice": {
+     "count": 1,
+     "sides": 6
+    }
+   },
+   "10": {
+    "text": "+1d6 base damage, and you gain a +1 Evade Buff.",
+    "dice": {
+     "count": 1,
+     "sides": 6
+    },
+    "evade": 1
+   },
+   "15": {
+    "text": "+1d6 base damage, and you gain a +1 Evade Buff.",
+    "dice": {
+     "count": 1,
+     "sides": 6
+    },
+    "evade": 1
+   }
+  },
+  "summary": "Finesse blade that uses Dex for damage and improves Evade."
+ },
+ {
+  "id": "foot-soldier",
+  "name": "Foot Soldier",
+  "kind": "attack",
+  "group": "Hand-to-hand Combat Skills",
+  "page": 179,
+  "keywords": [
+   "Melee Attack",
+   "Str"
+  ],
+  "stat": "str",
+  "passive": false,
+  "attack": true,
+  "attackType": "melee",
+  "checkType": "Evade",
+  "aiFavor": "1 (only if no Damage Effect is used)",
+  "damage": {
+   "count": 1,
+   "sides": 4,
+   "stat": "str",
+   "types": [
+    "Bludgeoning"
+   ],
+   "area": ""
+  },
+  "upgrades": {
+   "5": {
+    "text": "+1d4 base damage",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   },
+   "10": {
+    "text": "+1d4 base damage",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   },
+   "15": {
+    "text": "+1d4 base damage, and the target gains the Sore as Shit Debuff.",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   }
+  },
+  "summary": "Kicks and stomps; can pair with Powerful Strike or Smush."
+ },
+ {
+  "id": "noggin-nocker",
+  "name": "Noggin Nocker",
+  "kind": "attack",
+  "group": "Hand-to-hand Combat Skills",
+  "page": 179,
+  "keywords": [
+   "Melee Attack",
+   "Str"
+  ],
+  "stat": "str",
+  "passive": false,
+  "attack": true,
+  "attackType": "melee",
+  "checkType": "Evade",
+  "aiFavor": "1 (only if no Damage Effect is used)",
+  "limitations": "On Success, you lose 1 Health Bar slot.",
+  "damage": {
+   "count": 1,
+   "sides": 4,
+   "stat": "con",
+   "types": [
+    "Bludgeoning"
+   ],
+   "area": ""
+  },
+  "upgrades": {
+   "5": {
+    "text": "+1d4 base damage, and you don’t take any damage from your own Attack.",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   },
+   "10": {
+    "text": "+1d4 base damage, and add 1 Rank damage die.",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    },
+    "rankDie": true
+   },
+   "15": {
+    "text": "+1d4 base damage, and the target gains the Woozy Debuff.",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   }
+  },
+  "summary": "Headbutts; hurts you too until Rank 5. Pairs with Skullcracker or Powerful Strike."
+ },
+ {
+  "id": "pugilism",
+  "name": "Pugilism",
+  "kind": "attack",
+  "group": "Hand-to-hand Combat Skills",
+  "page": 179,
+  "keywords": [
+   "Melee Attack",
+   "Dex"
+  ],
+  "stat": "dex",
+  "passive": false,
+  "attack": true,
+  "attackType": "melee",
+  "checkType": "Evade",
+  "aiFavor": "2 (only if no Damage Effect is used)",
+  "damage": {
+   "count": 1,
+   "sides": 2,
+   "stat": "str",
+   "types": [
+    "Bludgeoning"
+   ],
+   "area": ""
+  },
+  "upgrades": {
+   "5": {
+    "text": "+2d2 base damage",
+    "dice": {
+     "count": 2,
+     "sides": 2
+    }
+   },
+   "10": {
+    "text": "+1d2 base damage",
+    "dice": {
+     "count": 1,
+     "sides": 2
+    }
+   },
+   "15": {
+    "text": "+1d2 base damage, and you may make an extra free Attack with Disadvantage.",
+    "dice": {
+     "count": 1,
+     "sides": 2
+    }
+   }
+  },
+  "summary": "Boxing; pairs with Dirty Fighting, Iron Punch or Powerful Strike."
+ },
+ {
+  "id": "unarmed-combat",
+  "name": "Unarmed Combat",
+  "kind": "attack",
+  "group": "Hand-to-hand Combat Skills",
+  "page": 179,
+  "keywords": [
+   "Melee Attack",
+   "Str"
+  ],
+  "stat": "str",
+  "passive": false,
+  "attack": true,
+  "attackType": "melee",
+  "checkType": "Evade",
+  "aiFavor": "1",
+  "limitations": "Cannot choose a Damage Effect.",
+  "damage": {
+   "count": 1,
+   "sides": 4,
+   "stat": "str",
+   "types": [
+    "Bludgeoning"
+   ],
+   "area": ""
+  },
+  "upgrades": {
+   "5": {
+    "text": "+1d4 base damage",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   },
+   "10": {
+    "text": "+1d4 base damage",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   },
+   "15": {
+    "text": "+2d4 base damage",
+    "dice": {
+     "count": 2,
+     "sides": 4
+    }
+   }
+  },
+  "summary": "Everyone's basic punches and kicks; no Damage Effects."
+ },
+ {
+  "id": "wrasslin",
+  "name": "Wrasslin’",
+  "kind": "attack",
+  "group": "Hand-to-hand Combat Skills",
+  "page": 179,
+  "keywords": [
+   "Melee Attack",
+   "Str"
+  ],
+  "stat": "str",
+  "passive": false,
+  "attack": true,
+  "attackType": "melee",
+  "checkType": "Evade",
+  "aiFavor": "1 (only if no Damage Effect is used)",
+  "limitations": "Requires two hands to wield.",
+  "damage": {
+   "count": 1,
+   "sides": 4,
+   "stat": "str",
+   "types": [
+    "Bludgeoning"
+   ],
+   "area": ""
+  },
+  "upgrades": {
+   "5": {
+    "text": "You may maintain the Held Debuff at no Action cost if you wish, but your Skill Check to prevent escape is made with Disadvantage."
+   },
+   "10": {
+    "text": "+1d4 base damage",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   },
+   "15": {
+    "text": "+1d4 base damage",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   }
+  },
+  "summary": "Grappling; a hit leaves the target Held. Pairs with Choke Out, Dirty Fighting or Toss."
+ },
+ {
+  "id": "choke-out",
+  "name": "Choke Out",
+  "kind": "damageEffect",
+  "group": "Hand-to-hand Damage Effect Skills",
+  "page": 180,
+  "keywords": [
+   "Wrasslin’ Damage Effect",
+   "Passive"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "damageEffectOf": "Wrasslin’",
+  "upgrades": {
+   "5": {
+    "text": "Choke Out activates at 20% Health Bar or less."
+   },
+   "10": {
+    "text": "Choke Out activates at 40% Health Bar or less, and deals ×4 the total damage."
+   },
+   "15": {
+    "text": "Choke Out activates at 80% Health Bar or less, and deals ×8 the total damage."
+   }
+  },
+  "summary": "Damage Effect: double total damage against a foe at 10% Health or less."
+ },
+ {
+  "id": "dirty-fighting",
+  "name": "Dirty Fighting",
+  "kind": "damageEffect",
+  "group": "Hand-to-hand Damage Effect Skills",
+  "page": 180,
+  "keywords": [
+   "Pugilism or Wrasslin’ Damage Effect",
+   "Passive"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "damageEffectOf": "Pugilism or Wrasslin’",
+  "upgrades": {
+   "5": {
+    "text": "Also apply The Taint Debuff to the target."
+   },
+   "10": {
+    "text": "Also apply the Blinded Debuff to the target. You no longer lose Popularity on Critical Fails."
+   },
+   "15": {
+    "text": "Also apply an immediate Minor Injury Debuff to the target."
+   }
+  },
+  "summary": "Damage Effect: cheap shots that make the target Woozy."
+ },
+ {
+  "id": "iron-punch",
+  "name": "Iron Punch",
+  "kind": "damageEffect",
+  "group": "Hand-to-hand Damage Effect Skills",
+  "page": 180,
+  "keywords": [
+   "Pugilism Damage Effect",
+   "Passive"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "damageEffectOf": "Pugilism",
+  "upgrades": {
+   "5": {
+    "text": "Add 1 Rank damage die.",
+    "rankDie": true
+   },
+   "10": {
+    "text": "You may choose to have the target gain the Stunned Debuff instead of rolling damage."
+   },
+   "15": {
+    "text": "Add 1 Rank damage die, and the target gains the Stunned Debuff.",
+    "rankDie": true
+   }
+  },
+  "summary": "Damage Effect: extra base damage on punches."
+ },
+ {
+  "id": "powerful-strike",
+  "name": "Powerful Strike",
+  "kind": "damageEffect",
+  "group": "Hand-to-hand Damage Effect Skills",
+  "page": 180,
+  "keywords": [
+   "Foot Soldier",
+   "Noggin Nocker",
+   "or Pugilism Damage Effect",
+   "Passive"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "cooldown": "30 hours",
+  "damageEffectOf": "Or Pugilism",
+  "upgrades": {
+   "5": {
+    "text": "The cooldown is 10 hours."
+   },
+   "10": {
+    "text": "The cooldown is 5 hours."
+   },
+   "15": {
+    "text": "The cooldown is 2 hours."
+   }
+  },
+  "summary": "Damage Effect: multiply the base dice result by this Skill's Rank."
+ },
+ {
+  "id": "skullcracker",
+  "name": "Skullcracker",
+  "kind": "damageEffect",
+  "group": "Hand-to-hand Damage Effect Skills",
+  "page": 180,
+  "keywords": [
+   "Noggin Nocker Damage Effect",
+   "Passive"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "damageEffectOf": "Noggin Nocker",
+  "upgrades": {
+   "5": {
+    "text": "+1d4 base damage if target is the same size as you.",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   },
+   "10": {
+    "text": "If the target is the same size as you, add 1 Rank damage die, and the target gains the Stunned Debuff.",
+    "rankDie": true
+   },
+   "15": {
+    "text": "If the target is the same size as you, add 1 Rank damage die, and the target gains the Blood Trail Debuff.",
+    "rankDie": true
+   }
+  },
+  "summary": "Damage Effect: extra base damage against a same-size foe."
+ },
+ {
+  "id": "smush",
+  "name": "Smush",
+  "kind": "damageEffect",
+  "group": "Hand-to-hand Damage Effect Skills",
+  "page": 181,
+  "keywords": [
+   "Foot Soldier Damage Effect",
+   "Passive"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "limitations": "You can only apply this Damage Effect to targets with 20% Health Bar or less.",
+  "cooldown": "Once per round.",
+  "damageEffectOf": "Foot Soldier",
+  "upgrades": {
+   "5": {
+    "text": "Smush activates at 30% Health Bar or less and deals ×3 the total damage."
+   },
+   "10": {
+    "text": "This skill has no cooldown."
+   },
+   "15": {
+    "text": "Smush activates at 40% Health Bar or less and deals ×4 the total damage."
+   }
+  },
+  "summary": "Damage Effect: multiply total damage against a badly hurt foe."
+ },
+ {
+  "id": "toss",
+  "name": "Toss",
+  "kind": "damageEffect",
+  "group": "Hand-to-hand Damage Effect Skills",
+  "page": 181,
+  "keywords": [
+   "Wrasslin’ Damage Effect",
+   "Passive"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "damageEffectOf": "Wrasslin’",
+  "upgrades": {
+   "5": {
+    "text": "You can Toss foes up to your own size or smaller."
+   },
+   "10": {
+    "text": "You can Toss foes one size larger than you or smaller."
+   },
+   "15": {
+    "text": "+1d8 base damage, and you can throw foes two sizes larger than you or smaller.",
+    "dice": {
+     "count": 1,
+     "sides": 8
+    }
+   }
+  },
+  "summary": "Damage Effect: extra damage, ends Held, and throws a smaller foe."
+ },
+ {
+  "id": "bow",
+  "name": "Bow",
+  "kind": "attack",
+  "group": "Ranged Weapon Skills",
+  "page": 181,
+  "keywords": [
+   "Ranged Attack",
+   "Dex"
+  ],
+  "stat": "dex",
+  "passive": false,
+  "attack": true,
+  "attackType": "ranged",
+  "checkType": "Evade",
+  "range": "100 feet",
+  "limitations": "Requires two hands to wield. Each Attack requires proper ammunition.",
+  "damage": {
+   "count": 1,
+   "sides": 6,
+   "stat": "str",
+   "types": [
+    "Piercing"
+   ],
+   "area": ""
+  },
+  "upgrades": {
+   "5": {
+    "text": "+1d6 base damage",
+    "dice": {
+     "count": 1,
+     "sides": 6
+    }
+   },
+   "10": {
+    "text": "+1d6 base damage, and add 1 Rank damage die.",
+    "dice": {
+     "count": 1,
+     "sides": 6
+    },
+    "rankDie": true
+   },
+   "15": {
+    "text": "+1d6 base damage, and the target gains the Blood Trail Debuff.",
+    "dice": {
+     "count": 1,
+     "sides": 6
+    }
+   }
+  },
+  "summary": "Two-handed ranged weapon; needs arrows."
+ },
+ {
+  "id": "crossbow",
+  "name": "Crossbow",
+  "kind": "attack",
+  "group": "Ranged Weapon Skills",
+  "page": 181,
+  "keywords": [
+   "Ranged Attack",
+   "Dex"
+  ],
+  "stat": "dex",
+  "passive": false,
+  "attack": true,
+  "attackType": "ranged",
+  "checkType": "Evade",
+  "range": "50 feet",
+  "limitations": "Requires two hands to wield. Each Attack requires proper ammunition.",
+  "cooldown": "Once per round.",
+  "damage": {
+   "count": 1,
+   "sides": 8,
+   "stat": null,
+   "types": [
+    "Piercing"
+   ],
+   "area": ""
+  },
+  "upgrades": {
+   "5": {
+    "text": "+1d8 base damage",
+    "dice": {
+     "count": 1,
+     "sides": 8
+    }
+   },
+   "10": {
+    "text": "+1d8 base damage, and the target gains the Blood Trail Debuff.",
+    "dice": {
+     "count": 1,
+     "sides": 8
+    }
+   },
+   "15": {
+    "text": "+1d8 base damage, and the range is 100 feet.",
+    "dice": {
+     "count": 1,
+     "sides": 8
+    }
+   }
+  },
+  "summary": "Mechanical ranged weapon; needs bolts."
+ },
+ {
+  "id": "handgun",
+  "name": "Handgun",
+  "kind": "attack",
+  "group": "Ranged Weapon Skills",
+  "page": 181,
+  "keywords": [
+   "Ranged Attack",
+   "Dex"
+  ],
+  "stat": "dex",
+  "passive": false,
+  "attack": true,
+  "attackType": "ranged",
+  "checkType": "Evade",
+  "range": "150 feet",
+  "limitations": "Each Attack requires proper ammunition. Spend one Action to reload after a Major Fail or worse.",
+  "damage": {
+   "count": 1,
+   "sides": 8,
+   "stat": null,
+   "types": [
+    "Piercing"
+   ],
+   "area": ""
+  },
+  "upgrades": {
+   "5": {
+    "text": "+1d8 base damage",
+    "dice": {
+     "count": 1,
+     "sides": 8
+    }
+   },
+   "10": {
+    "text": "+1d8 base damage",
+    "dice": {
+     "count": 1,
+     "sides": 8
+    }
+   },
+   "15": {
+    "text": "+1d8 base damage, and the target gains the Staggered Debuff.",
+    "dice": {
+     "count": 1,
+     "sides": 8
+    }
+   }
+  },
+  "summary": "Pistol; needs ammo and adds no Stat to damage."
+ },
+ {
+  "id": "javelin",
+  "name": "Javelin",
+  "kind": "attack",
+  "group": "Ranged Weapon Skills",
+  "page": 182,
+  "keywords": [
+   "Ranged Attack",
+   "Dex"
+  ],
+  "stat": "dex",
+  "passive": false,
+  "attack": true,
+  "attackType": "ranged",
+  "checkType": "Evade",
+  "range": "40 feet",
+  "damage": {
+   "count": 1,
+   "sides": 8,
+   "stat": "str",
+   "types": [
+    "Piercing"
+   ],
+   "area": ""
+  },
+  "upgrades": {
+   "5": {
+    "text": "+1d8 base damage",
+    "dice": {
+     "count": 1,
+     "sides": 8
+    }
+   },
+   "10": {
+    "text": "+1d8 base damage, and this attack deals Armor-Piercing damage (ignores DR).",
+    "dice": {
+     "count": 1,
+     "sides": 8
+    }
+   },
+   "15": {
+    "text": "+1d8 base damage, and its range increases by your Strength score in feet.",
+    "dice": {
+     "count": 1,
+     "sides": 8
+    }
+   }
+  },
+  "summary": "Thrown spear."
+ },
+ {
+  "id": "shotgun",
+  "name": "Shotgun",
+  "kind": "attack",
+  "group": "Ranged Weapon Skills",
+  "page": 182,
+  "keywords": [
+   "Ranged Attack",
+   "Dex"
+  ],
+  "stat": "dex",
+  "passive": false,
+  "attack": true,
+  "attackType": "ranged",
+  "checkType": "Evade",
+  "range": "30 feet",
+  "limitations": "Requires two hands to wield. Each Attack requires proper ammunition. Spend one Action to reload after a Major Fail or worse.",
+  "damage": {
+   "count": 1,
+   "sides": 10,
+   "stat": null,
+   "types": [
+    "Piercing"
+   ],
+   "area": ""
+  },
+  "upgrades": {
+   "5": {
+    "text": "+1d10 base damage",
+    "dice": {
+     "count": 1,
+     "sides": 10
+    }
+   },
+   "10": {
+    "text": "+1d10 base damage",
+    "dice": {
+     "count": 1,
+     "sides": 10
+    }
+   },
+   "15": {
+    "text": "+1d10 base damage, +5ft Splash",
+    "dice": {
+     "count": 1,
+     "sides": 10
+    }
+   }
+  },
+  "summary": "Close-range spread firearm; needs shells."
+ },
+ {
+  "id": "shuriken",
+  "name": "Shuriken",
+  "kind": "attack",
+  "group": "Ranged Weapon Skills",
+  "page": 182,
+  "keywords": [
+   "Ranged Attack",
+   "Dex"
+  ],
+  "stat": "dex",
+  "passive": false,
+  "attack": true,
+  "attackType": "ranged",
+  "checkType": "Evade",
+  "range": "30 feet",
+  "aiFavor": "1",
+  "damage": {
+   "count": 1,
+   "sides": 4,
+   "stat": "str",
+   "types": [
+    "Piercing"
+   ],
+   "area": ""
+  },
+  "upgrades": {
+   "5": {
+    "text": "+1d4 base damage, and the range is 40 feet.",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   },
+   "10": {
+    "text": "+1d4 base damage, and you may make an extra free attack with Disadvantage.",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   },
+   "15": {
+    "text": "+1d4 base damage, and you may make an extra free attack with Disadvantage.",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   }
+  },
+  "summary": "Thrown stars."
+ },
+ {
+  "id": "slingshot",
+  "name": "Slingshot",
+  "kind": "attack",
+  "group": "Ranged Weapon Skills",
+  "page": 182,
+  "keywords": [
+   "Ranged Attack",
+   "Dex"
+  ],
+  "stat": "dex",
+  "passive": false,
+  "attack": true,
+  "attackType": "ranged",
+  "checkType": "Evade",
+  "range": "30 feet",
+  "aiFavor": "2",
+  "limitations": "Requires two hands to wield.",
+  "damage": {
+   "count": 1,
+   "sides": 2,
+   "stat": "str",
+   "types": [
+    "Bludgeoning"
+   ],
+   "area": ""
+  },
+  "upgrades": {
+   "5": {
+    "text": "+1d2 base damage, and its range increases by your Strength score in feet.",
+    "dice": {
+     "count": 1,
+     "sides": 2
+    }
+   },
+   "10": {
+    "text": "+1d2 base damage, and add 1 Rank damage die.",
+    "dice": {
+     "count": 1,
+     "sides": 2
+    },
+    "rankDie": true
+   },
+   "15": {
+    "text": "+1d2 base damage, and add 1 Rank damage die.",
+    "dice": {
+     "count": 1,
+     "sides": 2
+    },
+    "rankDie": true
+   }
+  },
+  "summary": "Flings small stones; cheap ammo."
+ },
+ {
+  "id": "herding-weapons",
+  "name": "Herding Weapons",
+  "kind": "attack",
+  "group": "Reach Weapon Skills",
+  "page": 182,
+  "keywords": [
+   "Melee Attack",
+   "Str"
+  ],
+  "stat": "str",
+  "passive": false,
+  "attack": true,
+  "attackType": "melee",
+  "checkType": "Evade",
+  "range": "10 feet",
+  "aiFavor": "1",
+  "limitations": "Requires two hands to wield.",
+  "damage": {
+   "count": 1,
+   "sides": 4,
+   "stat": "str",
+   "types": [
+    "Bludgeoning"
+   ],
+   "area": ""
+  },
+  "upgrades": {
+   "5": {
+    "text": "+1d4 base damage and you may slide the target 5 feet",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   },
+   "10": {
+    "text": "+1d4 base damage, and you may use this skill to make a Sling attack with a range of 50 feet, but using Dex to hit.",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   },
+   "15": {
+    "text": "+1d4 base damage, and the target gains the Take Down Debuff.",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   }
+  },
+  "summary": "Shepherd's crook and similar herding tools (reach)."
+ },
+ {
+  "id": "lance",
+  "name": "Lance",
+  "kind": "attack",
+  "group": "Reach Weapon Skills",
+  "page": 182,
+  "keywords": [
+   "Melee Attack",
+   "Str"
+  ],
+  "stat": "str",
+  "passive": false,
+  "attack": true,
+  "attackType": "melee",
+  "checkType": "Evade",
+  "range": "10 feet",
+  "limitations": "Must be mounted to use. Cannot be used in conjunction with Attack of Opportunity or Zone of Control Skills.",
+  "damage": {
+   "count": 1,
+   "sides": 12,
+   "stat": "str",
+   "types": [
+    "Piercing"
+   ],
+   "area": ""
+  },
+  "upgrades": {
+   "5": {
+    "text": "+1d12 base damage",
+    "dice": {
+     "count": 1,
+     "sides": 12
+    }
+   },
+   "10": {
+    "text": "+1d12 base damage, and +1 damage for every 10 feet your mount Moved this turn.",
+    "dice": {
+     "count": 1,
+     "sides": 12
+    }
+   },
+   "15": {
+    "text": "+1d12 base damage, and +X damage, where X is the size of your mount.",
+    "dice": {
+     "count": 1,
+     "sides": 12
+    }
+   }
+  },
+  "summary": "Reach weapon, best used when mounted."
+ },
+ {
+  "id": "polearm",
+  "name": "Polearm",
+  "kind": "attack",
+  "group": "Reach Weapon Skills",
+  "page": 183,
+  "keywords": [
+   "Melee Attack",
+   "Str"
+  ],
+  "stat": "str",
+  "passive": false,
+  "attack": true,
+  "attackType": "melee",
+  "checkType": "Evade",
+  "range": "10 feet",
+  "limitations": "Requires two hands to wield.",
+  "damage": {
+   "count": 1,
+   "sides": 8,
+   "stat": "str",
+   "types": [
+    "Piercing"
+   ],
+   "area": ""
+  },
+  "upgrades": {
+   "5": {
+    "text": "+1d8 base damage",
+    "dice": {
+     "count": 1,
+     "sides": 8
+    }
+   },
+   "10": {
+    "text": "+1d8 base damage, and +1 Rank in the Zone of Control Skill.",
+    "dice": {
+     "count": 1,
+     "sides": 8
+    }
+   },
+   "15": {
+    "text": "+1d8 base damage, and +1 Rank in the Zone of Control Skill.",
+    "dice": {
+     "count": 1,
+     "sides": 8
+    }
+   }
+  },
+  "summary": "Two-handed reach weapon."
+ },
+ {
+  "id": "quarterstaff",
+  "name": "Quarterstaff",
+  "kind": "attack",
+  "group": "Reach Weapon Skills",
+  "page": 183,
+  "keywords": [
+   "Melee Attack",
+   "Str"
+  ],
+  "stat": "str",
+  "passive": false,
+  "attack": true,
+  "attackType": "melee",
+  "checkType": "Evade",
+  "range": "10 feet",
+  "limitations": "Requires two hands to wield.",
+  "damage": {
+   "count": 1,
+   "sides": 6,
+   "stat": "str",
+   "types": [
+    "Bludgeoning"
+   ],
+   "area": ""
+  },
+  "upgrades": {
+   "5": {
+    "text": "+1d6 base damage",
+    "dice": {
+     "count": 1,
+     "sides": 6
+    }
+   },
+   "10": {
+    "text": "+1d6 base damage, and you gain a +1 Evade Buff.",
+    "dice": {
+     "count": 1,
+     "sides": 6
+    },
+    "evade": 1
+   },
+   "15": {
+    "text": "+1d6 base damage, and you gain a +1 Evade Buff.",
+    "dice": {
+     "count": 1,
+     "sides": 6
+    },
+    "evade": 1
+   }
+  },
+  "summary": "Two-handed reach staff that improves Evade."
+ },
+ {
+  "id": "acute-ears",
+  "name": "Acute Ears",
+  "kind": "utility",
+  "page": 184,
+  "keywords": [
+   "Intelligence"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": false,
+  "checkType": "Varies",
+  "upgrades": {
+   "5": {
+    "text": "Information on the Mob’s size and whether you have encountered them before are added to the red dot indicator."
+   },
+   "10": {
+    "text": "Mobs of a lower level than you cannot Ambush your party."
+   },
+   "15": {
+    "text": "Mobs cannot Ambush your party."
+   }
+  },
+  "summary": "Sharper hearing; more Mobs show on your minimap."
+ },
+ {
+  "id": "aiming",
+  "name": "Aiming",
+  "kind": "utility",
+  "page": 184,
+  "keywords": [
+   "Passive"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "limitations": "This Skill is used only in conjunction with Ranged Attacks. Mark this Skill for Advancement only when applying its Ranks to such an Attack.",
+  "upgrades": {
+   "5": {
+    "text": "+1d4 damage",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   },
+   "10": {
+    "text": "+1d4 base damage",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   },
+   "15": {
+    "text": "+1d4 base damage",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   }
+  },
+  "summary": "On a ranged attack, take Disadvantage to add your Aiming Ranks and bonus damage."
+ },
+ {
+  "id": "alchemy",
+  "name": "Alchemy",
+  "kind": "utility",
+  "page": 184,
+  "keywords": [
+   "Intelligence"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": false,
+  "checkType": "Varies",
+  "upgrades": {
+   "5": {
+    "text": "You may craft potions up to a +10 bonus level."
+   },
+   "10": {
+    "text": "You may create additional potions of the same kind without spending extra time."
+   },
+   "15": {
+    "text": "You can write the recipe for any potion you find."
+   }
+  },
+  "summary": "Craft potions and poisons (crafting rules p.221)."
+ },
+ {
+  "id": "ambush",
+  "name": "Ambush",
+  "kind": "utility",
+  "page": 184,
+  "keywords": [
+   "Intelligence"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": false,
+  "checkType": "Opposed",
+  "upgrades": {
+   "5": {
+    "text": "If you Attack with your Surprise Action, add an Ambush Rank damage die to your Surprise Attack damage."
+   },
+   "10": {
+    "text": "When other crawlers in your party roll this skill untrained, they roll as normal (not with Disadvantage)."
+   },
+   "15": {
+    "text": "You gain a second bonus Action as a surprise Action. This bonus Action can’t be an Attack."
+   }
+  },
+  "summary": "Int-Opposed. Get a surprise Action against approaching Mobs, attacking with Advantage."
+ },
+ {
+  "id": "animal-handling",
+  "name": "Animal Handling",
+  "kind": "utility",
+  "page": 185,
+  "keywords": [
+   "Charisma"
+  ],
+  "stat": "cha",
+  "passive": false,
+  "attack": false,
+  "checkType": "Opposed",
+  "upgrades": {
+   "5": {
+    "text": "Choose an animal type to specialize in. You have Advantage on your Animal Handling Skill Checks against that animal type. You gain a second bonus Action as a surprise Action. This bonus Action can’t be an attack."
+   },
+   "10": {
+    "text": "Forming each level of bonding with a potential pet takes half the normal time."
+   },
+   "15": {
+    "text": "You can have up to two pets."
+   }
+  },
+  "summary": "Int-Opposed. Calm or befriend an animal so it won't attack."
+ },
+ {
+  "id": "arcane",
+  "name": "Arcane",
+  "kind": "utility",
+  "page": 185,
+  "keywords": [
+   "Intelligence"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed",
+  "upgrades": {
+   "5": {
+    "text": "You are able to determine details such as the specific Rank and bonus levels of magical items."
+   },
+   "10": {
+    "text": "You can imbue items with inherent spells using an Arcanist Table. See Crafting on p. 221."
+   },
+   "15": {
+    "text": "The default cooldown of your imbued spells is 3 hours."
+   }
+  },
+  "summary": "Unopposed. Tell whether an item is magical."
+ },
+ {
+  "id": "attack-of-opportunity",
+  "name": "Attack of Opportunity",
+  "kind": "utility",
+  "page": 185,
+  "keywords": [
+   "Passive",
+   "Interrupt"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "limitations": "Requires a single-handed melee weapon with a range no greater than 5 feet.",
+  "upgrades": {
+   "5": {
+    "text": "If the foe moves into another space adjacent to you, they must stop."
+   },
+   "10": {
+    "text": "A foe using their Step no longer prevents this ability."
+   },
+   "15": {
+    "text": "Roll the Attack Skill Check with Advantage."
+   }
+  },
+  "summary": "Interrupt attack when an adjacent foe moves away (not by Step)."
+ },
+ {
+  "id": "backfire",
+  "name": "Backfire",
+  "kind": "utility",
+  "page": 185,
+  "keywords": [
+   "Intelligence"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed",
+  "limitations": "Compensated Anarchist Class Only",
+  "upgrades": {
+   "5": {
+    "text": "You can identify when the trap was placed. Time required to neutralize a trap is 5 minutes."
+   },
+   "10": {
+    "text": "You can identify when the trap was created. Time required to deconstruct a trap is 30 minutes."
+   },
+   "15": {
+    "text": "You can identify the designer of the trap. Time required to deconstruct a trap is 15 minutes."
+   }
+  },
+  "summary": "Compensated Anarchist only. Neutralize or take apart traps without a Sapper's Table."
+ },
+ {
+  "id": "balance",
+  "name": "Balance",
+  "kind": "utility",
+  "page": 186,
+  "keywords": [
+   "Dexterity"
+  ],
+  "stat": "dex",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed",
+  "upgrades": {
+   "5": {
+    "text": "You may perform Move Actions in difficult terrain without penalty."
+   },
+   "10": {
+    "text": "When subject to a Take Down or involuntary Move effects, you may use this skill as a free Interrupt Action to avoid the effect."
+   },
+   "15": {
+    "text": "You may perform your Step on vertical surfaces (yes, like in The Matrix), but must end it on a flat(ish) surface."
+   }
+  },
+  "summary": "Unopposed. Keep your footing on tricky or shifting surfaces."
+ },
+ {
+  "id": "basic-science",
+  "name": "Basic Science",
+  "kind": "utility",
+  "page": 186,
+  "keywords": [
+   "Intelligence"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed",
+  "upgrades": {
+   "5": {
+    "text": "Experiments take 1 hour to perform."
+   },
+   "10": {
+    "text": "Choose a specialty (physics, biology, chemistry, Earth science, etc.), and roll with Advantage when dealing with that."
+   },
+   "15": {
+    "text": "Experiments take 30 minutes to perform."
+   }
+  },
+  "summary": "Unopposed. Run 2-hour experiments to learn or confirm something."
+ },
+ {
+  "id": "bomb-surgeon",
+  "name": "Bomb Surgeon",
+  "kind": "utility",
+  "page": 186,
+  "keywords": [
+   "Intelligence"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed",
+  "upgrades": {
+   "5": {
+    "text": "Time required is 30 minutes."
+   },
+   "10": {
+    "text": "You never have to make an Explosives Handling Skill Check when using this skill."
+   },
+   "15": {
+    "text": "When cutting dynamite in half to make smaller bombs, round dice up. Time required is 15 minutes."
+   }
+  },
+  "summary": "Unopposed. Take bombs apart for parts or half-size bombs."
+ },
+ {
+  "id": "calligraphy",
+  "name": "Calligraphy",
+  "kind": "utility",
+  "page": 186,
+  "keywords": [
+   "Dexterity"
+  ],
+  "stat": "dex",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed",
+  "upgrades": {
+   "5": {
+    "text": "Roll with Advantage on your next Charisma Skill Check vs. the recipient of your beautiful paper."
+   },
+   "10": {
+    "text": "You are able to craft scrolls as if this were a crafting skill. See Crafting, p. 221."
+   },
+   "15": {
+    "text": "Once per floor, you may craft a scroll for a spell you have only seen cast within the last 2 hours."
+   }
+  },
+  "summary": "Unopposed. Beautiful writing; needed to make scrolls from the Fourth Floor on."
+ },
+ {
+  "id": "cartography",
+  "name": "Cartography",
+  "kind": "utility",
+  "page": 186,
+  "keywords": [
+   "Intelligence"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed",
+  "upgrades": {
+   "5": {
+    "text": "You can always return from whence you came quickly, assuming the dungeon walls haven’t shifted in the meantime."
+   },
+   "10": {
+    "text": "You provide an Advantage die to crawlers in your party (could be you) who are making Tracking Skill Checks or Checks that rely on spatial relations."
+   },
+   "15": {
+    "text": "Even with merely a finger point or a “thattaway,” you can get from point A to point B via the most direct path."
+   }
+  },
+  "summary": "Unopposed. Work out where you are relative to other places."
+ },
+ {
+  "id": "cat-like-reflexes",
+  "name": "Cat-like Reflexes",
+  "kind": "utility",
+  "page": 186,
+  "keywords": [
+   "Dexterity"
+  ],
+  "stat": "dex",
+  "passive": false,
+  "attack": false,
+  "checkType": "Varies",
+  "upgrades": {
+   "5": {
+    "text": "Reduce the damage you take from foes’ Surprise Attacks against you by your Rank in this skill."
+   },
+   "10": {
+    "text": "Reduce all Area damage you take by 50% (rounded down)."
+   },
+   "15": {
+    "text": "+10ft Move. You gain a +1 Evade Buff. Roll with Advantage to Evade Attacks and effects that would apply the Held Debuff (or similar) to you.",
+    "evade": 1,
+    "move": 10
+   }
+  },
+  "effects": {
+   "move": 10
+  },
+  "summary": "+10ft Move; use it in place of Dexterity Stat Checks."
+ },
+ {
+  "id": "catcher",
+  "name": "Catcher",
+  "kind": "utility",
+  "page": 187,
+  "keywords": [
+   "Passive",
+   "Interrupt"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "upgrades": {
+   "5": {
+    "text": "You’ve learned how to take hits. You gain +5 DR when using this Skill."
+   },
+   "10": {
+    "text": "You gain +5 DR a when using this Skill."
+   },
+   "15": {
+    "text": "You gain +5 DR when using this Skill and ignore any Debuffs attached to this damage."
+   }
+  },
+  "summary": "Interrupt: take a hit meant for an adjacent ally (can Step first). You can't Evade it."
+ },
+ {
+  "id": "cesta-punta",
+  "name": "Cesta Punta",
+  "kind": "utility",
+  "page": 187,
+  "keywords": [
+   "Dexterity"
+  ],
+  "stat": "dex",
+  "passive": false,
+  "attack": false,
+  "checkType": "Varies",
+  "limitations": "Only acquired via an Earth Hobby Potion",
+  "upgrades": {
+   "5": {
+    "text": "Throw range Strength ×20 feet."
+   },
+   "10": {
+    "text": "Add 1 Cesta Punta Rank damage die to thrown damaging Attacks."
+   },
+   "15": {
+    "text": "Throw range Strength ×30 feet, and roll with Disadvantage at ranges over 2,000 feet."
+   }
+  },
+  "summary": "Jai alai throwing with a xistera; Earth Hobby Potion only."
+ },
+ {
+  "id": "character-actor",
+  "name": "Character Actor",
+  "kind": "utility",
+  "page": 187,
+  "keywords": [
+   "Passive",
+   "Charisma"
+  ],
+  "stat": "cha",
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "limitations": "Former Child Actor Class Only. Rank increases by 1 when descending to a new floor only.",
+  "upgrades": {
+   "5": {
+    "text": "The random Classes increase in rarity and power based on the crawler’s Stats and Level."
+   },
+   "10": {
+    "text": "Skill Ranks gained in any newly-granted Skills persist from floor to floor, but the starting Ranks of those Skills are lost."
+   },
+   "15": {
+    "text": "You choose the Class from any available."
+   }
+  },
+  "summary": "Each floor, borrow random abilities from a new Class."
+ },
+ {
+  "id": "chopper-pilot",
+  "name": "Chopper Pilot",
+  "kind": "utility",
+  "page": 187,
+  "keywords": [
+   "Dexterity"
+  ],
+  "stat": "dex",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed",
+  "limitations": "You suffer Disadvantage on Attack Skill Checks made while Piloting and cannot Attack with a weapon that requires two hands.",
+  "upgrades": {
+   "5": {
+    "text": "Your chopper has +5ft Move.",
+    "move": 5
+   },
+   "10": {
+    "text": "Attacking while piloting no longer suffers Disadvantage."
+   },
+   "15": {
+    "text": "Your chopper has +5ft Move. When performing crazy stunts (like riding up a canyon wall), roll with Advantage.",
+    "move": 5
+   }
+  },
+  "summary": "Unopposed. Stunts and chases on a motorcycle."
+ },
+ {
+  "id": "climbing",
+  "name": "Climbing",
+  "kind": "utility",
+  "page": 188,
+  "keywords": [
+   "Strength"
+  ],
+  "stat": "str",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed",
+  "limitations": "If you Attack while Climbing, you suffer Disadvantage on those Checks.",
+  "upgrades": {
+   "5": {
+    "text": "Make a Check every 5 minutes."
+   },
+   "10": {
+    "text": "Make a Check every 10 minutes. You no longer Attack with Disadvantage while climbing."
+   },
+   "15": {
+    "text": "Make a Check every 15 minutes. When other crawlers in your party roll this skill untrained, they roll as normal (not with Disadvantage)."
+   }
+  },
+  "summary": "Unopposed, rolled each minute. Make safe progress up a climb."
+ },
+ {
+  "id": "cockroach",
+  "name": "Cockroach",
+  "kind": "utility",
+  "page": 188,
+  "keywords": [
+   "Constitution"
+  ],
+  "stat": "con",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed",
+  "cooldown": "Once per scene",
+  "upgrades": {
+   "5": {
+    "text": "No Skill Check required anymore."
+   },
+   "10": {
+    "text": "The crawler’s Health Bar is unaffected by damage that would drop them to 0%."
+   },
+   "15": {
+    "text": "Cooldown is twice per scene. When it triggers, the crawler heals to 100% and has +Rank DR until the end of the next round of combat."
+   }
+  },
+  "summary": "Unopposed. When an attack would drop you to 0%, drop to 10% instead."
+ },
+ {
+  "id": "cooking",
+  "name": "Cooking",
+  "kind": "utility",
+  "page": 188,
+  "keywords": [
+   "Intelligence"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed",
+  "upgrades": {
+   "5": {
+    "text": "It takes you 30 minutes to prepare a meal with makeshift ingredients."
+   },
+   "10": {
+    "text": "The diners gain the day-long “You are full!” Buff: Heal 2 Health Bar slots per hour when not resting."
+   },
+   "15": {
+    "text": "The “You are full!” Buff also causes Debuffs to end if you drop to 10% Health Bar."
+   }
+  },
+  "summary": "Unopposed. Turn ingredients into an edible meal for the party in 1 hour."
+ },
+ {
+  "id": "deception",
+  "name": "Deception",
+  "kind": "utility",
+  "page": 189,
+  "keywords": [
+   "Charisma"
+  ],
+  "stat": "cha",
+  "passive": false,
+  "attack": false,
+  "checkType": "Opposed",
+  "upgrades": {
+   "5": {
+    "text": "You can use this Skill while gambling."
+   },
+   "10": {
+    "text": "You can use this Skill to forge documents."
+   },
+   "15": {
+    "text": "You’re good enough to know when you’ve been caught. If you fail this Check, you may perform one Action before your foes can react."
+   }
+  },
+  "summary": "Int-Opposed. Lie convincingly (Disadvantage against Detect Lies)."
+ },
+ {
+  "id": "detect-lies",
+  "name": "Detect Lies",
+  "kind": "utility",
+  "page": 189,
+  "keywords": [
+   "Intelligence"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": false,
+  "checkType": "Opposed",
+  "upgrades": {
+   "5": {
+    "text": "When you Fail, you still can’t detect the lie, but you can ignore the additional effects of a Major Fail or worse."
+   },
+   "10": {
+    "text": "When you Fail, you can’t detect the lie, but you can ignore the effects of a Critical Fail."
+   },
+   "15": {
+    "text": "You do not need to see the speaker, which allows you to detect lies in text and audio form."
+   }
+  },
+  "summary": "Cha-Opposed. Sense whether someone is lying."
+ },
+ {
+  "id": "detect-trap",
+  "name": "Detect Trap",
+  "kind": "utility",
+  "page": 189,
+  "keywords": [
+   "Intelligence"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed",
+  "upgrades": {
+   "5": {
+    "text": "You can detect magical traps."
+   },
+   "10": {
+    "text": "You no longer roll with Disadvantage when searching a broad area or while moving."
+   },
+   "15": {
+    "text": "When you are aware of nearby traps, your party has Advantage on their first Check to avoid or escape the effects."
+   }
+  },
+  "summary": "Unopposed. Spot a non-magic trap on a suspect object."
+ },
+ {
+  "id": "determine-value",
+  "name": "Determine Value",
+  "kind": "utility",
+  "page": 189,
+  "keywords": [
+   "Passive"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "limitations": "Ranks in this Skill only increase by magical means.",
+  "upgrades": {
+   "5": {
+    "text": "Your Inventory is tabbed to sort your items by type, and it includes a history tab that tracks your item usage and any former owners of an item."
+   },
+   "10": {
+    "text": "You can determine what type of loot box the item would have come from."
+   },
+   "15": {
+    "text": "Whenever you add a new item to your Inventory, the gold value of that item is displayed."
+   }
+  },
+  "summary": "Sort your inventory by value."
+ },
+ {
+  "id": "diplomacy",
+  "name": "Diplomacy",
+  "kind": "utility",
+  "page": 189,
+  "keywords": [
+   "Charisma"
+  ],
+  "stat": "cha",
+  "passive": false,
+  "attack": false,
+  "checkType": "Opposed",
+  "upgrades": {
+   "5": {
+    "text": "Roll with Advantage if you are not a member of either party."
+   },
+   "10": {
+    "text": "Each side accepts consequences if they break the deal."
+   },
+   "15": {
+    "text": "Hostilities cease at least for the remainder of the day."
+   }
+  },
+  "summary": "Int-Opposed. Get two opposing groups talking."
+ },
+ {
+  "id": "dodge",
+  "name": "Dodge",
+  "kind": "utility",
+  "page": 190,
+  "keywords": [
+   "Passive"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "limitations": "Mark the Skill for Advancement when Evading until you reach Rank 5. After that, Ranks in this Skill only increase by magical means and training.",
+  "upgrades": {
+   "5": {
+    "text": "Gain a +1 Evade Buff, and you may Step an additional 5 feet when you perform the Evade Action.",
+    "evade": 1
+   },
+   "10": {
+    "text": "Gain a +2 Evade Buff, and roll Evade with Advantage vs. Spells and Ranged Attacks.",
+    "evade": 2
+   },
+   "15": {
+    "text": "Gain a +2 Evade Buff, and you may perform the Evade Action without spending an Action in combat.",
+    "evade": 2
+   }
+  },
+  "effects": {
+   "evade": 1
+  },
+  "summary": "+1 Evade Buff."
+ },
+ {
+  "id": "double-tap",
+  "name": "Double Tap",
+  "kind": "utility",
+  "page": 190,
+  "keywords": [
+   "Passive"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "limitations": "To engage this Skill, you must declare a Double Tap at the start of the combat round, before Mob Actions have been determined.",
+  "upgrades": {
+   "5": {
+    "text": "Roll your first Attack with Advantage."
+   },
+   "10": {
+    "text": "If your first Attack is a Standard Success or better, the second Attack (if it hits) is upgraded to a Critical Hit."
+   },
+   "15": {
+    "text": "Roll your second Attack with Advantage. If your second Attack is a Critical Hit or upgraded to one, deal ×3 damage (instead of ×2)."
+   }
+  },
+  "summary": "If your first attack is an Amazing Success, your second hit becomes a Critical Hit."
+ },
+ {
+  "id": "driving",
+  "name": "Driving",
+  "kind": "utility",
+  "page": 190,
+  "keywords": [
+   "Dexterity"
+  ],
+  "stat": "dex",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed",
+  "limitations": "If you Attack while Driving, you suffer Disadvantage on those Checks.",
+  "upgrades": {
+   "5": {
+    "text": "You no longer suffer Disadvantage when attacking while Driving."
+   },
+   "10": {
+    "text": "Your vehicle has +5ft Move. Roll with Advantage to Evade Attacks against your vehicle.",
+    "move": 5
+   },
+   "15": {
+    "text": "Your vehicle has +5ft Move. When performing crazy stunts (like driving on only your left-side wheels), roll with Advantage.",
+    "move": 5
+   }
+  },
+  "summary": "Unopposed. Racing, chasing and stunts in a vehicle."
+ },
+ {
+  "id": "dumpster-diving",
+  "name": "Dumpster Diving",
+  "kind": "utility",
+  "page": 190,
+  "keywords": [
+   "Intelligence"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed",
+  "upgrades": {
+   "5": {
+    "text": "You also find 1 Rank damage die’s-worth of Misc. Junk."
+   },
+   "10": {
+    "text": "A Dumpster Dive takes 30 minutes. On a Critical Hit, you gain an additional interesting item."
+   },
+   "15": {
+    "text": "A Dumpster Dive takes 10 minutes. On an Amazing Success, you gain an interesting item."
+   }
+  },
+  "summary": "Unopposed, 1 hour per area. Scrounge useful junk."
+ },
+ {
+  "id": "endurance",
+  "name": "Endurance",
+  "kind": "utility",
+  "page": 190,
+  "keywords": [
+   "Constitution"
+  ],
+  "stat": "con",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed",
+  "upgrades": {
+   "5": {
+    "text": "You can ignore the effects of a Major Fail when making these Checks."
+   },
+   "10": {
+    "text": "If you are not Fatigued or in extreme conditions, you make this Check with Advantage."
+   },
+   "15": {
+    "text": "If your Check is a Critical Fail, you can take the effects of a Standard Fail."
+   }
+  },
+  "summary": "Unopposed. Keep going without becoming Fatigued (grinding, long marches)."
+ },
+ {
+  "id": "engineering",
+  "name": "Engineering",
+  "kind": "utility",
+  "page": 191,
+  "keywords": [
+   "Intelligence"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed",
+  "limitations": "Cannot create vehicles or high-powered engines (see Gear Head for that p. 192).",
+  "upgrades": {
+   "5": {
+    "text": "Choose a mundane item type to specialize in. You have Advantage when creating an item of that type."
+   },
+   "10": {
+    "text": "You may craft your specialty item with a +1 bonus level enchantment."
+   },
+   "15": {
+    "text": "You may craft your specialty item with up to +2 bonus level enchantment, and it takes half the time."
+   }
+  },
+  "summary": "Unopposed. Build things with moving parts from Misc. Junk."
+ },
+ {
+  "id": "escape-artist",
+  "name": "Escape Artist",
+  "kind": "utility",
+  "page": 191,
+  "keywords": [
+   "Dexterity"
+  ],
+  "stat": "dex",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed/Opposed",
+  "upgrades": {
+   "5": {
+    "text": "You can escape your bonds, and no one sees you do it. If you escape being Held, you can then take a Step (also unseen)."
+   },
+   "10": {
+    "text": "When other crawlers in your party roll this skill untrained, they roll as normal (not with Disadvantage)."
+   },
+   "15": {
+    "text": "When you slip out, you may immediately take an Action with Advantage."
+   }
+  },
+  "summary": "Escape bonds (Unopposed) or being Held (Str-Opposed)."
+ },
+ {
+  "id": "escape-plan",
+  "name": "Escape Plan",
+  "kind": "utility",
+  "page": 191,
+  "keywords": [
+   "Passive"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "limitations": "Ranks in this Skill only advance by magical means.",
+  "upgrades": {
+   "5": {
+    "text": "You have access to system-concealed displays and the Dungeon Locator. Holographic signs pop up in your HUD, displaying insider information like signs at a zoo. Includes arrows toward City and stronger Bosses."
+   },
+   "10": {
+    "text": "You are able to read hidden sigils (glowing blue circles) used by the showrunners to direct the movement of Mobs."
+   },
+   "15": {
+    "text": "You are able to read hidden messages and redactions in dungeon documents."
+   }
+  },
+  "summary": "Your HUD shows hidden doors and passages."
+ },
+ {
+  "id": "explosives-handling",
+  "name": "Explosives Handling",
+  "kind": "utility",
+  "page": 191,
+  "keywords": [
+   "Intelligence"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed",
+  "upgrades": {
+   "5": {
+    "text": "You are able to determine the type, status, and raw materials of explosives you handle."
+   },
+   "10": {
+    "text": "You are able to craft explosives such as dynamite as if this were a crafting Skill, though you must have explosive raw materials and a Sapper’s Table (see"
+   },
+   "15": {
+    "text": "You may create explosive raw materials out of non-volatile materials. Your crafting takes half the time."
+   }
+  },
+  "summary": "Unopposed. Handle standard explosives safely."
+ },
+ {
+  "id": "fabricate",
+  "name": "Fabricate",
+  "kind": "utility",
+  "page": 191,
+  "keywords": [
+   "Intelligence"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed",
+  "limitations": "Cannot create things with moving parts, fluids, or chemicals.",
+  "upgrades": {
+   "5": {
+    "text": "Choose a mundane item to specialize in. You have Advantage when creating that item."
+   },
+   "10": {
+    "text": "You may craft your specialty item with a +1 bonus level enchantment."
+   },
+   "15": {
+    "text": "You may craft your specialty item with up to +2 bonus level enchantment, and it takes half the time."
+   }
+  },
+  "summary": "Unopposed. Make simple mundane items from Misc. Junk."
+ },
+ {
+  "id": "find-crawler",
+  "name": "Find Crawler",
+  "kind": "utility",
+  "page": 192,
+  "keywords": [
+   "Passive"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "limitations": "Ranks in this Skill only increase by magical means.",
+  "upgrades": {
+   "5": {
+    "text": "The area in which you can detect other crawlers increases to 5 miles."
+   },
+   "10": {
+    "text": "The area in which you can detect other crawlers increases to 10 miles."
+   },
+   "15": {
+    "text": "You can input a specific crawler’s name and learn their exact location anywhere in the dungeon."
+   }
+  },
+  "summary": "Your HUD shows other crawlers within 1,000 feet."
+ },
+ {
+  "id": "find-trap",
+  "name": "Find Trap",
+  "kind": "utility",
+  "page": 192,
+  "keywords": [
+   "Passive"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "limitations": "Ranks in this Skill only increase by magical means and training.",
+  "upgrades": {
+   "5": {
+    "text": "Traps appear on your HUD up to 5 seconds before they are triggered."
+   },
+   "10": {
+    "text": "Traps within 10 feet of you appear on your HUD as you approach them."
+   },
+   "15": {
+    "text": "Traps within 15 feet of you appear on your HUD as you approach them."
+   }
+  },
+  "summary": "Traps within 5 feet flash on your HUD just before they trigger."
+ },
+ {
+  "id": "first-aid",
+  "name": "First Aid",
+  "kind": "utility",
+  "page": 192,
+  "keywords": [
+   "Intelligence"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": false,
+  "checkType": "Varies",
+  "limitations": "After you treat someone, you can’t treat them again until they complete a Short or Long Rest. Give minor medical aid to yourself or someone else. Make an Unopposed Skill Check.",
+  "upgrades": {
+   "5": {
+    "text": "If you spend 5 minutes, the patient also heals a Minor Injury Debuff."
+   },
+   "10": {
+    "text": "If you spend 10 minutes, the patient also heals a Long-Term Minor Injury Debuff."
+   },
+   "15": {
+    "text": "The patient regains 1 additional Health Bar slot. If you spend 15 minutes, the patient also heals a Major Injury Debuff."
+   }
+  },
+  "summary": "Heal 1 Health Bar slot, plus 1 for each higher degree of Success."
+ },
+ {
+  "id": "gear-head",
+  "name": "Gear Head",
+  "kind": "utility",
+  "page": 192,
+  "keywords": [
+   "Intelligence"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": false,
+  "checkType": "Varies",
+  "limitations": "This Limited Skill can only be learned via a Race, Class, or item. Requires an Engine Stand attachment to an Engineering Table (2,000 gold).",
+  "upgrades": {
+   "5": {
+    "text": "You are able to add accessories to vehicles or even build your own custom vehicles. Use the rules of Engineering for crafting such things, but use this Skill and there are no bonus level limits to your custom-crafted items."
+   },
+   "10": {
+    "text": "Each +10ft Move is a +1 Bonus Level. You may use this Skill as a Repair Skill (see p. 197) when fixing engines.",
+    "move": 10
+   },
+   "15": {
+    "text": "Cut the time required to craft engines and vehicles you build around your engines in half."
+   }
+  },
+  "summary": "Unopposed. Build high-performance engines (+5ft Move per Bonus Level)."
+ },
+ {
+  "id": "goblin-explosives",
+  "name": "Goblin Explosives",
+  "kind": "utility",
+  "page": 192,
+  "keywords": [
+   "Intelligence"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed",
+  "upgrades": {
+   "5": {
+    "text": "Critical Fail occurs on a Natural 3 or less. You are able to determine the type, status, and raw materials of Goblin Explosives you handle."
+   },
+   "10": {
+    "text": "Critical Fail occurs on a Natural 2 or less. You are able to craft explosives such as dynamite as if this were a crafting Skill, though you must have explosive raw materials and a Sapper’s Table. See Crafting on p. 221."
+   },
+   "15": {
+    "text": "Critical Fail occurs on a Natural 1 as usual. You may create explosive raw materials out of non-volatile materials with the use of a Sapper’s Table. Your crafting takes half the time."
+   }
+  },
+  "summary": "Unopposed. Use unstable goblin explosives; Crit Fails on a Natural 1–4."
+ },
+ {
+  "id": "good-first-impression",
+  "name": "Good First Impression",
+  "kind": "utility",
+  "page": 193,
+  "keywords": [
+   "Charisma"
+  ],
+  "stat": "cha",
+  "passive": false,
+  "attack": false,
+  "checkType": "Opposed",
+  "limitations": "This Skill doesn’t work on crawlers, Bosses, or Elites. You can only make a Skill Check against individuals, not groups.",
+  "upgrades": {
+   "5": {
+    "text": "A Mob that is lower level than you won’t attack your party unless they are attacked by a member of your party."
+   },
+   "10": {
+    "text": "A Mob that is up to double your level won’t attack your party unless they are attacked by you or an ally or your party is preventing them from completing their objective."
+   },
+   "15": {
+    "text": "A group of Mobs of the same type up to double your level won’t attack your party unless they are attacked by a member of your party, or your party is preventing them from completing their objective."
+   }
+  },
+  "summary": "Int-Opposed. A non-hostile NPC or Mob approaches with curiosity."
+ },
+ {
+  "id": "hide-in-shadows",
+  "name": "Hide in Shadows",
+  "kind": "utility",
+  "page": 193,
+  "keywords": [
+   "Dexterity"
+  ],
+  "stat": "dex",
+  "passive": false,
+  "attack": false,
+  "checkType": "Opposed",
+  "limitations": "To move while avoiding detection, see",
+  "upgrades": {
+   "5": {
+    "text": "You can use this Skill in a dim light without having an object to hide behind."
+   },
+   "10": {
+    "text": "When other crawlers in your party roll this Skill untrained, they roll as normal (not with Disadvantage)."
+   },
+   "15": {
+    "text": "You can use this Skill in a lightly shaded area and may make a Step without giving away your position."
+   }
+  },
+  "summary": "Int-Opposed. Hide while standing still; you become invisible to Mobs and HUDs."
+ },
+ {
+  "id": "improvised-explosive-device",
+  "name": "Improvised Explosive Device",
+  "kind": "utility",
+  "page": 193,
+  "keywords": [
+   "Intelligence"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": false,
+  "checkType": "Varies",
+  "upgrades": {
+   "5": {
+    "text": "Your crafting takes half the time."
+   },
+   "10": {
+    "text": "Your devices deal d10s of damage instead of d6s (the default)."
+   },
+   "15": {
+    "text": "Your devices can be set to trigger only against a specific Mob, Boss, NPC, or crawler."
+   }
+  },
+  "summary": "Unopposed. Build bombs and traps without a Sapper's Table."
+ },
+ {
+  "id": "incendiary-device-handling",
+  "name": "Incendiary Device Handling",
+  "kind": "utility",
+  "page": 193,
+  "keywords": [
+   "Intelligence"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed",
+  "upgrades": {
+   "5": {
+    "text": "You are able to determine the type, status, and raw materials of incendiary devices you handle."
+   },
+   "10": {
+    "text": "You are able to craft incendiary devices as if this were a crafting Skill, though you must have incendiary raw materials and a Sapper’s Table. See"
+   },
+   "15": {
+    "text": "Add a +5 Splash to your crafted device at no additional Difficulty, and your crafting takes half the time."
+   }
+  },
+  "summary": "Unopposed. Handle incendiary devices safely."
+ },
+ {
+  "id": "infusion",
+  "name": "Infusion",
+  "kind": "utility",
+  "page": 194,
+  "keywords": [
+   "Intelligence"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": false,
+  "checkType": "Varies",
+  "limitations": "Requires an Infusion Station attachment on an Alchemy Table or Tier 3 Sapper’s Table.",
+  "upgrades": {
+   "5": {
+    "text": "One potion can infuse 2 items at once."
+   },
+   "10": {
+    "text": "One potion can infuse 5 items at once."
+   },
+   "15": {
+    "text": "One potion can infuse 10 items at once."
+   }
+  },
+  "summary": "Put a potion's effect into a consumable item."
+ },
+ {
+  "id": "intimidate",
+  "name": "Intimidate",
+  "kind": "utility",
+  "page": 194,
+  "keywords": [
+   "Strength"
+  ],
+  "stat": "str",
+  "passive": false,
+  "attack": false,
+  "checkType": "Opposed",
+  "upgrades": {
+   "5": {
+    "text": "On Success or greater, until the end of the next round, the target can only use its remaining Actions to move away from you (though it does not need to use its Step when doing so)."
+   },
+   "10": {
+    "text": "The target also gains the Woozy Debuff."
+   },
+   "15": {
+    "text": "The target drops everything they were holding and also gains the Paralyzed Debuff."
+   }
+  },
+  "summary": "Cha-Opposed. Scare a foe so it becomes Staggered."
+ },
+ {
+  "id": "investigation",
+  "name": "Investigation",
+  "kind": "utility",
+  "page": 194,
+  "keywords": [
+   "Intelligence"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed",
+  "upgrades": {
+   "5": {
+    "text": "If you’re familiar with the area you are investigating, you can make the Skill Check with Advantage."
+   },
+   "10": {
+    "text": "Each attempt takes 5 minutes."
+   },
+   "15": {
+    "text": "Roll with Advantage if you know the parties involved. Example: You know the puzzle’s maker, or you know the murder victim and the main suspect."
+   }
+  },
+  "summary": "Unopposed, 10 minutes. Learn something useful; also for Look for Clues."
+ },
+ {
+  "id": "iron-stomach",
+  "name": "Iron Stomach",
+  "kind": "utility",
+  "page": 194,
+  "keywords": [
+   "Constitution"
+  ],
+  "stat": "con",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed",
+  "upgrades": {
+   "5": {
+    "text": "On a Critical Hit, gain 1 additional permanent Intelligence."
+   },
+   "10": {
+    "text": "On a Standard Success or better, gain 1 permanent Intelligence. You may eat cursed items with no ill effects."
+   },
+   "15": {
+    "text": "You choose which Stat is permanently increased."
+   }
+  },
+  "summary": "Unopposed. Eat magic items (Amazing Success: +1 permanent Int)."
+ },
+ {
+  "id": "jumping",
+  "name": "Jumping",
+  "kind": "utility",
+  "page": 194,
+  "keywords": [
+   "Strength"
+  ],
+  "stat": "str",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed",
+  "upgrades": {
+   "5": {
+    "text": "Add your Dexto the height of your Jump."
+   },
+   "10": {
+    "text": "You gain a +1 Evade Buff.",
+    "evade": 1
+   },
+   "15": {
+    "text": "Your leap distance in feet is Rank + [Str ×2]."
+   }
+  },
+  "summary": "Unopposed. Running leap of up to Rank + Str feet."
+ },
+ {
+  "id": "leadership",
+  "name": "Leadership",
+  "kind": "utility",
+  "page": 194,
+  "keywords": [
+   "Charisma"
+  ],
+  "stat": "cha",
+  "passive": false,
+  "attack": false,
+  "checkType": "Opposed",
+  "upgrades": {
+   "5": {
+    "text": "You may instead use this Skill during Skill challenges while on a group Quest. Perform a free Call a Play Action, and it extends to each member of the parties during their next non-combat Skill Check."
+   },
+   "10": {
+    "text": "Instead of Advantage, anyone in the parties may perform a free Move Action."
+   },
+   "15": {
+    "text": "Instead of Advantage, anyone in the parties may perform a free Evade Action."
+   }
+  },
+  "summary": "Int-Opposed. Coordinate parties so they get Advantage on their first attack against a Boss."
+ },
+ {
+  "id": "light-on-your-feet",
+  "name": "Light on Your Feet",
+  "kind": "utility",
+  "page": 195,
+  "keywords": [
+   "Dexterity"
+  ],
+  "stat": "dex",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed",
+  "limitations": "Usable only by animals",
+  "upgrades": {
+   "5": {
+    "text": "Your distance is Rank ×3 and your height is Dex ×3."
+   },
+   "10": {
+    "text": "You may leap without an arcing trajectory, which allows for “straight up.”"
+   },
+   "15": {
+    "text": "Your leap may last up to your Rank in seconds, which resembles gliding."
+   }
+  },
+  "summary": "Unopposed. Running leap of Rank ×2 feet, reaching Dex ×2 feet high."
+ },
+ {
+  "id": "lockpicking",
+  "name": "Lockpicking",
+  "kind": "utility",
+  "page": 195,
+  "keywords": [
+   "Dexterity"
+  ],
+  "stat": "dex",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed/Opposed",
+  "limitations": "Roll with Disadvantage if you do not have the proper tools, unless it’s a crude lock.",
+  "upgrades": {
+   "5": {
+    "text": "You make no noise and leave no trace."
+   },
+   "10": {
+    "text": "Each attempt takes half the time. You may alter the lock so that the key no longer works."
+   },
+   "15": {
+    "text": "You don’t roll with Disadvantage if you lack the proper tools."
+   }
+  },
+  "summary": "Unopposed, takes Floor-number minutes. Pick a lock."
+ },
+ {
+  "id": "lore",
+  "name": "Lore",
+  "kind": "utility",
+  "page": 195,
+  "keywords": [
+   "Intelligence"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed",
+  "upgrades": {
+   "5": {
+    "text": "You can identify the major factions in the area."
+   },
+   "10": {
+    "text": "You are aware of the important local NPCs. Just give your GM a break and don’t demand this all up front or the first one you come across will likely attack you."
+   },
+   "15": {
+    "text": "You roll with Advantage on your first Charisma-based Skill Check when encountering an organized group in a neighborhood."
+   }
+  },
+  "summary": "Unopposed. Know something about a neighborhood, its Mobs or its locals."
+ },
+ {
+  "id": "negotiation",
+  "name": "Negotiation",
+  "kind": "utility",
+  "page": 195,
+  "keywords": [
+   "Charisma"
+  ],
+  "stat": "cha",
+  "passive": false,
+  "attack": false,
+  "checkType": "Opposed",
+  "limitations": "Does not work on members of your own party. Some items have a minimum price.",
+  "upgrades": {
+   "5": {
+    "text": "Your party members can also buy or sell at your newly-negotiated price."
+   },
+   "10": {
+    "text": "Increase or decrease the price by an additional 10% in your favor."
+   },
+   "15": {
+    "text": "Increase or decrease the price by an additional 15% in your favor."
+   }
+  },
+  "summary": "Int-Opposed, 5 minutes. Haggle prices with merchants."
+ },
+ {
+  "id": "pathfinder",
+  "name": "Pathfinder",
+  "kind": "utility",
+  "page": 195,
+  "keywords": [
+   "Passive"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "limitations": "Ranks in this Skill only increase by magical means and training.",
+  "upgrades": {
+   "5": {
+    "text": "You are notified when you are near a saferoom or stairwell."
+   },
+   "10": {
+    "text": "You can see through your map while it is open in your HUD."
+   },
+   "15": {
+    "text": "Mobs appear as red dots on your HUD map."
+   }
+  },
+  "summary": "Your HUD map covers Rank × the normal area."
+ },
+ {
+  "id": "perception",
+  "name": "Perception",
+  "kind": "utility",
+  "page": 196,
+  "keywords": [
+   "Intelligence"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed",
+  "upgrades": {
+   "5": {
+    "text": "Halve the penalty for cluttered areas."
+   },
+   "10": {
+    "text": "Halve the penalty for how short of a window you have to notice the thing."
+   },
+   "15": {
+    "text": "Halve the penalty for the range to the thing."
+   }
+  },
+  "summary": "Unopposed. Notice details; also for Look for Clues."
+ },
+ {
+  "id": "performance",
+  "name": "Performance",
+  "kind": "utility",
+  "page": 196,
+  "keywords": [
+   "Charisma"
+  ],
+  "stat": "cha",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed",
+  "upgrades": {
+   "5": {
+    "text": "Choose an additional type of performance to specialize in."
+   },
+   "10": {
+    "text": "Choose an additional type of performance. You can coach and coordinate others in one of your specialties. After coaching them for at least 1 hour in one of your specialties, they can attempt an unskilled Performance Skill Check without Disadvantage."
+   },
+   "15": {
+    "text": "Choose an additional type of performance. You can mimic someone else’s performance after experiencing it once."
+   }
+  },
+  "summary": "Unopposed. Wow an audience in your specialty."
+ },
+ {
+  "id": "persuasion",
+  "name": "Persuasion",
+  "kind": "utility",
+  "page": 196,
+  "keywords": [
+   "Charisma"
+  ],
+  "stat": "cha",
+  "passive": false,
+  "attack": false,
+  "checkType": "Opposed",
+  "upgrades": {
+   "5": {
+    "text": "They’ll follow your suggestion even if it is costly for them."
+   },
+   "10": {
+    "text": "They’ll follow your suggestion even if it is dangerous."
+   },
+   "15": {
+    "text": "They’ll follow your suggestion even if it’s against their nature."
+   }
+  },
+  "summary": "Int-Opposed, about 10 minutes. Convince someone to go along with you."
+ },
+ {
+  "id": "regeneration",
+  "name": "Regeneration",
+  "kind": "utility",
+  "page": 196,
+  "keywords": [
+   "Passive"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "upgrades": {
+   "5": {
+    "text": "After 5 minutes, any Minor Injury Debuff you suffer from ends. After 10 minutes, any Major Injury Debuff you suffer from ends."
+   },
+   "10": {
+    "text": "After 20 minutes, any Long-Term Minor Injury Debuff you suffer from ends. After 1 hour, any Long-Term Major Injury Debuff you suffer from ends."
+   },
+   "15": {
+    "text": "The time required to end injury Debuffs is halved."
+   }
+  },
+  "summary": "Heal 1 slot every round if Rank ≥ your Con, otherwise every other round."
+ },
+ {
+  "id": "religion",
+  "name": "Religion",
+  "kind": "utility",
+  "page": 197,
+  "keywords": [
+   "Intelligence"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed",
+  "upgrades": {
+   "5": {
+    "text": "You can identify the followers on sight, even if they’re trying to hide their affiliation."
+   },
+   "10": {
+    "text": "You know how to sow discord among the followers of that religion."
+   },
+   "15": {
+    "text": "You know strengths and weakness of the gods."
+   }
+  },
+  "summary": "Unopposed. Know the basics about a god and its followers."
+ },
+ {
+  "id": "repair",
+  "name": "Repair",
+  "kind": "utility",
+  "page": 197,
+  "keywords": [
+   "Intelligence"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed",
+  "limitations": "For basic repairs to items with no moving parts, magical or not.",
+  "upgrades": {
+   "5": {
+    "text": "You can make repairs to things with moving parts."
+   },
+   "10": {
+    "text": "You can make repairs in 1 hour."
+   },
+   "15": {
+    "text": "You can rebuild a destroyed item."
+   }
+  },
+  "summary": "Unopposed, 2 hours. Fix a broken item."
+ },
+ {
+  "id": "riding",
+  "name": "Riding",
+  "kind": "utility",
+  "page": 197,
+  "keywords": [
+   "Dexterity"
+  ],
+  "stat": "dex",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed",
+  "limitations": "The rider in control of the mount rolls Attack Skill Checks with Disadvantage.",
+  "upgrades": {
+   "5": {
+    "text": "Your mount has +5ft Move. You no longer suffer Disadvantage when attacking while Riding.",
+    "move": 5
+   },
+   "10": {
+    "text": "Your mount has an additional +10ft Move. When other crawlers in your party roll this Skill untrained, they roll as normal (not with Disadvantage).",
+    "move": 10
+   },
+   "15": {
+    "text": "Your mount has an additional +15ft Move. When performing crazy stunts (like jumping through flames), roll with Advantage.",
+    "move": 15
+   }
+  },
+  "summary": "Stay on a panicking mount during action scenes."
+ },
+ {
+  "id": "ropework",
+  "name": "Ropework",
+  "kind": "utility",
+  "page": 197,
+  "keywords": [
+   "Dexterity"
+  ],
+  "stat": "dex",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed",
+  "upgrades": {
+   "5": {
+    "text": "You can now use this Skill as an Attack, at a Range of 10ft vs. the target’s Evade. On Success, the target gains the Held Debuff."
+   },
+   "10": {
+    "text": "You can whip your line in that special way to untie a knot you made and recover your rope."
+   },
+   "15": {
+    "text": "Your Attack now has a Range of your Strength (min 15). Just make sure your rope is long enough."
+   }
+  },
+  "summary": "Unopposed. Knots, lassos and tying things up."
+ },
+ {
+  "id": "running",
+  "name": "Running",
+  "kind": "utility",
+  "page": 197,
+  "keywords": [
+   "Dexterity"
+  ],
+  "stat": "dex",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed",
+  "limitations": "For short bursts of running. For extended runs, use Endurance instead (p. 190).",
+  "upgrades": {
+   "5": {
+    "text": "You have a permanent +5ft Move Buff. Make a Check every 2 minutes.",
+    "move": 5
+   },
+   "10": {
+    "text": "You have an additional permanent +10ft Move Buff. Make a Check every 4 minutes.",
+    "move": 10
+   },
+   "15": {
+    "text": "You have an additional permanent +15ft Move Buff. Make a Check every 6 minutes.",
+    "move": 15
+   }
+  },
+  "summary": "Unopposed, each minute. Races and chases (+1 per 10ft Move)."
+ },
+ {
+  "id": "salvage",
+  "name": "Salvage",
+  "kind": "utility",
+  "page": 198,
+  "keywords": [
+   "Intelligence"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed",
+  "limitations": "Salvage cannot be used with explosive devices.",
+  "upgrades": {
+   "5": {
+    "text": "Your Salvage Checks take 30 minutes."
+   },
+   "10": {
+    "text": "On Success, you recover all of the important raw materials."
+   },
+   "15": {
+    "text": "On a crafting Standard Fail or Near Miss, roll your crafting Check again with Advantage, with an additional 15-minute time expenditure."
+   }
+  },
+  "summary": "Unopposed, 1 hour. Recover half the materials from wrecked or failed crafts."
+ },
+ {
+  "id": "scutelliphily",
+  "name": "Scutelliphily",
+  "kind": "utility",
+  "page": 198,
+  "keywords": [
+   "Intelligence"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed",
+  "limitations": "This Limited Skill can only be learned via a Race, Class, or item.",
+  "upgrades": {
+   "5": {
+    "text": "You can sew and iron patches onto clothing using this Skill."
+   },
+   "10": {
+    "text": "You may use this as a crafting Skill, but crafting tables provide no bonuses. Enchanted patches are limited to one per Gear slot and do not take up Accessory slots. See Crafting, p. 221."
+   },
+   "15": {
+    "text": "Your crafting Checks take half the time. Increase the bonus value of your enchantments with this Skill by 1, at no additional Difficulty or time to craft."
+   }
+  },
+  "summary": "Unopposed. Identify patches and improve the patches you craft."
+ },
+ {
+  "id": "shield-block",
+  "name": "Shield Block",
+  "kind": "utility",
+  "page": 198,
+  "keywords": [
+   "Strength",
+   "Interrupt"
+  ],
+  "stat": "str",
+  "passive": false,
+  "attack": false,
+  "checkType": "Varies",
+  "limitations": "Requires you to be wielding a shield. Cannot be used against Area of Effect damage. A successful Shield Block still counts as “a hit crawler” or “a crawler who failed to Evade.”",
+  "upgrades": {
+   "5": {
+    "text": "You may also use this Skill against Spells and magical damage."
+   },
+   "10": {
+    "text": "On a Critical Hit, you may make a Shield Bash Attack as a free melee-range Interrupt Attack (instead of Advantage on your next Attack) if you wish, dealing 3d6 base damage + Str Bludgeoning."
+   },
+   "15": {
+    "text": "+1d6 Shield Bash damage. Further reduce the damage you would take by your Str Mod. Example: After halving 30 damage down to 15, your Str Mod of 5 reduces it to 10 damage.",
+    "dice": {
+     "count": 1,
+     "sides": 6
+    }
+   }
+  },
+  "summary": "Interrupt: roll against each physical attack's to-hit to block it with a shield."
+ },
+ {
+  "id": "sleight-of-hand",
+  "name": "Sleight of Hand",
+  "kind": "utility",
+  "page": 198,
+  "keywords": [
+   "Dexterity"
+  ],
+  "stat": "dex",
+  "passive": false,
+  "attack": false,
+  "checkType": "Opposed",
+  "limitations": "Items you manipulate must be smaller than the size of your hand. You cannot access others’ Inventories or Hotlists.",
+  "upgrades": {
+   "5": {
+    "text": "You may attempt to pick the pockets of NPCs and Mobs."
+   },
+   "10": {
+    "text": "You may attempt to plant items on someone with pockets or the equivalent."
+   },
+   "15": {
+    "text": "You may manipulate items up to half your own size (rounded down)."
+   }
+  },
+  "summary": "Int-Opposed. Move small objects without being noticed."
+ },
+ {
+  "id": "smithing",
+  "name": "Smithing",
+  "kind": "utility",
+  "page": 199,
+  "keywords": [
+   "Strength"
+  ],
+  "stat": "str",
+  "passive": false,
+  "attack": false,
+  "checkType": "Varies",
+  "upgrades": {
+   "5": {
+    "text": "You may craft items up to a +5 bonus."
+   },
+   "10": {
+    "text": "You may craft items up to a +10 bonus."
+   },
+   "15": {
+    "text": "Your crafting with this Skill takes half the time."
+   }
+  },
+  "summary": "Forge mundane metal items, weapons and armor."
+ },
+ {
+  "id": "stealth",
+  "name": "Stealth",
+  "kind": "utility",
+  "page": 199,
+  "keywords": [
+   "Dexterity"
+  ],
+  "stat": "dex",
+  "passive": false,
+  "attack": false,
+  "checkType": "Opposed",
+  "limitations": "You must be out of sight of all foes to begin this Check.",
+  "upgrades": {
+   "5": {
+    "text": "Your surprise Action can be an Attack with Advantage."
+   },
+   "10": {
+    "text": "When other crawlers in your party roll this Skill untrained, they roll as normal (not with Disadvantage)."
+   },
+   "15": {
+    "text": "On a successful Surprise Check, you may also take a full Move and Step. If you Attack with your Surprise Action, deal ×2 the base damage dice."
+   }
+  },
+  "summary": "Int-Opposed. Move unseen; before combat, gain a free non-Attack Action."
+ },
+ {
+  "id": "streetwise",
+  "name": "Streetwise",
+  "kind": "utility",
+  "page": 199,
+  "keywords": [
+   "Charisma"
+  ],
+  "stat": "cha",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed",
+  "upgrades": {
+   "5": {
+    "text": "You also hear an additional rumor, as determined by the GM. Or spread one!"
+   },
+   "10": {
+    "text": "You also quickly find a hiding place determined by the GM."
+   },
+   "15": {
+    "text": "You also uncover information that might give you some leverage on an important person in town determined by the GM."
+   }
+  },
+  "summary": "Unopposed. Rumors, black markets and keeping a low profile in town."
+ },
+ {
+  "id": "survival",
+  "name": "Survival",
+  "kind": "utility",
+  "page": 199,
+  "keywords": [
+   "Constitution"
+  ],
+  "stat": "con",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed",
+  "upgrades": {
+   "5": {
+    "text": "You do not suffer additional damage from a Critical Fail."
+   },
+   "10": {
+    "text": "When other crawlers in your party roll this Skill untrained, they roll as normal (not with Disadvantage)."
+   },
+   "15": {
+    "text": "You do not suffer additional damage from a Major Fail."
+   }
+  },
+  "summary": "Unopposed. Get through harsh, remote areas unharmed."
+ },
+ {
+  "id": "swimming",
+  "name": "Swimming",
+  "kind": "utility",
+  "page": 199,
+  "keywords": [
+   "Strength"
+  ],
+  "stat": "str",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed",
+  "limitations": "After 1 minute of Swimming (Success or Fail) or immediately on a Major Fail or worse, gain the Fatigued Debuff.",
+  "upgrades": {
+   "5": {
+    "text": "After 2 minutes of Swimming (Success or Fail), gain the Fatigued Debuff."
+   },
+   "10": {
+    "text": "You can swim at your full Move rate as an Action, but you still can’t take a 10ft Step."
+   },
+   "15": {
+    "text": "Make this Check every 5 minutes, and only gain the Fatigue Debuff on a Critical Fail."
+   }
+  },
+  "summary": "Unopposed, every 30 seconds. Swim under pressure; causes Fatigue."
+ },
+ {
+  "id": "tactics",
+  "name": "Tactics",
+  "kind": "utility",
+  "page": 200,
+  "keywords": [
+   "Intelligence"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed",
+  "limitations": "A crawler may attempt this Skill Check only once per combat.",
+  "upgrades": {
+   "5": {
+    "text": "If you observe the foes and battlefield for at least 5 minutes prior to combat, roll this Skill Check with Advantage."
+   },
+   "10": {
+    "text": "After using this Skill during a combat, you roll 2d10 when you Call a Play (still choose one die)."
+   },
+   "15": {
+    "text": "The bonus applies to all three combat disciplines instead of just one."
+   }
+  },
+  "summary": "Unopposed, once per combat. Party gets +1 or more to Attack, Damage or Evade."
+ },
+ {
+  "id": "tattoo-artistry",
+  "name": "Tattoo Artistry",
+  "kind": "utility",
+  "page": 200,
+  "keywords": [
+   "Dexterity"
+  ],
+  "stat": "dex",
+  "passive": false,
+  "attack": false,
+  "checkType": "Varies",
+  "upgrades": {
+   "5": {
+    "text": "You may craft tattoos with up to a +5 bonus."
+   },
+   "10": {
+    "text": "You may craft tattoos with up to a +10 bonus."
+   },
+   "15": {
+    "text": "Your crafting with this Skill takes half the time."
+   }
+  },
+  "summary": "Mundane tattoos (magical ones use crafting rules)."
+ },
+ {
+  "id": "taunt",
+  "name": "Taunt",
+  "kind": "utility",
+  "page": 200,
+  "keywords": [
+   "Charisma",
+   "Interrupt"
+  ],
+  "stat": "cha",
+  "passive": false,
+  "attack": false,
+  "checkType": "Opposed",
+  "upgrades": {
+   "5": {
+    "text": "You may make a free Evade Check against each Taunted Attack (roll separately vs. each Attack as usual). Then you may still spend an Action to Evade other Attacks and reroll any Fails from your free Evades."
+   },
+   "10": {
+    "text": "You can affect Mobs within 60 feet."
+   },
+   "15": {
+    "text": "Your free Evade Checks against Taunted Attacks are made with Advantage."
+   }
+  },
+  "summary": "Interrupt, Int-Opposed. Pull a Mob's attack onto yourself."
+ },
+ {
+  "id": "throwing",
+  "name": "Throwing",
+  "kind": "utility",
+  "page": 200,
+  "keywords": [
+   "Strength"
+  ],
+  "stat": "str",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed",
+  "upgrades": {
+   "5": {
+    "text": "You have Advantage when Throwing to a target who wants to catch what you are selling."
+   },
+   "10": {
+    "text": "Choose the direction on a miss, rather than roll."
+   },
+   "15": {
+    "text": "Your Throw range is your Str ×20 feet."
+   }
+  },
+  "summary": "Throw objects (Unopposed to hit an area, vs Evade to hit a foe); range Str ×10 ft."
+ },
+ {
+  "id": "tracking",
+  "name": "Tracking",
+  "kind": "utility",
+  "page": 201,
+  "keywords": [
+   "Intelligence"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": false,
+  "checkType": "Unopposed",
+  "upgrades": {
+   "5": {
+    "text": "You can follow found tracks for 30 minutes before making a new Check, and gain 1 piece of information about the target(s)."
+   },
+   "10": {
+    "text": "You can follow found tracks for 1 hour before making a new Check, and gain 2 pieces of information about the target(s)."
+   },
+   "15": {
+    "text": "You can follow found tracks for 2 hours before making a new Check, and gain 4 pieces of information about the target(s)."
+   }
+  },
+  "summary": "Unopposed. Find and follow tracks, re-rolling every 15 minutes."
+ },
+ {
+  "id": "trap-engineer",
+  "name": "Trap Engineer",
+  "kind": "utility",
+  "page": 201,
+  "keywords": [
+   "Intelligence"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": false,
+  "checkType": "Varies",
+  "upgrades": {
+   "5": {
+    "text": "Roll with Advantage when making non-explosive traps."
+   },
+   "10": {
+    "text": "Your traps can be set to trigger only against a specific Mob, Boss, NPC, or crawler."
+   },
+   "15": {
+    "text": "Add a +5 Splash to your trap at no additional Difficulty, and your crafting takes half the time."
+   }
+  },
+  "summary": "Craft traps with a Sapper's Table and Trap Module."
+ },
+ {
+  "id": "zone-of-control",
+  "name": "Zone of Control",
+  "kind": "utility",
+  "page": 201,
+  "keywords": [
+   "Passive"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "limitations": "You must be wielding a Reach weapon.",
+  "upgrades": {
+   "5": {
+    "text": "Your Attack is no longer made with Disadvantage."
+   },
+   "10": {
+    "text": "The target is pushed 5 feet."
+   },
+   "15": {
+    "text": "Make your Attack Skill Check with Advantage."
+   }
+  },
+  "summary": "Once per round, Interrupt-attack a foe entering an adjacent space (with Disadvantage)."
+ },
+ {
+  "id": "creepy-chains",
+  "name": "Creepy Chains",
+  "kind": "attack",
+  "group": "Racial (Changbi Demon)",
+  "page": 130,
+  "keywords": [
+   "Melee Attack",
+   "Str"
+  ],
+  "stat": "str",
+  "passive": false,
+  "attack": true,
+  "attackType": "melee",
+  "checkType": "Evade",
+  "range": "10 feet",
+  "damage": {
+   "count": 1,
+   "sides": 6,
+   "stat": "str",
+   "types": [
+    "Bludgeoning"
+   ],
+   "area": ""
+  },
+  "upgrades": {
+   "5": {
+    "text": "+1d6 base damage",
+    "dice": {
+     "count": 1,
+     "sides": 6
+    }
+   },
+   "10": {
+    "text": "+1d6 base damage, and the target gains the Woozy Debuff.",
+    "dice": {
+     "count": 1,
+     "sides": 6
+    }
+   },
+   "15": {
+    "text": "+1d6 base damage, and if the target loses at least 3 Health Bar slots, they gain the Take Down Debuff.",
+    "dice": {
+     "count": 1,
+     "sides": 6
+    }
+   }
+  },
+  "summary": "Changbi Demon racial chain weapon: works like a Club with 10ft reach."
+ }
+]

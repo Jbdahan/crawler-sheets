@@ -1,0 +1,2190 @@
+[
+ {
+  "id": "air-buddy",
+  "name": "Air Buddy",
+  "kind": "spell",
+  "page": 202,
+  "keywords": [
+   "Passive",
+   "Favored: Mage"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "range": "Self",
+  "mana": 12,
+  "manaText": "12",
+  "favored": [
+   "Mage"
+  ],
+  "upgrades": {
+   "5": {
+    "text": "You may choose one additional willing target up to your size at touch range, who you bring with you."
+   },
+   "10": {
+    "text": "You can fly up to 20 × your Int Mod away with this spell."
+   },
+   "15": {
+    "text": "You may choose up to five additional willing targets up to your size at touch range to bring with you."
+   }
+  },
+  "summary": "Launch yourself up to 10 × Int Mod away; cast twice to double jump."
+ },
+ {
+  "id": "astral-paw",
+  "name": "Astral Paw (Astral Hand, Astral Claw)",
+  "kind": "spell",
+  "page": 203,
+  "keywords": [
+   "Passive"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "range": "30 feet",
+  "duration": "Until the end of combat or 5 minutes.",
+  "mana": 12,
+  "manaText": "12",
+  "upgrades": {
+   "5": {
+    "text": "Your Pugilism and Slice Attacks with the Paw add 1 Astral Paw Rank damage die."
+   },
+   "10": {
+    "text": "You can conjure a paw up to four size categories larger than your own, and the range increases to 50 feet."
+   },
+   "15": {
+    "text": "The caster no longer suffers Disadvantage when performing suitable Skill Checks using the paw, and the duration is 15 minutes."
+   }
+  },
+  "summary": "Spectral hand that manipulates things up to 30ft away."
+ },
+ {
+  "id": "bad-faith",
+  "name": "Bad Faith",
+  "kind": "spell",
+  "page": 203,
+  "keywords": [
+   "Attack",
+   "Necrotic",
+   "Charisma",
+   "Favored: Cleric"
+  ],
+  "stat": "cha",
+  "passive": false,
+  "attack": true,
+  "attackType": "ranged",
+  "checkType": "Evade",
+  "range": "40 feet",
+  "mana": 10,
+  "manaText": "10",
+  "damage": {
+   "count": 1,
+   "sides": 8,
+   "stat": "cha",
+   "types": [
+    "Necrotic"
+   ],
+   "area": ""
+  },
+  "favored": [
+   "Cleric"
+  ],
+  "upgrades": {
+   "5": {
+    "text": "+1d8 base damage, +5ft Splash",
+    "dice": {
+     "count": 1,
+     "sides": 8
+    }
+   },
+   "10": {
+    "text": "+1d8 base damage, and end all Buffs on the victims for the duration of the combat.",
+    "dice": {
+     "count": 1,
+     "sides": 8
+    }
+   },
+   "15": {
+    "text": "+1d8 base damage, +5ft Splash",
+    "dice": {
+     "count": 1,
+     "sides": 8
+    }
+   }
+  },
+  "summary": "Necrotic attack on mind and soul."
+ },
+ {
+  "id": "bang-bro",
+  "name": "Bang Bro",
+  "kind": "spell",
+  "page": 203,
+  "keywords": [
+   "Passive"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "range": "5 feet",
+  "cooldown": "15 minutes",
+  "duration": "5 minutes + 1 minute per Rank",
+  "mana": 5,
+  "manaText": "5",
+  "upgrades": {
+   "5": {
+    "text": "+1d6 Fire and Electric damage",
+    "dice": {
+     "count": 1,
+     "sides": 6
+    }
+   },
+   "10": {
+    "text": "+1d6 Fire and Electric damage, and on an Amazing Success, the target of the weapon attack gains the Burned Debuff.",
+    "dice": {
+     "count": 1,
+     "sides": 6
+    }
+   },
+   "15": {
+    "text": "+1d6 Fire and Electric damage, and on an Amazing Success, the target of the weapon attack also gains the Shocked Debuff.",
+    "dice": {
+     "count": 1,
+     "sides": 6
+    }
+   }
+  },
+  "summary": "Your held weapon deals +2 Fire/Electric damage for a while."
+ },
+ {
+  "id": "clockwork-triplicate",
+  "name": "Clockwork Triplicate",
+  "kind": "spell",
+  "page": 203,
+  "keywords": [
+   "Passive"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "range": "5 feet",
+  "limitations": "Only castable on pets and minions.",
+  "duration": "1 minute per Rank",
+  "mana": 26,
+  "manaText": "26",
+  "upgrades": {
+   "5": {
+    "text": "Duration is 2 minutes per Rank."
+   },
+   "10": {
+    "text": "Duration is 3 minutes per Rank."
+   },
+   "15": {
+    "text": "When you command your pet or minion, the clockwork versions follow suit."
+   }
+  },
+  "summary": "Split your pet or minion into three copies."
+ },
+ {
+  "id": "confusing-fog",
+  "name": "Confusing Fog",
+  "kind": "spell",
+  "page": 204,
+  "keywords": [
+   "Passive"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "range": "40 feet",
+  "cooldown": "15 minutes",
+  "duration": "Until the end of two full rounds of combat or 20 seconds",
+  "mana": 6,
+  "manaText": "6",
+  "upgrades": {
+   "5": {
+    "text": "The fog fills a 50 × 50ft area, and its duration is 1 minute."
+   },
+   "10": {
+    "text": "The fog fills a 100 × 100ft area and lasts for 5 minutes."
+   },
+   "15": {
+    "text": "The fog fills a 500 × 500ft area and lasts for 15 minutes."
+   }
+  },
+  "summary": "Fog that Mobs attack through with Disadvantage; your party sees through it."
+ },
+ {
+  "id": "dirt-clod",
+  "name": "Dirt Clod",
+  "kind": "spell",
+  "page": 204,
+  "keywords": [
+   "Attack",
+   "Bludgeoning"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": true,
+  "attackType": "ranged",
+  "checkType": "Evade",
+  "range": "100 feet",
+  "aiFavor": "2",
+  "mana": 1,
+  "manaText": "1",
+  "damage": {
+   "count": 1,
+   "sides": 2,
+   "stat": "int",
+   "types": [
+    "Bludgeoning"
+   ],
+   "area": ""
+  },
+  "upgrades": {
+   "5": {
+    "text": "+2d2 base damage",
+    "dice": {
+     "count": 2,
+     "sides": 2
+    }
+   },
+   "10": {
+    "text": "+1d2 base damage, and the target gains the Woozy Debuff.",
+    "dice": {
+     "count": 1,
+     "sides": 2
+    }
+   },
+   "15": {
+    "text": "+1d2 base damage, and 1 Rank damage die.",
+    "dice": {
+     "count": 1,
+     "sides": 2
+    }
+   }
+  },
+  "summary": "Hurl a magic clod of dirt."
+ },
+ {
+  "id": "drain-life",
+  "name": "Drain Life",
+  "kind": "spell",
+  "page": 204,
+  "keywords": [
+   "Attack",
+   "Necrotic"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": true,
+  "attackType": "ranged",
+  "checkType": "Evade",
+  "range": "30 feet",
+  "limitations": "For a brief instant, you create a disgusting blood vein that reaches out and wraps itself around your target.",
+  "mana": 14,
+  "manaText": "14",
+  "damage": {
+   "count": 1,
+   "sides": 6,
+   "stat": "int",
+   "types": [
+    "Necrotic"
+   ],
+   "area": ""
+  },
+  "upgrades": {
+   "5": {
+    "text": "+1d6 base damage, and if the target loses at least 3 Health Bar slots, you heal 1 Health Bar slot.",
+    "dice": {
+     "count": 1,
+     "sides": 6
+    }
+   },
+   "10": {
+    "text": "+1d6 base damage, and if you heal this way, heal +1 Health Bar slot.",
+    "dice": {
+     "count": 1,
+     "sides": 6
+    }
+   },
+   "15": {
+    "text": "+1d6 base damage, and if you heal this way, heal +1 Health Bar slot.",
+    "dice": {
+     "count": 1,
+     "sides": 6
+    }
+   }
+  },
+  "summary": "Necrotic tether that heals you at higher Ranks."
+ },
+ {
+  "id": "earworm",
+  "name": "Earworm",
+  "kind": "spell",
+  "page": 204,
+  "keywords": [
+   "Attack",
+   "Sonic",
+   "Charisma",
+   "Favored: Bard"
+  ],
+  "stat": "cha",
+  "passive": false,
+  "attack": true,
+  "attackType": "ranged",
+  "checkType": "Evade",
+  "range": "30ft",
+  "cooldown": "Once per round.",
+  "mana": 6,
+  "manaText": "6",
+  "damage": {
+   "count": 1,
+   "sides": 6,
+   "stat": "cha",
+   "types": [
+    "Sonic"
+   ],
+   "area": ""
+  },
+  "favored": [
+   "Bard"
+  ],
+  "upgrades": {
+   "5": {
+    "text": "+1d6 base damage.",
+    "dice": {
+     "count": 1,
+     "sides": 6
+    }
+   },
+   "10": {
+    "text": "+1d6 base damage, and the target gains the Queasy Debuff.",
+    "dice": {
+     "count": 1,
+     "sides": 6
+    }
+   },
+   "15": {
+    "text": "+1d6 base damage and +10ft Splash.",
+    "dice": {
+     "count": 1,
+     "sides": 6
+    }
+   }
+  },
+  "summary": "Sonic attack by singing terribly."
+ },
+ {
+  "id": "fear",
+  "name": "Fear",
+  "kind": "spell",
+  "page": 204,
+  "keywords": [
+   "Attack",
+   "Mind Control"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": true,
+  "attackType": "ranged",
+  "checkType": "Evade",
+  "range": "25 feet",
+  "limitations": "Warning: Scary-ass Mobs are immune to Fear effects (GM’s discretion).",
+  "mana": 3,
+  "manaText": "3",
+  "upgrades": {
+   "5": {
+    "text": "+5ft Blast radius."
+   },
+   "10": {
+    "text": "+5ft Blast radius, and on a Critical Hit, the affected creatures gain the Paralyzed Debuff."
+   },
+   "15": {
+    "text": "+5ft Blast radius."
+   }
+  },
+  "summary": "Make a weak non-Boss Mob lose its Dex Mod, or run away."
+ },
+ {
+  "id": "fireball",
+  "name": "Fireball",
+  "kind": "spell",
+  "page": 205,
+  "keywords": [
+   "Attack",
+   "Fire",
+   "Area of Effect"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": true,
+  "attackType": "ranged",
+  "checkType": "Evade",
+  "range": "80 feet",
+  "cooldown": "Once per scene",
+  "mana": 45,
+  "manaText": "45",
+  "damage": {
+   "count": 1,
+   "sides": 12,
+   "stat": "int",
+   "types": [
+    "Fire"
+   ],
+   "area": "10ft Blast radius"
+  },
+  "upgrades": {
+   "5": {
+    "text": "+1d12 base damage. Those who lose 1 or more Health Bar slots via this attack gain the Burned Debuff.",
+    "dice": {
+     "count": 1,
+     "sides": 12
+    }
+   },
+   "10": {
+    "text": "+1d12 base damage and becomes an 80ft Line attack (and keeps the Blast).",
+    "dice": {
+     "count": 1,
+     "sides": 12
+    }
+   },
+   "15": {
+    "text": "+1d12 base damage and +40ft Splash (on the Blast).",
+    "dice": {
+     "count": 1,
+     "sides": 12
+    }
+   }
+  },
+  "summary": "Slow fireball (attack with Disadvantage) with a 10ft Blast; still lands on a miss."
+ },
+ {
+  "id": "fire-fingers",
+  "name": "Fire Fingers",
+  "kind": "spell",
+  "page": 205,
+  "keywords": [
+   "Attack",
+   "Fire"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": true,
+  "attackType": "melee",
+  "checkType": "Evade",
+  "range": "Melee",
+  "aiFavor": "1",
+  "mana": 3,
+  "manaText": "3",
+  "damage": {
+   "count": 1,
+   "sides": 4,
+   "stat": "int",
+   "types": [
+    "Fire"
+   ],
+   "area": ""
+  },
+  "upgrades": {
+   "5": {
+    "text": "+1d4 base damage.",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   },
+   "10": {
+    "text": "+1d4 base damage, and the target gains the Burned Debuff.",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   },
+   "15": {
+    "text": "+1d4 base damage, and your hands begin to intermittently burn. Your Pugilism, Unarmed Combat, and Slice Attack strikes add 1 Fire Fingers Rank damage die (Fire).",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   }
+  },
+  "summary": "Melee flame touch."
+ },
+ {
+  "id": "frost-scar",
+  "name": "Frost Scar",
+  "kind": "spell",
+  "page": 205,
+  "keywords": [
+   "Attack",
+   "Ice"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": true,
+  "attackType": "melee",
+  "checkType": "Evade",
+  "range": "Melee",
+  "aiFavor": "1",
+  "mana": 2,
+  "manaText": "2",
+  "damage": {
+   "count": 1,
+   "sides": 4,
+   "stat": "int",
+   "types": [
+    "Ice"
+   ],
+   "area": ""
+  },
+  "upgrades": {
+   "5": {
+    "text": "+1d4 base damage, and the target cannot heal themselves in the next combat round.",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   },
+   "10": {
+    "text": "+1d4 base damage, and the target gains the Stiff Legs Debuff.",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   },
+   "15": {
+    "text": "+1d4 base damage, and the target gains The Taint Debuff.",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   }
+  },
+  "summary": "Melee ice touch."
+ },
+ {
+  "id": "grand-illusion",
+  "name": "Grand Illusion",
+  "kind": "spell",
+  "page": 205,
+  "keywords": [
+   "Intelligence"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": false,
+  "checkType": "Opposed",
+  "range": "40 feet",
+  "cooldown": "15 minutes",
+  "duration": "2 minutes",
+  "mana": 7,
+  "manaText": "7",
+  "upgrades": {
+   "5": {
+    "text": "Those who believe gain the Woozy Debuff or similar based on the desired response."
+   },
+   "10": {
+    "text": "Those who believe also gain the Queasy Debuff or similar based on the desired response."
+   },
+   "15": {
+    "text": "Those who believe also gain the Shocked Debuff or similar based on the desired response."
+   }
+  },
+  "summary": "Int-Opposed illusion that fools foes who see it."
+ },
+ {
+  "id": "heal",
+  "name": "Heal",
+  "kind": "spell",
+  "page": 206,
+  "keywords": [
+   "Heal",
+   "Interrupt",
+   "Passive"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "range": "Self only",
+  "limitations": "Rank 1 maximum",
+  "mana": 2,
+  "manaText": "2",
+  "heal": {
+   "slots": 2
+  },
+  "summary": "Heal yourself 2 Health Bar slots (Interrupt). Everyone starts with it."
+ },
+ {
+  "id": "heal-critter",
+  "name": "Heal Critter",
+  "kind": "spell",
+  "page": 206,
+  "keywords": [
+   "Heal",
+   "Interrupt",
+   "Passive"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "range": "30 feet",
+  "limitations": "May only be cast on pets and minions (sorry, Donut).",
+  "mana": 8,
+  "manaText": "8",
+  "upgrades": {
+   "5": {
+    "text": "The target mends a Minor Injury Debuff."
+   },
+   "10": {
+    "text": "The target mends a Major Injury Debuff."
+   },
+   "15": {
+    "text": "The target regrows all lost appendages."
+   }
+  },
+  "heal": {
+   "full": true
+  },
+  "summary": "Fully heal a pet or critter."
+ },
+ {
+  "id": "heal-others",
+  "name": "Heal Others",
+  "kind": "spell",
+  "page": 206,
+  "keywords": [
+   "Heal",
+   "Interrupt",
+   "Passive"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "range": "30 feet",
+  "limitations": "You can’t cast this Spell on yourself, pets, or minions.",
+  "mana": 6,
+  "manaText": "6",
+  "upgrades": {
+   "5": {
+    "text": "The target heals 1d6 Health Bar slots."
+   },
+   "10": {
+    "text": "The target heals 2d6 Health Bar slots."
+   },
+   "15": {
+    "text": "Instead of a single target, all party members within a 20ft Burst radius are healed."
+   }
+  },
+  "heal": {
+   "dice": "1d4"
+  },
+  "summary": "Heal a target 1d4 Health Bar slots (Interrupt)."
+ },
+ {
+  "id": "heal-self",
+  "name": "Heal Self",
+  "kind": "spell",
+  "page": 206,
+  "keywords": [
+   "Heal",
+   "Interrupt",
+   "Passive"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "range": "Self only",
+  "limitations": "You can only case this Spell on yourself.",
+  "mana": 1,
+  "manaText": "1",
+  "upgrades": {
+   "5": {
+    "text": "You heal 1d6 Health Bar slots and mend a Minor Injury, Poison, or Disease Debuff."
+   },
+   "10": {
+    "text": "You heal 2d6 Health Bar slots and mend a Major Injury or other Debuff."
+   },
+   "15": {
+    "text": "You heal to full and gain the benefits of a short rest."
+   }
+  },
+  "heal": {
+   "dice": "1d4"
+  },
+  "summary": "Heal yourself 1d4 Health Bar slots (Interrupt)."
+ },
+ {
+  "id": "hole",
+  "name": "Hole",
+  "kind": "spell",
+  "page": 206,
+  "keywords": [
+   "Passive"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "range": "10 feet",
+  "limitations": "Can’t be used on saferoom doors or living things.",
+  "duration": "Until the end of the combat or 5 minutes.",
+  "mana": 12,
+  "manaText": "12",
+  "upgrades": {
+   "5": {
+    "text": "You can reduce the diameter of the hole to a smaller size when cast."
+   },
+   "10": {
+    "text": "You can widen the hole’s diameter by 1 inch for every inch of depth you sacrifice when cast."
+   },
+   "15": {
+    "text": "The caster may end the spell with a thought (like an Interrupt, but it doesn’t cost an Action). Anything in the hole at that time is destroyed."
+   }
+  },
+  "summary": "Open a hole through a surface."
+ },
+ {
+  "id": "holy-aura",
+  "name": "Holy Aura",
+  "kind": "spell",
+  "page": 207,
+  "keywords": [
+   "Attack",
+   "Holy",
+   "Area of Effect",
+   "Charisma",
+   "Favored: Cleric & Paladin"
+  ],
+  "stat": "cha",
+  "passive": false,
+  "attack": true,
+  "attackType": "ranged",
+  "checkType": "Evade",
+  "range": "5ft Burst radius",
+  "cooldown": "Once per round",
+  "mana": 7,
+  "manaText": "7",
+  "damage": {
+   "count": 1,
+   "sides": 4,
+   "stat": "cha",
+   "types": [
+    "Holy"
+   ],
+   "area": "5ft Burst radius"
+  },
+  "favored": [
+   "Cleric & Paladin"
+  ],
+  "upgrades": {
+   "5": {
+    "text": "+1d4 base damage, and affected undead Mobs take double damage.",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   },
+   "10": {
+    "text": "+1d4 base damage and +5ft Burst radius.",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   },
+   "15": {
+    "text": "+1d4 base damage and +5ft Burst radius.",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   }
+  },
+  "summary": "Holy burst that damages only enemies around you."
+ },
+ {
+  "id": "hot-stuff-aura",
+  "name": "Hot Stuff Aura",
+  "kind": "spell",
+  "page": 207,
+  "keywords": [
+   "Passive",
+   "Area of Effect",
+   "Favored: Bard"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "range": "5ft Burst radius",
+  "cooldown": "5 minutes",
+  "duration": "2 rounds",
+  "mana": 8,
+  "manaText": "8",
+  "favored": [
+   "Bard"
+  ],
+  "upgrades": {
+   "5": {
+    "text": "Increase the Health to 4 in each slot."
+   },
+   "10": {
+    "text": "+5ft Burst radius, with a 6 in each slot."
+   },
+   "15": {
+    "text": "+10ft Burst radius, with a 8 in each slot."
+   }
+  },
+  "summary": "Shield slots (Cha Mod count, 2 each) for you and nearby allies."
+ },
+ {
+  "id": "ice-blast",
+  "name": "Ice Blast",
+  "kind": "spell",
+  "page": 207,
+  "keywords": [
+   "Attack",
+   "Ice"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": true,
+  "attackType": "ranged",
+  "checkType": "Evade",
+  "range": "40 feet",
+  "mana": 9,
+  "manaText": "9",
+  "damage": {
+   "count": 1,
+   "sides": 8,
+   "stat": "int",
+   "types": [
+    "Ice"
+   ],
+   "area": ""
+  },
+  "upgrades": {
+   "5": {
+    "text": "+1d8 base damage.",
+    "dice": {
+     "count": 1,
+     "sides": 8
+    }
+   },
+   "10": {
+    "text": "+1d8 base damage, and the target is pushed 10 feet away from you.",
+    "dice": {
+     "count": 1,
+     "sides": 8
+    }
+   },
+   "15": {
+    "text": "+1d8 base damage, and you can change the range to a 15ft Cone Attack.",
+    "dice": {
+     "count": 1,
+     "sides": 8
+    }
+   }
+  },
+  "summary": "Compact blast of cold."
+ },
+ {
+  "id": "icicles",
+  "name": "Icicles",
+  "kind": "spell",
+  "page": 207,
+  "keywords": [
+   "Attack",
+   "Ice"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": true,
+  "attackType": "ranged",
+  "checkType": "Evade",
+  "range": "60 feet",
+  "mana": 19,
+  "manaText": "19",
+  "damage": {
+   "count": 1,
+   "sides": 12,
+   "stat": "int",
+   "types": [
+    "Ice"
+   ],
+   "area": ""
+  },
+  "upgrades": {
+   "5": {
+    "text": "+1d12 base damage.",
+    "dice": {
+     "count": 1,
+     "sides": 12
+    }
+   },
+   "10": {
+    "text": "+1d12 base damage, and the target gains the Stiff Legs Debuff.",
+    "dice": {
+     "count": 1,
+     "sides": 12
+    }
+   },
+   "15": {
+    "text": "+1d12 base damage, and the damage is Armor-Piercing.",
+    "dice": {
+     "count": 1,
+     "sides": 12
+    }
+   }
+  },
+  "summary": "Long-range ice projectiles."
+ },
+ {
+  "id": "intimate-touches",
+  "name": "Intimate Touches",
+  "kind": "spell",
+  "page": 208,
+  "keywords": [
+   "Heal",
+   "Passive",
+   "Favored: Cleric & Paladin"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "range": "5 feet",
+  "limitations": "Unlike most healing, this spell is not an Interrupt.",
+  "mana": 8,
+  "manaText": "8",
+  "favored": [
+   "Cleric & Paladin"
+  ],
+  "upgrades": {
+   "5": {
+    "text": "The target also heals a Minor Injury Debuff."
+   },
+   "10": {
+    "text": "The target also heals a Major Injury Debuff."
+   },
+   "15": {
+    "text": "The target also heals all Poison & Disease Debuffs."
+   }
+  },
+  "heal": {
+   "statMod": "cha"
+  },
+  "summary": "Touch heal: the target heals slots equal to your Cha Mod."
+ },
+ {
+  "id": "lightning-bolt",
+  "name": "Lightning Bolt",
+  "kind": "spell",
+  "page": 208,
+  "keywords": [
+   "Attack",
+   "Electric"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": true,
+  "attackType": "ranged",
+  "checkType": "Evade",
+  "range": "100 feet",
+  "mana": 15,
+  "manaText": "15",
+  "damage": {
+   "count": 1,
+   "sides": 10,
+   "stat": "int",
+   "types": [
+    "Electric"
+   ],
+   "area": ""
+  },
+  "upgrades": {
+   "5": {
+    "text": "+1d10 base damage.",
+    "dice": {
+     "count": 1,
+     "sides": 10
+    }
+   },
+   "10": {
+    "text": "+1d10 base damage and becomes a 100ft Line Attack.",
+    "dice": {
+     "count": 1,
+     "sides": 10
+    }
+   },
+   "15": {
+    "text": "+1d10 base damage. The lightning bolt forks, and you may choose to apply your Attack against any number of additional targets within 15 feet of the previous target (within the range limit). Each successful Attack (including against the primary target), deals half damage.",
+    "dice": {
+     "count": 1,
+     "sides": 10
+    }
+   }
+  },
+  "summary": "Bolt of lightning."
+ },
+ {
+  "id": "magic-missile",
+  "name": "Magic Missile",
+  "kind": "spell",
+  "page": 208,
+  "keywords": [
+   "Attack",
+   "Force"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": true,
+  "attackType": "ranged",
+  "checkType": "Evade",
+  "range": "Within your line of sight",
+  "aiFavor": "1",
+  "mana": 5,
+  "manaText": "5",
+  "damage": {
+   "count": 1,
+   "sides": 4,
+   "stat": "int",
+   "types": [
+    "Force"
+   ],
+   "area": ""
+  },
+  "upgrades": {
+   "5": {
+    "text": "+1d4 base damage, and you can cast the Spell at a higher or lower Mana cost.",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   },
+   "10": {
+    "text": "+1d4 base damage, and the missiles deal Force and Fire damage. The target gains the Burned Debuff.",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   },
+   "15": {
+    "text": "This attack deals base damage ×3."
+   }
+  },
+  "summary": "Streak of pure force."
+ },
+ {
+  "id": "mind-tickle",
+  "name": "Mind Tickle",
+  "kind": "spell",
+  "page": 208,
+  "keywords": [
+   "Attack",
+   "Psychic",
+   "Charisma",
+   "Favored: Cleric"
+  ],
+  "stat": "cha",
+  "passive": false,
+  "attack": true,
+  "attackType": "ranged",
+  "checkType": "Evade",
+  "range": "40 feet",
+  "aiFavor": "2",
+  "mana": 2,
+  "manaText": "2",
+  "damage": {
+   "count": 1,
+   "sides": 2,
+   "stat": "cha",
+   "types": [
+    "Psychic"
+   ],
+   "area": ""
+  },
+  "favored": [
+   "Cleric"
+  ],
+  "upgrades": {
+   "5": {
+    "text": "+1d2 base damage.",
+    "dice": {
+     "count": 1,
+     "sides": 2
+    }
+   },
+   "10": {
+    "text": "+1d2 base damage, and the target gains the Sore as Shit Debuff.",
+    "dice": {
+     "count": 1,
+     "sides": 2
+    }
+   },
+   "15": {
+    "text": "+1d2 base damage, and the target gains the Muted Debuff.",
+    "dice": {
+     "count": 1,
+     "sides": 2
+    }
+   }
+  },
+  "summary": "Psychic headache attack."
+ },
+ {
+  "id": "minion-army",
+  "name": "Minion Army",
+  "kind": "spell",
+  "page": 209,
+  "keywords": [
+   "Intelligence",
+   "Area of Effect",
+   "Mind Control"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": false,
+  "checkType": "Varies",
+  "range": "50ft Burst radius",
+  "limitations": "5-minute casting time, and the caster cannot move while casting. Only works against Mobs with an Intelligence of 2+.",
+  "cooldown": "5 hours",
+  "duration": "2 minutes",
+  "mana": 50,
+  "manaText": "50",
+  "upgrades": {
+   "5": {
+    "text": "The casting time is 4 minutes. Duration is 5 minutes."
+   },
+   "10": {
+    "text": "Add your Charisma Stat to the Burst radius. Duration is 10 minutes."
+   },
+   "15": {
+    "text": "Add your Charisma Stat to the Burst radius. Duration is 15 minutes."
+   }
+  },
+  "summary": "Turn some Mobs in an area into allies."
+ },
+ {
+  "id": "natures-breath",
+  "name": "Nature’s Breath",
+  "kind": "spell",
+  "page": 209,
+  "keywords": [
+   "Heal",
+   "Interrupt",
+   "Passive",
+   "Favored: Druid"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "range": "5 feet",
+  "mana": 6,
+  "manaText": "6",
+  "favored": [
+   "Druid"
+  ],
+  "upgrades": {
+   "5": {
+    "text": "Add 1 to your die roll."
+   },
+   "10": {
+    "text": "Add 1 to your die roll, and remove a Minor Injury Debuff."
+   },
+   "15": {
+    "text": "Add 1 to your die roll, and remove a Major Injury Debuff."
+   }
+  },
+  "heal": {
+   "rankDie": true
+  },
+  "summary": "Heal slots equal to a roll of this Spell's Rank damage die; works on pets."
+ },
+ {
+  "id": "oakhide",
+  "name": "Oakhide",
+  "kind": "spell",
+  "page": 209,
+  "keywords": [
+   "Passive",
+   "Favored: Druid"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "range": "Self",
+  "cooldown": "10 minutes",
+  "duration": "2 minutes",
+  "mana": 5,
+  "manaText": "5",
+  "favored": [
+   "Druid"
+  ],
+  "upgrades": {
+   "5": {
+    "text": "+2 DR. Duration is 3 minutes.",
+    "dr": 2
+   },
+   "10": {
+    "text": "+2 DR. You may target party members and NPCs up to 10 feet away with this spell.",
+    "dr": 2
+   },
+   "15": {
+    "text": "+2 DR. Duration is 4 minutes.",
+    "dr": 2
+   }
+  },
+  "castBuff": {
+   "dr": 2
+  },
+  "summary": "+2 Damage Resistance while it lasts."
+ },
+ {
+  "id": "paladins-smite",
+  "name": "Paladin’s Smite",
+  "kind": "spell",
+  "page": 209,
+  "keywords": [
+   "Attack",
+   "Holy",
+   "Charisma",
+   "Favored: Paladin"
+  ],
+  "stat": "cha",
+  "passive": false,
+  "attack": true,
+  "attackType": "ranged",
+  "checkType": "Evade",
+  "range": "30 feet",
+  "mana": 11,
+  "manaText": "11",
+  "damage": {
+   "count": 1,
+   "sides": 8,
+   "stat": "cha",
+   "types": [
+    "Holy"
+   ],
+   "area": ""
+  },
+  "favored": [
+   "Paladin"
+  ],
+  "upgrades": {
+   "5": {
+    "text": "+1d8 base damage.",
+    "dice": {
+     "count": 1,
+     "sides": 8
+    }
+   },
+   "10": {
+    "text": "+1d8 base damage, and the target gains the Take Down Debuff.",
+    "dice": {
+     "count": 1,
+     "sides": 8
+    }
+   },
+   "15": {
+    "text": "+1d8 base damage, and the damage is Armor-Piercing (ignores DR).",
+    "dice": {
+     "count": 1,
+     "sides": 8
+    }
+   }
+  },
+  "summary": "Holy strike of divine wrath."
+ },
+ {
+  "id": "panty-dropper",
+  "name": "Panty Dropper",
+  "kind": "spell",
+  "page": 209,
+  "keywords": [
+   "Charisma",
+   "Mind Control",
+   "Favored: Bard"
+  ],
+  "stat": "cha",
+  "passive": false,
+  "attack": false,
+  "checkType": "Opposed",
+  "range": "10 feet",
+  "cooldown": "5 minutes",
+  "duration": "2 minutes or until you finish",
+  "mana": 10,
+  "manaText": "10",
+  "favored": [
+   "Bard"
+  ],
+  "upgrades": {
+   "5": {
+    "text": "The duration is 5 minutes."
+   },
+   "10": {
+    "text": "The duration is 10 minutes."
+   },
+   "15": {
+    "text": "The duration is 15 minutes."
+   }
+  },
+  "summary": "Int-Opposed charm; a non-Boss target stops fighting."
+ },
+ {
+  "id": "ping",
+  "name": "Ping",
+  "kind": "spell",
+  "page": 210,
+  "keywords": [
+   "Passive",
+   "Area of Effect"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "range": "1 mile Burst radius",
+  "cooldown": "5 minutes",
+  "mana": 5,
+  "manaText": "5",
+  "upgrades": {
+   "5": {
+    "text": "If you know the Fear Spell (see p. 204), you may cast it at no Action cost to affect all eligible Mobs within the Ping range. You only pay the Mana."
+   },
+   "10": {
+    "text": "Environmental factors and obstacles no longer decrease the range, and you receive “mostly complete” information."
+   },
+   "15": {
+    "text": "You pay no Mana to add the Fear Spell, and you receive “entirely complete” information."
+   }
+  },
+  "summary": "Reveal the location of nearby non-crawlers and Mobs."
+ },
+ {
+  "id": "protective-shell",
+  "name": "Protective Shell",
+  "kind": "spell",
+  "page": 210,
+  "keywords": [
+   "Interrupt",
+   "Passive",
+   "Area of Effect"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "range": "10ft Burst radius",
+  "limitations": "Spell must be imbued onto something you are wearing.",
+  "cooldown": "30 hours",
+  "duration": "5 seconds (only long enough to push foes away and protect against a single physical attack)",
+  "manaText": "None",
+  "upgrades": {
+   "5": {
+    "text": "Duration is 10 seconds. In addition to knocking enemies away, it protects the occupants from all non-Spell attacks originating from outside the shell until the end of the current combat round."
+   },
+   "10": {
+    "text": "Duration is 20 seconds or two rounds."
+   },
+   "15": {
+    "text": "Duration is 30 seconds or three rounds."
+   }
+  },
+  "summary": "Force dome that keeps Mobs out; doesn't stop magic."
+ },
+ {
+  "id": "puddle-jumper",
+  "name": "Puddle Jumper",
+  "kind": "spell",
+  "page": 210,
+  "keywords": [
+   "Passive"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "range": "Line-of-sight to the destination surface",
+  "limitations": "There is a 10-second delay before the effect takes place.",
+  "cooldown": "5 hours",
+  "mana": 20,
+  "manaText": "20",
+  "upgrades": {
+   "5": {
+    "text": "The delay is 2 seconds, and the destination doesn’t have to be a surface."
+   },
+   "10": {
+    "text": "The delay is 1 second, and the destination can be anywhere within 1,000 yards in any direction, even if the exact destination cannot be seen."
+   },
+   "15": {
+    "text": "There is no delay, and the destination can be anywhere within 1 mile in any direction, even if the exact destination cannot be seen."
+   }
+  },
+  "summary": "Teleport yourself and up to 3 party members."
+ },
+ {
+  "id": "rise-dead-minion",
+  "name": "Rise, Dead Minion!",
+  "kind": "spell",
+  "page": 211,
+  "keywords": [
+   "Attack",
+   "Favored: Necromancer"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": true,
+  "attackType": "ranged",
+  "checkType": "Evade",
+  "range": "30 feet",
+  "duration": "1 round",
+  "mana": 10,
+  "manaText": "10",
+  "favored": [
+   "Necromancer"
+  ],
+  "upgrades": {
+   "5": {
+    "text": "The skeleton attacks twice before collapsing."
+   },
+   "10": {
+    "text": "The skeleton increases to size Large (5), and its Attack range is 10 feet. +1d8 base damage."
+   },
+   "15": {
+    "text": "The skeleton increases to size Colossal (7), and its Attack range is 15 feet. Add one Rise, Dead Minion! Rank damage die to the damage."
+   }
+  },
+  "damage": {
+   "count": 1,
+   "sides": 8,
+   "stat": "int",
+   "types": [
+    "Necrotic"
+   ],
+   "area": ""
+  },
+  "summary": "A skeleton pops up and attacks for 1d8 + Int Necrotic."
+ },
+ {
+  "id": "rootfoot",
+  "name": "Rootfoot",
+  "kind": "spell",
+  "page": 211,
+  "keywords": [
+   "Attack",
+   "Favored: Druid"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": true,
+  "attackType": "ranged",
+  "checkType": "Evade",
+  "range": "30 feet",
+  "duration": "2 rounds",
+  "mana": 5,
+  "manaText": "5",
+  "favored": [
+   "Druid"
+  ],
+  "upgrades": {
+   "5": {
+    "text": "Can target victims up to size Large (5). Duration is 3 rounds."
+   },
+   "10": {
+    "text": "Can target victims up to size Huge (6). Duration is 4 rounds."
+   },
+   "15": {
+    "text": "Can target victims up to size Colossal (7). The victim also gains the Poisoned Debuff."
+   }
+  },
+  "summary": "Roots leave a Medium-or-smaller victim Held."
+ },
+ {
+  "id": "second-chance",
+  "name": "Second Chance",
+  "kind": "spell",
+  "page": 211,
+  "keywords": [
+   "Passive"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "range": "10 feet",
+  "duration": "1 minute",
+  "mana": 10,
+  "manaText": "10",
+  "upgrades": {
+   "5": {
+    "text": "The Mob can be up to 5 levels higher than you, and the duration is 5 minutes."
+   },
+   "10": {
+    "text": "The Mob can be up to 10 levels higher than the caster, with a duration of 15 minutes."
+   },
+   "15": {
+    "text": "The Mob can be up to 15 levels higher than the caster, with a duration of 45 minutes."
+   }
+  },
+  "summary": "Raise a lower-level Mob as a temporary undead minion."
+ },
+ {
+  "id": "shield",
+  "name": "Shield",
+  "kind": "spell",
+  "page": 211,
+  "keywords": [
+   "Interrupt",
+   "Passive"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "range": "Self",
+  "duration": "5 minutes",
+  "mana": 8,
+  "manaText": "8",
+  "upgrades": {
+   "5": {
+    "text": "The Shield has 5 Health Bar slots."
+   },
+   "10": {
+    "text": "The Shield has 10 Health Bar slots."
+   },
+   "15": {
+    "text": "The Shield has 15 Health Bar slots."
+   }
+  },
+  "summary": "Force field with 2 slots (Con Mod each) that absorbs non-magic damage first."
+ },
+ {
+  "id": "shock-treatment",
+  "name": "Shock Treatment",
+  "kind": "spell",
+  "page": 212,
+  "keywords": [
+   "Attack",
+   "Electric"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": true,
+  "attackType": "ranged",
+  "checkType": "Evade",
+  "range": "30 feet",
+  "aiFavor": "2",
+  "mana": 2,
+  "manaText": "2",
+  "damage": {
+   "count": 1,
+   "sides": 2,
+   "stat": "int",
+   "types": [
+    "Electric"
+   ],
+   "area": ""
+  },
+  "upgrades": {
+   "5": {
+    "text": "+1d2 base damage, and you may choose to afflict the target with the Stunned Debuff instead of dealing damage.",
+    "dice": {
+     "count": 1,
+     "sides": 2
+    }
+   },
+   "10": {
+    "text": "+1d2 base damage, and add 1 Rank damage die (Electric) at the end of the round.",
+    "dice": {
+     "count": 1,
+     "sides": 2
+    },
+    "rankDie": true
+   },
+   "15": {
+    "text": "+1d2 base damage, and if you make this attack at melee range, you deal ×5 the total damage.",
+    "dice": {
+     "count": 1,
+     "sides": 2
+    }
+   }
+  },
+  "summary": "Electric finger-lightning."
+ },
+ {
+  "id": "solsplash",
+  "name": "Solsplash",
+  "kind": "spell",
+  "page": 212,
+  "keywords": [
+   "Attack",
+   "Fire",
+   "Constitution",
+   "Favored: Druid"
+  ],
+  "stat": "con",
+  "passive": false,
+  "attack": true,
+  "attackType": "ranged",
+  "checkType": "Evade",
+  "range": "30 feet",
+  "mana": 13,
+  "manaText": "13",
+  "damage": {
+   "count": 1,
+   "sides": 8,
+   "stat": "con",
+   "types": [
+    "Fire"
+   ],
+   "area": ""
+  },
+  "favored": [
+   "Druid"
+  ],
+  "upgrades": {
+   "5": {
+    "text": "+1d8 base damage, +5ft Splash.",
+    "dice": {
+     "count": 1,
+     "sides": 8
+    }
+   },
+   "10": {
+    "text": "+1d8 base damage and +10ft Splash. Each affected entity who loses at least 3 Health Bar slots this way gains the Burned Debuff.",
+    "dice": {
+     "count": 1,
+     "sides": 8
+    }
+   },
+   "15": {
+    "text": "+1d8 base damage and +15ft Splash.",
+    "dice": {
+     "count": 1,
+     "sides": 8
+    }
+   }
+  },
+  "summary": "Fire sunbeam that also hits those around the target."
+ },
+ {
+  "id": "soul-collector",
+  "name": "Soul Collector",
+  "kind": "spell",
+  "page": 212,
+  "keywords": [
+   "Attack",
+   "Necrotic"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": true,
+  "attackType": "ranged",
+  "checkType": "Evade",
+  "range": "50 feet",
+  "aiFavor": "1",
+  "mana": 4,
+  "manaText": "4",
+  "damage": {
+   "count": 1,
+   "sides": 4,
+   "stat": "int",
+   "types": [
+    "Necrotic"
+   ],
+   "area": ""
+  },
+  "upgrades": {
+   "5": {
+    "text": "+1d4 base damage, and if this Spell deals the killing blow to a foe of at least half your level, it deals +1 bonus damage until you complete a long rest. This damage bonus is cumulative up to the Spell’s Rank.",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   },
+   "10": {
+    "text": "+1d4 base damage, and the bonus continues for one week.",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   },
+   "15": {
+    "text": "+1d4 base damage, and the bonus continues for as long as you remain on your current floor.",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   }
+  },
+  "summary": "Necrotic spirit siphon."
+ },
+ {
+  "id": "thunderlash",
+  "name": "Thunderlash",
+  "kind": "spell",
+  "page": 212,
+  "keywords": [
+   "Attack",
+   "Sonic"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": true,
+  "attackType": "ranged",
+  "checkType": "Evade",
+  "range": "50 feet",
+  "mana": 12,
+  "manaText": "12",
+  "damage": {
+   "count": 1,
+   "sides": 10,
+   "stat": "int",
+   "types": [
+    "Sonic"
+   ],
+   "area": ""
+  },
+  "upgrades": {
+   "5": {
+    "text": "+1d10 base damage.",
+    "dice": {
+     "count": 1,
+     "sides": 10
+    }
+   },
+   "10": {
+    "text": "+1d10 base damage, and this attack deals Armor-Piercing damage (ignores DR).",
+    "dice": {
+     "count": 1,
+     "sides": 10
+    }
+   },
+   "15": {
+    "text": "+1d10 base damage, and you can change the range to a 15ft Cone attack.",
+    "dice": {
+     "count": 1,
+     "sides": 10
+    }
+   }
+  },
+  "summary": "Sonic whip."
+ },
+ {
+  "id": "torch",
+  "name": "Torch",
+  "kind": "spell",
+  "page": 212,
+  "keywords": [
+   "Passive"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "range": "Self",
+  "duration": "Until you enter a saferoom or descend to a new floor.",
+  "mana": 1,
+  "manaText": "1",
+  "upgrades": {
+   "5": {
+    "text": "You can move the orb up to 20 feet away from you."
+   },
+   "10": {
+    "text": "You can move the orb up to 60 feet away from you and can double the radius of the brightness with a thought."
+   },
+   "15": {
+    "text": "You can move the orb up to 100 feet away from you and attach it to a surface as an Action."
+   }
+  },
+  "summary": "Floating light orb (20ft bright + 20ft dim)."
+ },
+ {
+  "id": "tripper",
+  "name": "Tripper",
+  "kind": "spell",
+  "page": 213,
+  "keywords": [
+   "Passive",
+   "Area of Effect"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "range": "30ft Burst radius",
+  "limitations": "Does not detonate traps with very specific triggers. Must be imbued onto something you are wearing.",
+  "cooldown": "5 hours",
+  "manaText": "None",
+  "upgrades": {
+   "5": {
+    "text": "+Intelligence Burst radius."
+   },
+   "10": {
+    "text": "+Intelligence Burst radius."
+   },
+   "15": {
+    "text": "+Intelligence Burst radius, and all damage taken is considered Splash (half damage)."
+   }
+  },
+  "summary": "Set off every movement, heat and weight trap nearby."
+ },
+ {
+  "id": "turn-undead",
+  "name": "Turn Undead",
+  "kind": "spell",
+  "page": 213,
+  "keywords": [
+   "Attack",
+   "Area of Effect",
+   "Favored: Bard",
+   "Cleric",
+   "& Paladin"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": true,
+  "attackType": "ranged",
+  "checkType": "Evade",
+  "range": "10ft Cone",
+  "limitations": "Does not work against Bosses.",
+  "cooldown": "5 minutes",
+  "duration": "3 rounds",
+  "mana": 9,
+  "manaText": "9",
+  "favored": [
+   "Bard"
+  ],
+  "upgrades": {
+   "5": {
+    "text": "+5ft Cone. Duration is 5 rounds."
+   },
+   "10": {
+    "text": "+10ft Cone. Duration is 10 rounds."
+   },
+   "15": {
+    "text": "+15ft Cone. Duration is 15 rounds. On an Amazing Success or better, the Undead Mob is destroyed."
+   }
+  },
+  "summary": "Cha-Opposed; undead in the area flee."
+ },
+ {
+  "id": "twinkle-toes",
+  "name": "Twinkle Toes",
+  "kind": "spell",
+  "page": 213,
+  "keywords": [
+   "Intelligence",
+   "Passive"
+  ],
+  "stat": "int",
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "range": "5 feet",
+  "duration": "A number of seconds equal to your Intelligence.",
+  "mana": 2,
+  "manaText": "2",
+  "upgrades": {
+   "5": {
+    "text": "The pet or minion has Move ×3 for the duration."
+   },
+   "10": {
+    "text": "The pet or minion has Move ×4 for the duration."
+   },
+   "15": {
+    "text": "The pet or minion has Move ×5 for the duration."
+   }
+  },
+  "summary": "Double a pet's or minion's Move."
+ },
+ {
+  "id": "unnecessary-force",
+  "name": "Unnecessary Force",
+  "kind": "spell",
+  "page": 213,
+  "keywords": [
+   "Attack",
+   "Force"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": true,
+  "attackType": "ranged",
+  "checkType": "Evade",
+  "range": "40 feet",
+  "mana": 13,
+  "manaText": "13",
+  "damage": {
+   "count": 1,
+   "sides": 12,
+   "stat": "int",
+   "types": [
+    "Force"
+   ],
+   "area": ""
+  },
+  "upgrades": {
+   "5": {
+    "text": "+1d12 base damage.",
+    "dice": {
+     "count": 1,
+     "sides": 12
+    }
+   },
+   "10": {
+    "text": "+1d12 base damage, and the target is pushed 10 feet.",
+    "dice": {
+     "count": 1,
+     "sides": 12
+    }
+   },
+   "15": {
+    "text": "+1d12 base damage, and the target is pushed 15 feet.",
+    "dice": {
+     "count": 1,
+     "sides": 12
+    }
+   }
+  },
+  "summary": "Force shockwave."
+ },
+ {
+  "id": "vine-porn",
+  "name": "Vine Porn",
+  "kind": "spell",
+  "page": 213,
+  "keywords": [
+   "Attack",
+   "Piercing",
+   "Constitution",
+   "Favored: Druid"
+  ],
+  "stat": "con",
+  "passive": false,
+  "attack": true,
+  "attackType": "ranged",
+  "checkType": "Evade",
+  "range": "20 feet",
+  "aiFavor": "1",
+  "mana": 3,
+  "manaText": "3",
+  "damage": {
+   "count": 1,
+   "sides": 4,
+   "stat": "con",
+   "types": [
+    "Piercing"
+   ],
+   "area": ""
+  },
+  "favored": [
+   "Druid"
+  ],
+  "upgrades": {
+   "5": {
+    "text": "+1d4 base damage.",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   },
+   "10": {
+    "text": "+1d4 base damage, and this Attack deals Armor-Piercing damage (ignores DR).",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   },
+   "15": {
+    "text": "+1d4 base damage. On a Critical Hit, the target takes ×4 damage.",
+    "dice": {
+     "count": 1,
+     "sides": 4
+    }
+   }
+  },
+  "summary": "Piercing vines tear at the target."
+ },
+ {
+  "id": "wall-of-fire",
+  "name": "Wall of Fire",
+  "kind": "spell",
+  "page": 214,
+  "keywords": [
+   "Passive",
+   "Fire"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "range": "30 feet",
+  "duration": "2 rounds",
+  "mana": 15,
+  "manaText": "15",
+  "damage": {
+   "count": 1,
+   "sides": 2,
+   "stat": null,
+   "types": [
+    "Fire"
+   ],
+   "area": "and they gain the Burned Debuff."
+  },
+  "upgrades": {
+   "5": {
+    "text": "+1d2 base damage. The wall can be turned into a ring of fire. Duration is 5 rounds.",
+    "dice": {
+     "count": 1,
+     "sides": 2
+    }
+   },
+   "10": {
+    "text": "+1d2 base damage. Creates a 50ft-long × 10ft-high × 3ft-thick wall. Duration is 10 rounds.",
+    "dice": {
+     "count": 1,
+     "sides": 2
+    }
+   },
+   "15": {
+    "text": "+1d2 base damage. Creates a 100ft-long × 20ft-high × 5ft-thick wall. Duration is 15 rounds.",
+    "dice": {
+     "count": 1,
+     "sides": 2
+    }
+   }
+  },
+  "summary": "Create a 30ft wall of fire."
+ },
+ {
+  "id": "water-breathing",
+  "name": "Water Breathing",
+  "kind": "spell",
+  "page": 214,
+  "keywords": [
+   "Intelligence",
+   "Passive"
+  ],
+  "stat": "int",
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "range": "Self",
+  "duration": "A number of seconds equal to the caster’s Intelligence ×3.",
+  "mana": 2,
+  "manaText": "2",
+  "upgrades": {
+   "5": {
+    "text": "You may now cast this upon others at a range of 5 feet."
+   },
+   "10": {
+    "text": "The targetsroll Swimming Skill Checks with Advantage."
+   },
+   "15": {
+    "text": "You can target any or all individuals within a 15ft Burst radius."
+   }
+  },
+  "summary": "The target breathes underwater."
+ },
+ {
+  "id": "web",
+  "name": "Web",
+  "kind": "spell",
+  "page": 214,
+  "keywords": [
+   "Attack",
+   "Intelligence"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": true,
+  "attackType": "ranged",
+  "checkType": "Evade",
+  "range": "20ft Cone",
+  "duration": "2 rounds",
+  "mana": 6,
+  "manaText": "6",
+  "upgrades": {
+   "5": {
+    "text": "+5ft Cone. Duration is 5 rounds."
+   },
+   "10": {
+    "text": "+5ft Cone. Duration is 10 rounds."
+   },
+   "15": {
+    "text": "+5ft Cone. Duration is 15 rounds."
+   }
+  },
+  "summary": "Cone of webbing that leaves everyone it hits Held."
+ },
+ {
+  "id": "wilburs-slow-build-fireblast",
+  "name": "Wilbur’s Slow-build Fireblast",
+  "kind": "spell",
+  "page": 214,
+  "keywords": [
+   "Attack",
+   "Fire"
+  ],
+  "stat": "int",
+  "passive": false,
+  "attack": true,
+  "attackType": "ranged",
+  "checkType": "Evade",
+  "range": "50 feet",
+  "mana": 60,
+  "manaText": "60",
+  "damage": {
+   "count": 1,
+   "sides": 8,
+   "stat": "int",
+   "types": [
+    "Fire"
+   ],
+   "area": "and the target gains the Burned Debuff."
+  },
+  "upgrades": {
+   "5": {
+    "text": "+1d8 base damage. For each full day you hold the spell, +1d8 Fire damage.",
+    "dice": {
+     "count": 1,
+     "sides": 8
+    }
+   },
+   "10": {
+    "text": "+1d8 base damage and +5ft Splash.",
+    "dice": {
+     "count": 1,
+     "sides": 8
+    }
+   },
+   "15": {
+    "text": "+1d8 base damage and +5ft Splash.",
+    "dice": {
+     "count": 1,
+     "sides": 8
+    }
+   }
+  },
+  "summary": "Hold a fire ring on your finger and unleash it with your next attack."
+ },
+ {
+  "id": "wisp-armor",
+  "name": "Wisp Armor",
+  "kind": "spell",
+  "page": 214,
+  "keywords": [
+   "Passive"
+  ],
+  "passive": true,
+  "attack": false,
+  "checkType": "Passive",
+  "range": "Self",
+  "cooldown": "5 minutes",
+  "duration": "5 minutes",
+  "mana": 5,
+  "manaText": "5",
+  "upgrades": {
+   "5": {
+    "text": "The duration is 10 minutes."
+   },
+   "10": {
+    "text": "The duration is 15 minutes."
+   },
+   "15": {
+    "text": "The duration is 20 minutes."
+   }
+  },
+  "summary": "Cut magic damage to Rank 1 base damage; immune to Mind Control."
+ }
+]

@@ -1,0 +1,1248 @@
+[
+ {
+  "id": "amazonian",
+  "name": "Amazonian",
+  "kind": "race",
+  "group": "Earth-based Races",
+  "classType": null,
+  "page": 129,
+  "prerequisite": "This limited Race is only available to crawlers who have at least one Strength or Dexterity-based Skill at Rank 5+",
+  "stats": {
+   "str": 6,
+   "dex": 3
+  },
+  "skills": [
+   {
+    "name": "Bow",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Endurance",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Pugilism",
+    "ranks": 2,
+    "kind": "skill"
+   }
+  ],
+  "choices": [],
+  "dr": 2,
+  "rank20": [],
+  "benefits": [
+   "Each floor, you receive a coupon good for one free training at a Weapon Training Guild"
+  ],
+  "size": "Medium (4)",
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null,
+  "alien": false
+ },
+ {
+  "id": "arachnid",
+  "name": "Arachnid",
+  "kind": "race",
+  "group": "Earth-based Races",
+  "classType": null,
+  "page": 129,
+  "prerequisite": null,
+  "stats": {
+   "dex": 5
+  },
+  "skills": [
+   {
+    "name": "Web",
+    "ranks": 3,
+    "kind": "spell"
+   },
+   {
+    "name": "Climbing",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Perception",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Performance",
+    "ranks": 2,
+    "kind": "skill"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "+3 Web Spell, which costs half the normal Mana to cast",
+   "You have an innate Climb Move equal to your normal Move value, without needing Checks (unless under duress)"
+  ],
+  "size": "Medium (4)",
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null,
+  "alien": false
+ },
+ {
+  "id": "cat",
+  "name": "Cat",
+  "kind": "race",
+  "group": "Earth-based Races",
+  "classType": null,
+  "page": 130,
+  "prerequisite": "This limited Race is only available to crawlers who are already a Cat",
+  "stats": {
+   "dex": 4,
+   "con": 2,
+   "cha": 1,
+   "str": -3
+  },
+  "skills": [
+   {
+    "name": "Slice Attack",
+    "ranks": 2,
+    "kind": "skill"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "+3 Cat-like Reflexes",
+   "Can see in total darkness",
+   "Advantage on Cat-like Reflexes Skill Checks",
+   "Nine Lives: Take half damage from the first 9 attacks each day",
+   "Vulnerability: Take double damage from Dogs and Beasts"
+  ],
+  "size": "Small (2); Animal",
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null,
+  "alien": false
+ },
+ {
+  "id": "cat-girl-cat-boy",
+  "name": "Cat Girl/Cat Boy",
+  "kind": "race",
+  "group": "Earth-based Races",
+  "classType": null,
+  "page": 130,
+  "prerequisite": null,
+  "stats": {
+   "dex": 3,
+   "cha": 3,
+   "con": -2
+  },
+  "skills": [
+   {
+    "name": "Cat-like Reflexes",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Good First Impression",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Light on your Feet",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Slice Attack",
+    "ranks": 2,
+    "kind": "skill"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "Your Slice Attacks may add your Cha Mod to the damage instead of Str",
+   "Toxoplasma G.: Once per day, your allies have Rank 5 Catcher Skill (and the +5 DR Upgrade!) for one round to protect only you from attacks about to hit you. Those who do gain 1 AI Favor",
+   "When dealing with felines other than Cat Girls/ Boys, you make Charisma-based Skill Checks with Disadvantage"
+  ],
+  "size": "Medium (4)",
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null,
+  "alien": false
+ },
+ {
+  "id": "changbi-demon",
+  "name": "Changbi Demon",
+  "kind": "race",
+  "group": "Earth-based Races",
+  "classType": null,
+  "page": 130,
+  "prerequisite": null,
+  "stats": {
+   "dex": 5,
+   "str": 3,
+   "con": 3,
+   "cha": -2
+  },
+  "skills": [
+   {
+    "name": "Ambush",
+    "ranks": 3,
+    "kind": "skill"
+   },
+   {
+    "name": "Creepy Chains",
+    "ranks": 3,
+    "kind": "skill"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "Creepy Chains: Can use any chain as a weapon (use the Club Weapon Skill, but with a 10ft range). A Changbi Demon can lengthen or shorten any chain by 50% once per scene",
+   "Each time a foe touches a Changbi Demon with their bare skin (such as with Hand-to-Hand attacks), that foe takes 1d4+F Acid",
+   "No need to breathe",
+   "Vulnerable to Holy damage",
+   "Cannot worship a deity"
+  ],
+  "size": "Medium (4)",
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null,
+  "alien": false
+ },
+ {
+  "id": "changeling",
+  "name": "Changeling",
+  "kind": "race",
+  "group": "Earth-based Races",
+  "classType": null,
+  "page": 130,
+  "prerequisite": null,
+  "stats": {
+   "cha": 3,
+   "int": 2
+  },
+  "skills": [
+   {
+    "name": "Ambush",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Deception",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Escape Artist",
+    "ranks": 1,
+    "kind": "skill"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "Advantage on Deception Skill Checks when no talking is needed",
+   "Changelings gain free access to organizations and producers by impersonating other crawlers and Syndicate celebrities, but can only use those relevant to the currently shifted individual",
+   "Changeling Shapeshifting: A Changeling who touches a member of another Race can shapeshift themselves into that Race, building a “library” of Races they can transform into. A Changeling can shapeshift into another Race as an Action to make an Unopposed Deception Skill Check. While shapeshifted into that other Race, they gain that Race’s bonuses other than statistics and Skills. For example, a Changeling shapeshifted into a Crocodilian would gain the Race’s Advantage on Intimidation Skill Checks, DR Buff, bonus after a full meal, and additional fatigue penalty on Charisma-based Checks",
+   "While shapeshifted into another Race, these changes are conveyed to World Dungeon systems, including information on viewers’ HUDs, mini-maps, and other systems",
+   "Changelings can’t touch mimicstype creatures. Don’t ask why or what happens—it’s bad"
+  ],
+  "size": "Large (5)",
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null,
+  "alien": false
+ },
+ {
+  "id": "crocodilian",
+  "name": "Crocodilian",
+  "kind": "race",
+  "group": "Earth-based Races",
+  "classType": null,
+  "page": 131,
+  "prerequisite": null,
+  "stats": {
+   "str": 4,
+   "con": 3
+  },
+  "skills": [
+   {
+    "name": "Pugilism",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Powerful Strike",
+    "ranks": 2,
+    "kind": "skill"
+   }
+  ],
+  "choices": [],
+  "dr": 3,
+  "rank20": [],
+  "benefits": [
+   "When physically menacing someone in person, roll Intimidate Skill Checks with Advantage",
+   "+1 Buff for all of your Skill Checks for 1 hour after eating a full meal",
+   "While you have the Fatigued Debuff, roll all Charisma-based Checks with Disadvantage"
+  ],
+  "size": "Large (5)",
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null,
+  "alien": false
+ },
+ {
+  "id": "doppelg-nger",
+  "name": "Doppelgänger",
+  "kind": "race",
+  "group": "Earth-based Races",
+  "classType": null,
+  "page": 131,
+  "prerequisite": null,
+  "stats": {
+   "con": 4,
+   "str": 3
+  },
+  "skills": [
+   {
+    "name": "Deception",
+    "ranks": 1,
+    "kind": "skill"
+   },
+   {
+    "name": "Endurance",
+    "ranks": 1,
+    "kind": "skill"
+   }
+  ],
+  "choices": [],
+  "dr": 2,
+  "rank20": [],
+  "benefits": [
+   "Due to shifting mass, can determine their maximum weight to lift based on Constitution instead of Strength",
+   "Advantage on Escape Artist Skill Checks and can make such Checks while being Held or watched",
+   "Once per scene, as an Action, you can incorporate a held weapon into their mass to deal additional damage equal to their Con Mod. Items incorporated this way can’t be disarmed",
+   "Doppelgänger Shape-Changing: As an Action, you can transform into any shape of comparable mass, incorporating carried and worn items into the new shape in the same percentage (that is, a Doppelgänger holding metal equal to half their weight must assume a shape that is one-third metal). This transformation is painful, causing you to mark off 1 Health Bar slot per change. If you attempt to change your shape to resemble a specific person or object, do so with an Unopposed Deception Skill Check"
+  ],
+  "size": "Unchanged, but size changes when shifting",
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null,
+  "alien": false
+ },
+ {
+  "id": "dwarf-classic",
+  "name": "Dwarf, Classic",
+  "kind": "race",
+  "group": "Earth-based Races",
+  "classType": null,
+  "page": 132,
+  "prerequisite": null,
+  "stats": {
+   "con": 4,
+   "int": 2,
+   "cha": -2
+  },
+  "skills": [
+   {
+    "name": "Endurance",
+    "ranks": 2,
+    "kind": "skill"
+   }
+  ],
+  "choices": [
+   {
+    "ranks": 3,
+    "count": 2,
+    "kind": "skill",
+    "text": "+3 in two different crafting Skills of your choice"
+   }
+  ],
+  "dr": 0,
+  "rank20": [
+   "All crafting Skills can be raised to Rank 20"
+  ],
+  "benefits": [
+   "Can see in total darkness",
+   "When dealing with elves or fairies, make all Charisma-based Checks with Disadvantage"
+  ],
+  "size": "Medium (4)",
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null,
+  "alien": false
+ },
+ {
+  "id": "dwarf-fathom",
+  "name": "Dwarf, Fathom",
+  "kind": "race",
+  "group": "Earth-based Races",
+  "classType": null,
+  "page": 132,
+  "prerequisite": null,
+  "stats": {
+   "con": 3,
+   "str": 2
+  },
+  "skills": [
+   {
+    "name": "Engineering",
+    "ranks": 3,
+    "kind": "skill"
+   },
+   {
+    "name": "Dumpster Diving",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Salvage",
+    "ranks": 2,
+    "kind": "skill"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "Roll d20 Checks with Advantage when earth, rocks, and dirt are involved",
+   "Can produce a 15ft Cone of light from a harmless lizard nesting atop their heads, and can easily acquire a new lizard if the existing one is lost or killed"
+  ],
+  "size": "Medium (4)",
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null,
+  "alien": false
+ },
+ {
+  "id": "elf-high",
+  "name": "Elf, High",
+  "kind": "race",
+  "group": "Earth-based Races",
+  "classType": null,
+  "page": 133,
+  "prerequisite": null,
+  "stats": {
+   "int": 4,
+   "dex": 4,
+   "cha": 4
+  },
+  "skills": [
+   {
+    "name": "Intimidate",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Lore",
+    "ranks": 1,
+    "kind": "skill"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [
+   "Two different Charisma-based Skills can be raised to Rank 20"
+  ],
+  "benefits": [
+   "+2 Intimidation Skill, and you can use your Cha Mod",
+   "You recover Mana at twice the normal rate in a natural environment",
+   "Add 1d4 to your Evade Checks",
+   "When dealing with Dwarves, Rat-Kin, or anyone smelly or dirty, make all Charisma-based Checks with Disadvantage"
+  ],
+  "size": "Medium (4)",
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null,
+  "alien": false
+ },
+ {
+  "id": "elf-city",
+  "name": "Elf, City",
+  "kind": "race",
+  "group": "Earth-based Races",
+  "classType": null,
+  "page": 133,
+  "prerequisite": null,
+  "stats": {},
+  "skills": [
+   {
+    "name": "Good First Impression",
+    "ranks": 3,
+    "kind": "skill"
+   },
+   {
+    "name": "Negotiation",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Streetwise",
+    "ranks": 2,
+    "kind": "skill"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "Once per floor during a Long Rest, a City Elf can adjust the +4 spent between Charisma, Intelligence, and Dexterity, reassigning those points between those Stats",
+   "When entering a settlement for the first time, make your first Charisma-based Check with Advantage. On an Amazing Success or better, you have made a permanent contact"
+  ],
+  "size": "Medium (4)",
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": {
+   "points": 6,
+   "among": [
+    "int",
+    "dex",
+    "cha"
+   ]
+  },
+  "alien": false
+ },
+ {
+  "id": "elf-night",
+  "name": "Elf, Night",
+  "kind": "race",
+  "group": "Earth-based Races",
+  "classType": null,
+  "page": 134,
+  "prerequisite": null,
+  "stats": {
+   "int": 3,
+   "dex": 3
+  },
+  "skills": [
+   {
+    "name": "Acute Ears",
+    "ranks": 3,
+    "kind": "skill"
+   },
+   {
+    "name": "Hide in Shadows",
+    "ranks": 3,
+    "kind": "skill"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [
+   "Hide in Shadows and one crafting Skill of your choice can be raised to Rank 20"
+  ],
+  "benefits": [
+   "Can see total darkness",
+   "Gain Advantage when you use the Hide in Shadows Skill at night",
+   "Once per day, can instruct the shadow of a living thing to use the Taunt Skill at Rank equal to Floor Number (and no Stat Mod) to pull attacks away from you"
+  ],
+  "size": "Medium (4)",
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null,
+  "alien": false
+ },
+ {
+  "id": "frost-maiden",
+  "name": "Frost Maiden",
+  "kind": "race",
+  "group": "Earth-based Races",
+  "classType": null,
+  "page": 134,
+  "prerequisite": null,
+  "stats": {
+   "cha": 2,
+   "int": 2,
+   "dex": 2
+  },
+  "skills": [
+   {
+    "name": "Persuasion",
+    "ranks": 2,
+    "kind": "skill"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "Melee attacks deal +1d4 Ice damage",
+   "Roll with Advantage on Int and Con Stat Checks",
+   "The crawler’s Game Guide becomes their Manager",
+   "Capable of flight for up to 1 minute per scene"
+  ],
+  "size": "Petite (3)",
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null,
+  "alien": false
+ },
+ {
+  "id": "human",
+  "name": "Human",
+  "kind": "race",
+  "group": "Earth-based Races",
+  "classType": null,
+  "page": 135,
+  "prerequisite": null,
+  "stats": {},
+  "skills": [],
+  "choices": [],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "At the end of each floor, roll one Skill Advancement Check with Advantage if that Skill is Rank 9 or less",
+   "Gain 1 AI Favor each time you level up",
+   "When you take damage, you may spend 1 AI Favor to gain DR equal to your Con (as many times as you have AI Favor to spend)",
+   "Once per day, when you would make an untrained Skill Check on a non-Passive Utility Skill, you can roll as if you had 2 Ranks in the Skill",
+   "Once per floor, you can spend an Action to remove any single Debuff you’re suffering from, even Injuries"
+  ],
+  "size": "Typically Medium (4)",
+  "earthBox": false,
+  "allStats": 2,
+  "statSplit": null,
+  "alien": false
+ },
+ {
+  "id": "igneous",
+  "name": "Igneous",
+  "kind": "race",
+  "group": "Earth-based Races",
+  "classType": null,
+  "page": 135,
+  "prerequisite": null,
+  "stats": {
+   "con": 6,
+   "str": 4,
+   "int": -2,
+   "cha": -2
+  },
+  "skills": [
+   {
+    "name": "Endurance",
+    "ranks": 1,
+    "kind": "skill"
+   }
+  ],
+  "choices": [],
+  "dr": 3,
+  "rank20": [],
+  "benefits": [
+   "Once per day, double your Move for 20 seconds",
+   "As an Action, make a Con Stat Check. On Success, deal 1d8+F Fire damage, 5ft Burst radius",
+   "No Survival Checks needed in harsh heat conditions and can breathe underwater",
+   "Immunity to Fire damage, and vulnerable to Ice damage",
+   "Ability to burrow",
+   "Lose 1 Health Bar slot each time you access your Inventory (not Hotlist)",
+   "Disadvantage on Checks to conceal your presence or nature (such as Stealth)"
+  ],
+  "size": "Large (5)",
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null,
+  "alien": false
+ },
+ {
+  "id": "lajabless",
+  "name": "Lajabless",
+  "kind": "race",
+  "group": "Earth-based Races",
+  "classType": null,
+  "page": 136,
+  "prerequisite": null,
+  "stats": {},
+  "skills": [],
+  "choices": [
+   {
+    "ranks": 2,
+    "count": 2,
+    "kind": "spell",
+    "text": "+2 in two Spells of your choice"
+   },
+   {
+    "ranks": 3,
+    "count": 1,
+    "kind": "skill",
+    "text": "+3 in one Weapon Skill of your choice"
+   }
+  ],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "+5 Intelligence during the day, +5 Strength during the night",
+   "Advantage when using the Ambush and Intimidation Skill",
+   "During the day, Strength is halved, but Spells cost half the Mana to cast",
+   "During the night, Strength is doubled, but Spells cost double the Mana to cast"
+  ],
+  "size": "Medium (4)",
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null,
+  "alien": false
+ },
+ {
+  "id": "obsidian-butterfly",
+  "name": "Obsidian Butterfly",
+  "kind": "race",
+  "group": "Earth-based Races",
+  "classType": null,
+  "page": 136,
+  "prerequisite": "This limited Race is only available to crawlers who earn Rank 5+ with any Edged Weapon",
+  "stats": {
+   "dex": 3,
+   "int": 2,
+   "con": -4
+  },
+  "skills": [
+   {
+    "name": "Intimidate",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Slice Attack",
+    "ranks": 2,
+    "kind": "skill"
+   }
+  ],
+  "choices": [
+   {
+    "ranks": 2,
+    "count": 1,
+    "kind": "spell",
+    "text": "+2 in a Spell of your choice"
+   }
+  ],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "Has four translucent butterfly wings that can reach up to 15 feet and deliver touch- or melee-range Spells",
+   "May use Cha Mod instead of Con Mod in their Health Bar",
+   "Upon entering the Sixth Floor, choose to either gain Stronger Wings (wings are now capable of flight for up to 2 minutes per scene, with +20ft Move when flying) or Ferocious Visage (Advantage when using any Skill to inspire fear or respect)",
+   "Add 1d4 to your Evade Checks"
+  ],
+  "size": "Medium (4), mostly due to wings",
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null,
+  "alien": false
+ },
+ {
+  "id": "primal",
+  "name": "Primal",
+  "kind": "race",
+  "group": "Earth-based Races",
+  "classType": null,
+  "page": 137,
+  "prerequisite": null,
+  "stats": {},
+  "skills": [],
+  "choices": [],
+  "dr": 0,
+  "rank20": [
+   "All Skills can be raised to Rank 20"
+  ],
+  "benefits": [],
+  "size": "Unchanged",
+  "earthBox": false,
+  "allStats": -1,
+  "statSplit": null,
+  "alien": false
+ },
+ {
+  "id": "rat-hooligan",
+  "name": "Rat Hooligan",
+  "kind": "race",
+  "group": "Earth-based Races",
+  "classType": null,
+  "page": 137,
+  "prerequisite": null,
+  "stats": {
+   "dex": 2,
+   "con": 1
+  },
+  "skills": [
+   {
+    "name": "Escape Plan",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Stealth",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Bite",
+    "ranks": 1,
+    "kind": "skill"
+   },
+   {
+    "name": "Survival",
+    "ranks": 1,
+    "kind": "skill"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "Advantage on Checks to resist hunger and thirst",
+   "Can converse with common house rats to gather minimal information while in buildings",
+   "May add Dex Mod to Bite damage instead of Str"
+  ],
+  "size": "Petite (3)",
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null,
+  "alien": false
+ },
+ {
+  "id": "sasquatch",
+  "name": "Sasquatch",
+  "kind": "race",
+  "group": "Earth-based Races",
+  "classType": null,
+  "page": 137,
+  "prerequisite": "This limited Race is only available to crawlers who have attained Rank 5+ in the Smush Skill",
+  "stats": {
+   "str": 6,
+   "con": 6,
+   "dex": 2,
+   "int": -3,
+   "cha": -1
+  },
+  "skills": [
+   {
+    "name": "Foot Soldier",
+    "ranks": 3,
+    "kind": "skill"
+   },
+   {
+    "name": "Smush",
+    "ranks": 3,
+    "kind": "skill"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [
+   "Smush Skill can be raised to Rank 20"
+  ],
+  "benefits": [],
+  "size": "Large (5)",
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null,
+  "alien": false
+ },
+ {
+  "id": "tetrakai",
+  "name": "Tetrakai",
+  "kind": "race",
+  "group": "Earth-based Races",
+  "classType": null,
+  "page": 138,
+  "prerequisite": null,
+  "stats": {
+   "dex": 6,
+   "cha": -2
+  },
+  "skills": [
+   {
+    "name": "Pugilism",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Wrasslin’",
+    "ranks": 2,
+    "kind": "skill"
+   }
+  ],
+  "choices": [
+   {
+    "ranks": 1,
+    "count": 0,
+    "group": "Edged Weapon Skills",
+    "text": "+1 in all Edged Weapon Skills"
+   }
+  ],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "Four Arms: Your Hands/Holding Gear slot allows for four items (or two weapons requiring two hands)"
+  ],
+  "size": "Medium (4)",
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null,
+  "alien": false
+ },
+ {
+  "id": "tigran",
+  "name": "Tigran",
+  "kind": "race",
+  "group": "Earth-based Races",
+  "classType": null,
+  "page": 138,
+  "prerequisite": null,
+  "stats": {
+   "dex": 3,
+   "str": 2,
+   "cha": -4
+  },
+  "skills": [
+   {
+    "name": "Ambush",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Cat-like Reflexes",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Slice Attack",
+    "ranks": 2,
+    "kind": "skill"
+   }
+  ],
+  "choices": [],
+  "dr": 1,
+  "rank20": [],
+  "benefits": [
+   "Can see in total darkness",
+   "+10ft Move",
+   "When attacking during a Surprise Action, deal ×2 total damage with melee attacks",
+   "Disadvantage on Dexterity-based Skills that require fine manipulation or motor coordination"
+  ],
+  "size": "Medium (4)",
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null,
+  "alien": false
+ },
+ {
+  "id": "bune",
+  "name": "Bune",
+  "kind": "race",
+  "group": "Alien Races",
+  "classType": null,
+  "page": 139,
+  "prerequisite": "This limited Race is only available to crawlers with 3 or more Popularity",
+  "stats": {
+   "int": 3,
+   "dex": 2,
+   "con": -2
+  },
+  "skills": [
+   {
+    "name": "Determine Value",
+    "ranks": 3,
+    "kind": "skill"
+   },
+   {
+    "name": "Fabricate",
+    "ranks": 3,
+    "kind": "skill"
+   },
+   {
+    "name": "Negotiation",
+    "ranks": 3,
+    "kind": "skill"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "At Level 50, +2 Dexterity and gain wings capable of flying up to 500ft per scene",
+   "+1 Popularity each time you roll a Critical Hit in combat"
+  ],
+  "size": "Medium (4)",
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null,
+  "alien": true
+ },
+ {
+  "id": "caprid",
+  "name": "Caprid",
+  "kind": "race",
+  "group": "Alien Races",
+  "classType": null,
+  "page": 139,
+  "prerequisite": null,
+  "stats": {
+   "int": 3,
+   "cha": 3,
+   "str": -2
+  },
+  "skills": [
+   {
+    "name": "Find Crawler",
+    "ranks": 3,
+    "kind": "skill"
+   },
+   {
+    "name": "Investigation",
+    "ranks": 3,
+    "kind": "skill"
+   },
+   {
+    "name": "Leadership",
+    "ranks": 3,
+    "kind": "skill"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [
+   "Find Crawler and Persuasion Skills can be raised to Rank 20"
+  ],
+  "benefits": [
+   "+1 Popularity each time you roll a Critical Hit on a Charisma Skill Check or on a Spell Skill Check outside of combat"
+  ],
+  "size": "Large (5)",
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null,
+  "alien": true
+ },
+ {
+  "id": "grulke",
+  "name": "Grulke",
+  "kind": "race",
+  "group": "Alien Races",
+  "classType": null,
+  "page": 139,
+  "prerequisite": "This limited Race is only available to crawlers who have Rank 5+ in the Jumping or Light on Your Feet Skill",
+  "stats": {
+   "dex": 3,
+   "str": 2,
+   "cha": -2
+  },
+  "skills": [],
+  "choices": [
+   {
+    "ranks": 3,
+    "count": 1,
+    "options": [
+     "Jumping",
+     "Light on Your Feet"
+    ],
+    "text": "+3 in either Jumping or Light on Your Feet Skills"
+   }
+  ],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "+2 Zone of Control and a Reach Weapon Skill of your choice",
+   "Tongue Lashing: Ranged attack; [Rank = Floor Number] + Dex to hit. 1d8 + Str, Bludgeoning, 30ft range. Add 1d8 at Rank 5, 10, and 15. Rank is always equal to the Floor Number and cannot be raised by other means",
+   "Gain a +2 DR breastplate (Torso) with your Grulke Battalion crest, not that it means much anymore",
+   "Troll-type enemies have Advantage on Wrasslin’ Checks against you, and when successful, they lick you",
+   "+1 Popularity when a troll-type enemy licks you or when you achieve an Amazing Success or better on an Attack against a troll-type enemy",
+   "+1 Popularity when you score a Critical Hit on a larger foe in combat"
+  ],
+  "size": "Medium (4)",
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null,
+  "alien": true
+ },
+ {
+  "id": "hobgoblin",
+  "name": "Hobgoblin",
+  "kind": "race",
+  "group": "Alien Races",
+  "classType": null,
+  "page": 140,
+  "prerequisite": "This limited Race is only available to crawlers who have Rank 5+ in the Explosives Handling Skill and any Trap-based Skill",
+  "stats": {
+   "dex": 1
+  },
+  "skills": [
+   {
+    "name": "Regeneration",
+    "ranks": 1,
+    "kind": "skill"
+   }
+  ],
+  "choices": [
+   {
+    "ranks": 3,
+    "count": 0,
+    "group": "Trap-based and Explosive-based Skills",
+    "text": "+3 in all Trap-based and Explosive-based Skills"
+   }
+  ],
+  "dr": 0,
+  "rank20": [
+   "All explosives and trap-making Skills can be raised to Rank 20"
+  ],
+  "benefits": [
+   "-5 Charisma. Charisma is capped at 10",
+   "Free access to all Hobgoblin Sapper Workshops",
+   "At the end of each floor, roll one Explosive or Trap-based Skill Advancement Check with Advantage",
+   "+1 Popularity when you kill an enemy with a trap or explosive once per scene"
+  ],
+  "size": "Medium (4)",
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null,
+  "alien": true
+ },
+ {
+  "id": "pocket-kuma",
+  "name": "Pocket Kuma",
+  "kind": "race",
+  "group": "Alien Races",
+  "classType": null,
+  "page": 140,
+  "prerequisite": null,
+  "stats": {
+   "dex": 5,
+   "cha": 5,
+   "con": -4
+  },
+  "skills": [
+   {
+    "name": "Bite",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Dodge",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Slice Attack",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Ambush",
+    "ranks": 1,
+    "kind": "skill"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [
+   "Light on Your Feet Skill can be raised to Rank 20"
+  ],
+  "benefits": [
+   "-4 Strength. Strength is capped at 10",
+   "You roll with Advantage on all Charisma-based Checks",
+   "Can see in total darkness",
+   "Take no damage from falling",
+   "You deal half damage with Strength-based melee weapons",
+   "Vulnerable to Bludgeoning damage",
+   "+1 Popularity when you act in the Surprise Round of a combat or roll a Critical Fail on an Evade Check"
+  ],
+  "size": "Small (2); Animal",
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null,
+  "alien": true
+ },
+ {
+  "id": "pterolykos",
+  "name": "Pterolykos",
+  "kind": "race",
+  "group": "Alien Races",
+  "classType": null,
+  "page": 140,
+  "prerequisite": null,
+  "stats": {
+   "cha": 4,
+   "dex": 2
+  },
+  "skills": [
+   {
+    "name": "Bite",
+    "ranks": 3,
+    "kind": "skill"
+   },
+   {
+    "name": "Performance",
+    "ranks": 3,
+    "kind": "skill"
+   },
+   {
+    "name": "Tracking",
+    "ranks": 3,
+    "kind": "skill"
+   },
+   {
+    "name": "Diplomacy",
+    "ranks": 1,
+    "kind": "skill"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "Has wings capable of flight for up to 50 seconds per scene",
+   "Disadvantage on all Checks to conceal emotion or presence (such as Deception and Stealth)",
+   "+1 Popularity when you roll a Critical Hit on a Charisma Skill Check"
+  ],
+  "size": "Medium (4)",
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null,
+  "alien": true
+ },
+ {
+  "id": "skyfowl",
+  "name": "Skyfowl",
+  "kind": "race",
+  "group": "Alien Races",
+  "classType": null,
+  "page": 141,
+  "prerequisite": null,
+  "stats": {
+   "dex": 3,
+   "cha": 3,
+   "str": -1,
+   "con": -1
+  },
+  "skills": [
+   {
+    "name": "Slice Attack",
+    "ranks": 2,
+    "kind": "skill"
+   }
+  ],
+  "choices": [
+   {
+    "ranks": 2,
+    "count": 0,
+    "group": "Charisma-based Skills",
+    "text": "+2 in all Charisma-based Skills"
+   }
+  ],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "Advantage on the Perception Skill for observing things 10+ feet away",
+   "Capable of flight for up to 3 minutes per scene. However, Skyfowl who choose a Cleric-based Class have their wings clipped and can only make short hops of up to 10 seconds per scene when flying",
+   "+1 Popularity when you roll a Critical Hit on a Leadership, Perception, Persuasion, or Taunt Skill Check"
+  ],
+  "size": "Medium (4)",
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null,
+  "alien": true
+ }
+]

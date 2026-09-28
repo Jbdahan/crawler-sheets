@@ -1,0 +1,64 @@
+/* Printable sheet: always light, landscape US Letter */
+html.printing, html.printing body { background: #e9e9e9; color-scheme: light; }
+.print-root { color: #111; font-family: 'Helvetica Neue', Arial, sans-serif; }
+.print-bar { position: sticky; top: 0; z-index: 5; display: flex; gap: 10px; align-items: center; padding: calc(env(safe-area-inset-top, 0px) + 8px) 12px 8px; background: #222; color: #eee; }
+.pp {
+  width: 11in; height: 8.5in; margin: 16px auto; padding: 0.35in; background: #fff;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25); overflow: hidden; display: flex; flex-direction: column; gap: 0.12in;
+  font-size: 10pt;
+}
+@media screen { .pp { zoom: var(--pp-zoom, 1); } }
+@media print {
+  @page { size: letter landscape; margin: 0; }
+  html.printing, html.printing body { background: #fff; }
+  .pp { margin: 0; box-shadow: none; page-break-after: always; break-after: page; zoom: 1; }
+  .print-bar { display: none; }
+}
+.pp .small { font-size: 8pt; }
+.pp .center { text-align: center; }
+.pp b { font-weight: 800; }
+.pp-head { display: grid; grid-template-columns: 1.6in 1fr; gap: 0.15in; align-items: center; }
+.pp-head .brand { font-weight: 900; font-size: 20pt; line-height: 0.95; color: #b3261e; letter-spacing: 0.02em; }
+.pp-head .fields { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px 12px; }
+.pp-head .f { display: flex; gap: 6px; align-items: baseline; border-bottom: 1px solid #333; padding-bottom: 1px; min-height: 22px; }
+.pp-head .k { font-weight: 800; font-size: 9pt; white-space: nowrap; }
+.pp-head .v { font-size: 11pt; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.pp-main { display: grid; grid-template-columns: 1.9in 1fr 2.3in; gap: 0.15in; }
+.pp-stats { display: flex; flex-direction: column; gap: 5px; }
+.pp-stat { border: 1.5px solid #222; padding: 3px 6px; }
+.pp-stat .t { font-weight: 800; font-size: 10pt; }
+.pp-stat .sv { display: flex; justify-content: space-around; font-size: 14pt; font-weight: 700; }
+.pp-stat .slash { color: #888; }
+.pp-stat .sl { display: flex; justify-content: space-around; font-size: 6.5pt; color: #555; }
+.pp-stat .mod { border-top: 1px solid #222; margin-top: 2px; font-size: 8pt; font-weight: 700; }
+.pp-stat .mod b { font-size: 12pt; margin-left: 6px; }
+.pp-center { display: flex; flex-direction: column; gap: 8px; }
+.pp-hb { display: grid; grid-template-columns: repeat(10, 1fr); gap: 3px; padding: 5px; background: linear-gradient(90deg, #d93a2b, #f39c12 35%, #f4d03f 55%, #58b947); }
+.pp-hb .slot { background: #fff; border: 1.5px solid #222; height: 0.45in; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.pp-hb .slot b { font-size: 12pt; }
+.pp-hb .slot span { font-size: 6pt; color: #555; }
+.pp-hb .slot.lost { background: repeating-linear-gradient(-45deg, #fff, #fff 4px, #bbb 4px, #bbb 5px); }
+.pp-line { display: flex; gap: 6px; align-items: center; }
+.pp-line .big { font-weight: 900; font-size: 13pt; line-height: 1; }
+.pp-line .grow { flex: 1; }
+.bx { text-align: center; }
+.bx .bv { border: 1.5px solid #222; min-width: 0.55in; height: 0.36in; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 11pt; padding: 0 4px; }
+.bx.w .bv { min-width: 0.9in; }
+.bx .bl { font-size: 7pt; font-weight: 700; }
+.lbl { font-weight: 800; font-size: 9pt; }
+.uline { border-bottom: 1px solid #222; min-height: 18px; font-size: 9pt; }
+.pp-side .portrait { border: 1.5px solid #222; height: 1.25in; display: flex; align-items: center; justify-content: center; color: #aaa; margin-bottom: 6px; overflow: hidden; }
+.pp-side .portrait img { height: 100%; }
+.pp-table { width: 100%; border-collapse: collapse; }
+.pp-table th { background: #111; color: #fff; font-size: 8.5pt; padding: 3px 5px; text-align: left; }
+.pp-table td { border: 1px solid #333; padding: 2px 5px; height: 0.27in; vertical-align: middle; font-size: 9pt; }
+.pp-table.gear th { background: #fff; color: #111; border: 1px solid #333; width: 1.3in; }
+.pp-band { background: #111; color: #fff; text-align: center; font-weight: 900; letter-spacing: 0.05em; padding: 2px; }
+.pp-hot { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+.pp-hot .hs { border: 1.5px solid #222; height: 0.9in; padding: 4px; font-size: 9pt; overflow: hidden; }
+.pp-two { display: grid; grid-template-columns: 1fr 2.8in; gap: 0.15in; flex: 1; }
+.pp-boxes { display: flex; flex-direction: column; gap: 6px; }
+.area { border: 1.5px solid #222; padding: 3px 6px; }
+.area .at { font-weight: 800; font-size: 9pt; }
+.area .av { font-size: 9pt; white-space: pre-wrap; }
+.pp-sub { font-weight: 800; text-align: center; font-size: 10pt; margin-bottom: 4px; }

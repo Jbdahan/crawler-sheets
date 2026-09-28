@@ -1,0 +1,1514 @@
+[
+ {
+  "stage": "childhood",
+  "roll": "1",
+  "name": "Latchkey Kid",
+  "rank": 1,
+  "skills": [
+   {
+    "name": "Streetwise",
+    "stat": "cha"
+   },
+   {
+    "name": "Perception",
+    "stat": "int"
+   },
+   {
+    "name": "Stealth",
+    "stat": "dex"
+   }
+  ],
+  "page": 104
+ },
+ {
+  "stage": "childhood",
+  "roll": "2",
+  "name": "Crafty Kid",
+  "rank": 1,
+  "skills": [
+   {
+    "name": "Fabricate",
+    "stat": "int"
+   },
+   {
+    "name": "Repair",
+    "stat": "int"
+   },
+   {
+    "name": "Salvage",
+    "stat": "int"
+   }
+  ],
+  "page": 104
+ },
+ {
+  "stage": "childhood",
+  "roll": "3",
+  "name": "Excitable Kid",
+  "rank": 1,
+  "skills": [
+   {
+    "name": "Escape Artist",
+    "stat": "dex"
+   },
+   {
+    "name": "Endurance",
+    "stat": "con"
+   },
+   {
+    "name": "Running",
+    "stat": "dex"
+   }
+  ],
+  "page": 104
+ },
+ {
+  "stage": "childhood",
+  "roll": "4",
+  "name": "Gymnast",
+  "rank": 1,
+  "skills": [
+   {
+    "name": "Endurance",
+    "stat": "con"
+   },
+   {
+    "name": "Jumping",
+    "stat": "str"
+   },
+   {
+    "name": "Performance",
+    "stat": "cha"
+   }
+  ],
+  "page": 104
+ },
+ {
+  "stage": "childhood",
+  "roll": "5",
+  "name": "Military Brat",
+  "rank": 1,
+  "skills": [
+   {
+    "name": "Deception",
+    "stat": "cha"
+   },
+   {
+    "name": "Streetwise",
+    "stat": "cha"
+   },
+   {
+    "name": "Tactics",
+    "stat": "int"
+   }
+  ],
+  "page": 104
+ },
+ {
+  "stage": "childhood",
+  "roll": "6",
+  "name": "MMO Kid",
+  "rank": 1,
+  "skills": [
+   {
+    "name": "Fabricate",
+    "stat": "int"
+   },
+   {
+    "name": "Engineering",
+    "stat": "int"
+   },
+   {
+    "name": "Tactics",
+    "stat": "int"
+   }
+  ],
+  "page": 104
+ },
+ {
+  "stage": "childhood",
+  "roll": "7",
+  "name": "Only Child",
+  "rank": 1,
+  "skills": [
+   {
+    "name": "Good First Impression",
+    "stat": "cha"
+   },
+   {
+    "name": "Investigation",
+    "stat": "int"
+   },
+   {
+    "name": "Negotiation",
+    "stat": "cha"
+   }
+  ],
+  "page": 104
+ },
+ {
+  "stage": "childhood",
+  "roll": "8",
+  "name": "Outdoor Kid",
+  "rank": 1,
+  "skills": [
+   {
+    "name": "Animal Handling",
+    "stat": "cha"
+   },
+   {
+    "name": "Climbing",
+    "stat": "str"
+   },
+   {
+    "name": "Swimming",
+    "stat": "str"
+   }
+  ],
+  "page": 104
+ },
+ {
+  "stage": "childhood",
+  "roll": "9",
+  "name": "Problem Child",
+  "rank": 1,
+  "skills": [
+   {
+    "name": "Intimidate",
+    "stat": "str"
+   },
+   {
+    "name": "Deception",
+    "stat": "cha"
+   },
+   {
+    "name": "Pugilism",
+    "stat": "dex"
+   }
+  ],
+  "page": 104
+ },
+ {
+  "stage": "childhood",
+  "roll": "10",
+  "name": "Scamp",
+  "rank": 1,
+  "skills": [
+   {
+    "name": "Hide in Shadows",
+    "stat": "dex"
+   },
+   {
+    "name": "Jumping",
+    "stat": "str"
+   },
+   {
+    "name": "Throwing",
+    "stat": "str"
+   }
+  ],
+  "page": 104
+ },
+ {
+  "stage": "childhood",
+  "roll": "11",
+  "name": "Teacher’s Pet",
+  "rank": 1,
+  "skills": [
+   {
+    "name": "Catcher",
+    "stat": null
+   },
+   {
+    "name": "Perception",
+    "stat": "int"
+   },
+   {
+    "name": "Good First Impression",
+    "stat": "cha"
+   }
+  ],
+  "page": 104
+ },
+ {
+  "stage": "childhood",
+  "roll": "12",
+  "name": "Wild Child",
+  "rank": 1,
+  "skills": [
+   {
+    "name": "Stealth",
+    "stat": "dex"
+   },
+   {
+    "name": "Survival",
+    "stat": "con"
+   },
+   {
+    "name": "Running",
+    "stat": "dex"
+   }
+  ],
+  "page": 104
+ },
+ {
+  "stage": "adolescence",
+  "roll": "1",
+  "name": "Family Farm",
+  "rank": 1,
+  "skills": [
+   {
+    "name": "Animal Handling",
+    "stat": "cha"
+   },
+   {
+    "name": "Fabricate",
+    "stat": "int"
+   },
+   {
+    "name": "Tracking",
+    "stat": "int"
+   }
+  ],
+  "page": 105
+ },
+ {
+  "stage": "adolescence",
+  "roll": "2",
+  "name": "Drama Nerd",
+  "rank": 1,
+  "skills": [
+   {
+    "name": "Fabricate",
+    "stat": "int"
+   },
+   {
+    "name": "Deception",
+    "stat": "cha"
+   },
+   {
+    "name": "Performance",
+    "stat": "cha"
+   }
+  ],
+  "page": 105
+ },
+ {
+  "stage": "adolescence",
+  "roll": "3",
+  "name": "Drop-Out",
+  "rank": 1,
+  "skills": [
+   {
+    "name": "Chopper Pilot",
+    "stat": "dex"
+   },
+   {
+    "name": "Streetwise",
+    "stat": "cha"
+   },
+   {
+    "name": "Survival",
+    "stat": "con"
+   }
+  ],
+  "page": 105
+ },
+ {
+  "stage": "adolescence",
+  "roll": "4",
+  "name": "Greek Life",
+  "rank": 1,
+  "skills": [
+   {
+    "name": "Negotiation",
+    "stat": "cha"
+   },
+   {
+    "name": "Intimidate",
+    "stat": "str"
+   },
+   {
+    "name": "Taunt",
+    "stat": "cha"
+   }
+  ],
+  "page": 105
+ },
+ {
+  "stage": "adolescence",
+  "roll": "5",
+  "name": "Influencer",
+  "rank": 1,
+  "skills": [
+   {
+    "name": "Negotiation",
+    "stat": "cha"
+   },
+   {
+    "name": "Persuasion",
+    "stat": "cha"
+   },
+   {
+    "name": "Performance",
+    "stat": "cha"
+   }
+  ],
+  "page": 105
+ },
+ {
+  "stage": "adolescence",
+  "roll": "6",
+  "name": "Jock",
+  "rank": 1,
+  "skills": [
+   {
+    "name": "Endurance",
+    "stat": "con"
+   },
+   {
+    "name": "Jumping",
+    "stat": "str"
+   },
+   {
+    "name": "Throwing",
+    "stat": "str"
+   }
+  ],
+  "page": 105
+ },
+ {
+  "stage": "adolescence",
+  "roll": "7",
+  "name": "McJob",
+  "rank": 1,
+  "skills": [
+   {
+    "name": "Determine Value",
+    "stat": null
+   },
+   {
+    "name": "Negotiation",
+    "stat": "cha"
+   },
+   {
+    "name": "Repair",
+    "stat": "int"
+   }
+  ],
+  "page": 105
+ },
+ {
+  "stage": "adolescence",
+  "roll": "8",
+  "name": "Popular",
+  "rank": 1,
+  "skills": [
+   {
+    "name": "Good First Impression",
+    "stat": "cha"
+   },
+   {
+    "name": "Perception",
+    "stat": "int"
+   },
+   {
+    "name": "Persuasion",
+    "stat": "cha"
+   }
+  ],
+  "page": 105
+ },
+ {
+  "stage": "adolescence",
+  "roll": "9",
+  "name": "Religious",
+  "rank": 1,
+  "skills": [
+   {
+    "name": "Catcher",
+    "stat": null
+   },
+   {
+    "name": "First Aid",
+    "stat": "int"
+   },
+   {
+    "name": "Persuasion",
+    "stat": "cha"
+   }
+  ],
+  "page": 105
+ },
+ {
+  "stage": "adolescence",
+  "roll": "10",
+  "name": "Student Government",
+  "rank": 1,
+  "skills": [
+   {
+    "name": "Deception",
+    "stat": "cha"
+   },
+   {
+    "name": "Persuasion",
+    "stat": "cha"
+   },
+   {
+    "name": "Investigation",
+    "stat": "int"
+   }
+  ],
+  "page": 105
+ },
+ {
+  "stage": "adolescence",
+  "roll": "11",
+  "name": "Nerd",
+  "rank": 1,
+  "skills": [
+   {
+    "name": "Investigation",
+    "stat": "int"
+   },
+   {
+    "name": "Repair",
+    "stat": "int"
+   },
+   {
+    "name": "Fabricate",
+    "stat": "int"
+   }
+  ],
+  "page": 105
+ },
+ {
+  "stage": "adolescence",
+  "roll": "12",
+  "name": "Weirdo",
+  "rank": 1,
+  "skills": [
+   {
+    "name": "Streetwise",
+    "stat": "cha"
+   },
+   {
+    "name": "Intimidate",
+    "stat": "str"
+   },
+   {
+    "name": "Fabricate",
+    "stat": "int"
+   }
+  ],
+  "page": 105
+ },
+ {
+  "stage": "career",
+  "roll": "1",
+  "name": "Criminal",
+  "rank": 3,
+  "skills": [
+   {
+    "name": "Deception",
+    "stat": "cha"
+   },
+   {
+    "name": "Stealth",
+    "stat": "dex"
+   },
+   {
+    "name": "Streetwise",
+    "stat": "cha"
+   }
+  ],
+  "page": 105
+ },
+ {
+  "stage": "career",
+  "roll": "2",
+  "name": "Service Industry",
+  "rank": 3,
+  "skills": [
+   {
+    "name": "Dagger",
+    "stat": "dex"
+   },
+   {
+    "name": "Endurance",
+    "stat": "con"
+   },
+   {
+    "name": "Sleight of Hand",
+    "stat": "dex"
+   }
+  ],
+  "page": 105
+ },
+ {
+  "stage": "career",
+  "roll": "3",
+  "name": "Small Business Owner",
+  "rank": 3,
+  "skills": [
+   {
+    "name": "Determine Value",
+    "stat": null
+   },
+   {
+    "name": "Negotiation",
+    "stat": "cha"
+   },
+   {
+    "name": "Perception",
+    "stat": "int"
+   }
+  ],
+  "page": 105
+ },
+ {
+  "stage": "career",
+  "roll": "4",
+  "name": "Medical",
+  "rank": 3,
+  "skills": [
+   {
+    "name": "Sleight of Hand",
+    "stat": "dex"
+   },
+   {
+    "name": "Detect Lies",
+    "stat": "int"
+   },
+   {
+    "name": "First Aid",
+    "stat": "int"
+   }
+  ],
+  "page": 105
+ },
+ {
+  "stage": "career",
+  "roll": "5",
+  "name": "Law Enforcement",
+  "rank": 3,
+  "skills": [
+   {
+    "name": "Detect Lies",
+    "stat": "int"
+   },
+   {
+    "name": "Handgun",
+    "stat": "dex"
+   },
+   {
+    "name": "Investigation",
+    "stat": "int"
+   }
+  ],
+  "page": 105
+ },
+ {
+  "stage": "career",
+  "roll": "6",
+  "name": "Gig Worker",
+  "rank": 3,
+  "skills": [
+   {
+    "name": "Driving",
+    "stat": "dex"
+   },
+   {
+    "name": "Escape Artist",
+    "stat": "str"
+   },
+   {
+    "name": "Negotiation",
+    "stat": "cha"
+   }
+  ],
+  "page": 105
+ },
+ {
+  "stage": "career",
+  "roll": "7",
+  "name": "Teacher",
+  "rank": 3,
+  "skills": [
+   {
+    "name": "Detect Lies",
+    "stat": "int"
+   },
+   {
+    "name": "Perception",
+    "stat": "int"
+   },
+   {
+    "name": "Performance",
+    "stat": "int"
+   }
+  ],
+  "page": 105
+ },
+ {
+  "stage": "career",
+  "roll": "8",
+  "name": "Office Drone",
+  "rank": 3,
+  "skills": [
+   {
+    "name": "Dumpster Diving",
+    "stat": "int"
+   },
+   {
+    "name": "Endurance",
+    "stat": "con"
+   },
+   {
+    "name": "Investigation",
+    "stat": "int"
+   }
+  ],
+  "page": 105
+ },
+ {
+  "stage": "career",
+  "roll": "9",
+  "name": "Entertainer",
+  "rank": 3,
+  "skills": [
+   {
+    "name": "Deception",
+    "stat": "cha"
+   },
+   {
+    "name": "Good First Impression",
+    "stat": "cha"
+   },
+   {
+    "name": "Performance",
+    "stat": "cha"
+   }
+  ],
+  "page": 105
+ },
+ {
+  "stage": "career",
+  "roll": "10",
+  "name": "Unhoused",
+  "rank": 3,
+  "skills": [
+   {
+    "name": "Dumpster Diving",
+    "stat": "int"
+   },
+   {
+    "name": "Streetwise",
+    "stat": "cha"
+   },
+   {
+    "name": "Survival",
+    "stat": "con"
+   }
+  ],
+  "page": 105
+ },
+ {
+  "stage": "career",
+  "roll": "11",
+  "name": "Middle Manager",
+  "rank": 3,
+  "skills": [
+   {
+    "name": "Deception",
+    "stat": "cha"
+   },
+   {
+    "name": "Intimidate",
+    "stat": "str"
+   },
+   {
+    "name": "Negotiation",
+    "stat": "cha"
+   }
+  ],
+  "page": 105
+ },
+ {
+  "stage": "career",
+  "roll": "12",
+  "name": "Military",
+  "rank": 3,
+  "skills": [
+   {
+    "name": "Handgun",
+    "stat": "dex"
+   },
+   {
+    "name": "Survival",
+    "stat": "con"
+   },
+   {
+    "name": "Tactics",
+    "stat": "int"
+   }
+  ],
+  "page": 105
+ },
+ {
+  "stage": "hobby",
+  "roll": "1",
+  "name": "Collector",
+  "rank": 2,
+  "skills": [
+   {
+    "name": "Fabricate",
+    "stat": "int"
+   },
+   {
+    "name": "Determine Value",
+    "stat": null
+   },
+   {
+    "name": "Investigation",
+    "stat": "int"
+   }
+  ],
+  "page": 106
+ },
+ {
+  "stage": "hobby",
+  "roll": "2",
+  "name": "Cosplay",
+  "rank": 2,
+  "skills": [
+   {
+    "name": "Fabricate",
+    "stat": "int"
+   },
+   {
+    "name": "Performance",
+    "stat": "cha"
+   },
+   {
+    "name": "Salvage",
+    "stat": "int"
+   }
+  ],
+  "page": 106
+ },
+ {
+  "stage": "hobby",
+  "roll": "3",
+  "name": "Drinker",
+  "rank": 2,
+  "skills": [
+   {
+    "name": "Deception",
+    "stat": "cha"
+   },
+   {
+    "name": "Intimidate",
+    "stat": "str"
+   },
+   {
+    "name": "Streetwise",
+    "stat": "cha"
+   }
+  ],
+  "page": 106
+ },
+ {
+  "stage": "hobby",
+  "roll": "4",
+  "name": "Gamer",
+  "rank": 2,
+  "skills": [
+   {
+    "name": "Aiming",
+    "stat": "dex"
+   },
+   {
+    "name": "Perception",
+    "stat": "int"
+   },
+   {
+    "name": "Tactics",
+    "stat": "int"
+   }
+  ],
+  "page": 106
+ },
+ {
+  "stage": "hobby",
+  "roll": "5",
+  "name": "Gym Rat",
+  "rank": 2,
+  "skills": [
+   {
+    "name": "Running",
+    "stat": "dex"
+   },
+   {
+    "name": "Endurance",
+    "stat": "con"
+   },
+   {
+    "name": "Swimming",
+    "stat": "str"
+   }
+  ],
+  "page": 106
+ },
+ {
+  "stage": "hobby",
+  "roll": "6",
+  "name": "Hunting",
+  "rank": 2,
+  "skills": [
+   {
+    "name": "Tracking",
+    "stat": "int"
+   },
+   {
+    "name": "Shotgun",
+    "stat": "dex"
+   },
+   {
+    "name": "Stealth",
+    "stat": "dex"
+   }
+  ],
+  "page": 106
+ },
+ {
+  "stage": "hobby",
+  "roll": "7",
+  "name": "Music",
+  "rank": 2,
+  "skills": [
+   {
+    "name": "Perception",
+    "stat": "int"
+   },
+   {
+    "name": "Performance",
+    "stat": "cha"
+   },
+   {
+    "name": "Sleight of Hand",
+    "stat": "dex"
+   }
+  ],
+  "page": 106
+ },
+ {
+  "stage": "hobby",
+  "roll": "8",
+  "name": "Motorsports",
+  "rank": 2,
+  "skills": [
+   {
+    "name": "Driving",
+    "stat": "dex"
+   },
+   {
+    "name": "Repair",
+    "stat": "int"
+   },
+   {
+    "name": "Salvage",
+    "stat": "int"
+   }
+  ],
+  "page": 106
+ },
+ {
+  "stage": "hobby",
+  "roll": "9",
+  "name": "Climber",
+  "rank": 2,
+  "skills": [
+   {
+    "name": "Climbing",
+    "stat": "str"
+   },
+   {
+    "name": "Jumping",
+    "stat": "str"
+   },
+   {
+    "name": "Endurance",
+    "stat": "con"
+   }
+  ],
+  "page": 106
+ },
+ {
+  "stage": "hobby",
+  "roll": "10",
+  "name": "Pop Culture",
+  "rank": 2,
+  "skills": [
+   {
+    "name": "Determine Value",
+    "stat": null
+   },
+   {
+    "name": "Investigation",
+    "stat": "int"
+   },
+   {
+    "name": "Perception",
+    "stat": "int"
+   }
+  ],
+  "page": 106
+ },
+ {
+  "stage": "hobby",
+  "roll": "11",
+  "name": "Tinkering",
+  "rank": 2,
+  "skills": [
+   {
+    "name": "Engineering",
+    "stat": "int"
+   },
+   {
+    "name": "Repair",
+    "stat": "int"
+   },
+   {
+    "name": "Salvage",
+    "stat": "int"
+   }
+  ],
+  "page": 106
+ },
+ {
+  "stage": "hobby",
+  "roll": "12",
+  "name": "Travel",
+  "rank": 2,
+  "skills": [
+   {
+    "name": "Endurance",
+    "stat": "con"
+   },
+   {
+    "name": "Negotiation",
+    "stat": "cha"
+   },
+   {
+    "name": "Streetwise",
+    "stat": "cha"
+   }
+  ],
+  "page": 106
+ },
+ {
+  "stage": "animalYouth",
+  "roll": "1",
+  "name": "Abandoned",
+  "rank": 1,
+  "skills": [
+   {
+    "name": "Hide in Shadows",
+    "stat": "dex"
+   },
+   {
+    "name": "Endurance",
+    "stat": "con"
+   },
+   {
+    "name": "Survival",
+    "stat": "con"
+   }
+  ],
+  "page": 106
+ },
+ {
+  "stage": "animalYouth",
+  "roll": "2",
+  "name": "Farmed",
+  "rank": 1,
+  "skills": [
+   {
+    "name": "Escape Artist",
+    "stat": "dex"
+   },
+   {
+    "name": "Climbing",
+    "stat": "str"
+   },
+   {
+    "name": "Light on Your Feet",
+    "stat": "dex"
+   }
+  ],
+  "page": 106
+ },
+ {
+  "stage": "animalYouth",
+  "roll": "3",
+  "name": "Litter-Raised",
+  "rank": 1,
+  "skills": [
+   {
+    "name": "Animal Handling",
+    "stat": "cha"
+   },
+   {
+    "name": "Detect Lies",
+    "stat": "int"
+   },
+   {
+    "name": "Back Claw",
+    "stat": "str"
+   }
+  ],
+  "page": 106
+ },
+ {
+  "stage": "animalYouth",
+  "roll": "4",
+  "name": "Pampered",
+  "rank": 1,
+  "skills": [
+   {
+    "name": "Negotiation",
+    "stat": "cha"
+   },
+   {
+    "name": "Good First Impression",
+    "stat": "cha"
+   },
+   {
+    "name": "Persuasion",
+    "stat": "cha"
+   }
+  ],
+  "page": 106
+ },
+ {
+  "stage": "animalYouth",
+  "roll": "5",
+  "name": "Runt",
+  "rank": 1,
+  "skills": [
+   {
+    "name": "Hide in Shadows",
+    "stat": "dex"
+   },
+   {
+    "name": "Escape Artist",
+    "stat": "dex"
+   },
+   {
+    "name": "Stealth",
+    "stat": "dex"
+   }
+  ],
+  "page": 106
+ },
+ {
+  "stage": "animalYouth",
+  "roll": "6",
+  "name": "Stray",
+  "rank": 1,
+  "skills": [
+   {
+    "name": "Back Claw",
+    "stat": "str"
+   },
+   {
+    "name": "Streetwise",
+    "stat": "cha"
+   },
+   {
+    "name": "Survival",
+    "stat": "con"
+   }
+  ],
+  "page": 106
+ },
+ {
+  "stage": "animalTraining",
+  "roll": "1",
+  "name": "Clever",
+  "rank": 1,
+  "skills": [
+   {
+    "name": "Investigation",
+    "stat": "int"
+   },
+   {
+    "name": "Detect Lies",
+    "stat": "int"
+   },
+   {
+    "name": "Dodge",
+    "stat": null
+   }
+  ],
+  "page": 107
+ },
+ {
+  "stage": "animalTraining",
+  "roll": "2",
+  "name": "Free Range",
+  "rank": 1,
+  "skills": [
+   {
+    "name": "Escape Artist",
+    "stat": "dex"
+   },
+   {
+    "name": "Survival",
+    "stat": "con"
+   },
+   {
+    "name": "Tracking",
+    "stat": "int"
+   }
+  ],
+  "page": 107
+ },
+ {
+  "stage": "animalTraining",
+  "roll": "3",
+  "name": "Pack Mentality",
+  "rank": 1,
+  "skills": [
+   {
+    "name": "Animal Handling",
+    "stat": "cha"
+   },
+   {
+    "name": "Persuasion",
+    "stat": "cha"
+   },
+   {
+    "name": "Tactics",
+    "stat": "int"
+   }
+  ],
+  "page": 107
+ },
+ {
+  "stage": "animalTraining",
+  "roll": "4",
+  "name": "Mischievous",
+  "rank": 1,
+  "skills": [
+   {
+    "name": "Deception",
+    "stat": "cha"
+   },
+   {
+    "name": "Persuasion",
+    "stat": "cha"
+   },
+   {
+    "name": "Sleight of Hand",
+    "stat": "dex"
+   }
+  ],
+  "page": 107
+ },
+ {
+  "stage": "animalTraining",
+  "roll": "5",
+  "name": "Watcher",
+  "rank": 1,
+  "skills": [
+   {
+    "name": "Ambush",
+    "stat": "int"
+   },
+   {
+    "name": "Investigation",
+    "stat": "int"
+   },
+   {
+    "name": "Perception",
+    "stat": "int"
+   }
+  ],
+  "page": 107
+ },
+ {
+  "stage": "animalTraining",
+  "roll": "6",
+  "name": "Well-Trained",
+  "rank": 1,
+  "skills": [
+   {
+    "name": "Light on Your Feet",
+    "stat": "dex"
+   },
+   {
+    "name": "Catcher",
+    "stat": null
+   },
+   {
+    "name": "Performance",
+    "stat": "cha"
+   }
+  ],
+  "page": 107
+ },
+ {
+  "stage": "animalQuirk",
+  "roll": "1",
+  "name": "Chow Hound",
+  "rank": 2,
+  "skills": [
+   {
+    "name": "Dumpster Diving",
+    "stat": "int"
+   },
+   {
+    "name": "Investigation",
+    "stat": "int"
+   },
+   {
+    "name": "Intimidate",
+    "stat": "str"
+   }
+  ],
+  "page": 107
+ },
+ {
+  "stage": "animalQuirk",
+  "roll": "2",
+  "name": "Cuddly",
+  "rank": 2,
+  "skills": [
+   {
+    "name": "Good First Impression",
+    "stat": "cha"
+   },
+   {
+    "name": "Persuasion",
+    "stat": "cha"
+   },
+   {
+    "name": "Negotiation",
+    "stat": "cha"
+   }
+  ],
+  "page": 107
+ },
+ {
+  "stage": "animalQuirk",
+  "roll": "3",
+  "name": "Curious",
+  "rank": 2,
+  "skills": [
+   {
+    "name": "Climbing",
+    "stat": "str"
+   },
+   {
+    "name": "Perception",
+    "stat": "int"
+   },
+   {
+    "name": "Swimming",
+    "stat": "str"
+   }
+  ],
+  "page": 107
+ },
+ {
+  "stage": "animalQuirk",
+  "roll": "4",
+  "name": "Hunter",
+  "rank": 2,
+  "skills": [
+   {
+    "name": "Hide in Shadows",
+    "stat": "dex"
+   },
+   {
+    "name": "Stealth",
+    "stat": "dex"
+   },
+   {
+    "name": "Tracking",
+    "stat": "int"
+   }
+  ],
+  "page": 107
+ },
+ {
+  "stage": "animalQuirk",
+  "roll": "5",
+  "name": "Playful",
+  "rank": 2,
+  "skills": [
+   {
+    "name": "Persuasion",
+    "stat": "cha"
+   },
+   {
+    "name": "Dodge",
+    "stat": null
+   },
+   {
+    "name": "Intimidate",
+    "stat": "str"
+   }
+  ],
+  "page": 107
+ },
+ {
+  "stage": "animalQuirk",
+  "roll": "6",
+  "name": "Social",
+  "rank": 2,
+  "skills": [
+   {
+    "name": "Animal Handling",
+    "stat": "cha"
+   },
+   {
+    "name": "Taunt",
+    "stat": "cha"
+   },
+   {
+    "name": "Perception",
+    "stat": "int"
+   }
+  ],
+  "page": 107
+ },
+ {
+  "stage": "animalAdult",
+  "roll": "1",
+  "name": "Guard",
+  "rank": 3,
+  "skills": [
+   {
+    "name": "Catcher",
+    "stat": null
+   },
+   {
+    "name": "Perception",
+    "stat": "int"
+   },
+   {
+    "name": "Taunt",
+    "stat": "cha"
+   }
+  ],
+  "page": 107
+ },
+ {
+  "stage": "animalAdult",
+  "roll": "2",
+  "name": "Pile of Floof",
+  "rank": 3,
+  "skills": [
+   {
+    "name": "Escape Artist",
+    "stat": "dex"
+   },
+   {
+    "name": "Deception",
+    "stat": "cha"
+   },
+   {
+    "name": "Persuasion",
+    "stat": "cha"
+   }
+  ],
+  "page": 107
+ },
+ {
+  "stage": "animalAdult",
+  "roll": "3",
+  "name": "Scrapper",
+  "rank": 3,
+  "skills": [
+   {
+    "name": "Light on Your Feet",
+    "stat": "dex"
+   },
+   {
+    "name": "Streetwise",
+    "stat": "cha"
+   },
+   {
+    "name": "Survival",
+    "stat": "con"
+   }
+  ],
+  "page": 107
+ },
+ {
+  "stage": "animalAdult",
+  "roll": "4",
+  "name": "Show Animal",
+  "rank": 3,
+  "skills": [
+   {
+    "name": "Good First Impression",
+    "stat": "cha"
+   },
+   {
+    "name": "Light on Your Feet",
+    "stat": "dex"
+   },
+   {
+    "name": "Performance",
+    "stat": "cha"
+   }
+  ],
+  "page": 107
+ },
+ {
+  "stage": "animalAdult",
+  "roll": "5",
+  "name": "Support Animal",
+  "rank": 3,
+  "skills": [
+   {
+    "name": "Determine Value",
+    "stat": null
+   },
+   {
+    "name": "First Aid",
+    "stat": "int"
+   },
+   {
+    "name": "Perception",
+    "stat": "int"
+   }
+  ],
+  "page": 107
+ },
+ {
+  "stage": "animalAdult",
+  "roll": "6",
+  "name": "Working",
+  "rank": 3,
+  "skills": [
+   {
+    "name": "Animal Handling",
+    "stat": "cha"
+   },
+   {
+    "name": "Endurance",
+    "stat": "con"
+   },
+   {
+    "name": "Perception",
+    "stat": "int"
+   }
+  ],
+  "page": 107
+ }
+]

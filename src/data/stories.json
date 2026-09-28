@@ -1,0 +1,44 @@
+{
+ "trauma": [
+  "I was abused by someone I trusted.",
+  "I was in a terrible accident.",
+  "I witnessed a death.",
+  "I was betrayed by a family member, friend, or lover.",
+  "I was abandoned by one or more parents.",
+  "I have a fear of open spaces.",
+  "I have a fear of the dark or being alone.",
+  "My home burned down.",
+  "I was falsely accused of a betrayal or crime.",
+  "I was deeply humiliated by a family member, friend, or lover.",
+  "I let someone take the blame for something terrible that I did.",
+  "I have a fear of heights."
+ ],
+ "looseEnd": [
+  "I never finished high school or my college degree.",
+  "I was about to open a restaurant or other business.",
+  "I didn’t finish writing my novel.",
+  "A family member, friend, or lover recently died, but I couldn’t say my goodbyes.",
+  "I was on the verge of inventing or discovering something.",
+  "I made a promise that I might no longer be able to fulfill.",
+  "My collection was almost complete.",
+  "I was about to perform for the first time when the collapse happened.",
+  "I wanted to dump my partner, but…",
+  "I was just about to buy or finish renovating my home.",
+  "I never sent that letter to a family member, friend, or loved one.",
+  "I never got to travel to my dream destination."
+ ],
+ "regret": [
+  "I didn’t ask them to marry me.",
+  "I turned down the perfect job.",
+  "I stayed quiet when I shouldn’t have.",
+  "I chose my own safety when I should have leapt into action.",
+  "I never said goodbye.",
+  "I spent way too much time on something pointless.",
+  "I did something illegal, immoral, and probably both.",
+  "I lied to avoid an event important to those close to me.",
+  "I kept a secret that hurt someone badly.",
+  "I didn’t apologize for something terrible that I did.",
+  "I abandoned someone when they needed me the most.",
+  "I trusted the wrong people."
+ ]
+}

@@ -1,0 +1,150 @@
+import type { HealDef, StatKey } from '../data'
+
+/**
+ * A numeric effect from gear, a Buff, a Debuff, a Race or a Class.
+ * target:
+ *   stat:<str|int|con|dex|cha>  Stat bonus (Enhanced layer, or Unenhanced for traits)
+ *   skill:<skillId>             Skill Rank bonus
+ *   dr | evade | move | hbSlot | maxMana | toHit | damage | allChecks
+ *   resist:<Type> | immune:<Type> | vuln:<Type>   (value ignored)
+ */
+export interface Modifier {
+  target: string
+  value: number
+}
+
+export type GearSlot = 'head' | 'torso' | 'arms' | 'hands' | 'legs' | 'feet' | 'belt' | 'cape' | 'accessory'
+export const GEAR_SLOTS: { key: GearSlot; label: string; max: number }[] = [
+  { key: 'head', label: 'Head', max: 1 },
+  { key: 'torso', label: 'Torso', max: 1 },
+  { key: 'arms', label: 'Arms', max: 1 },
+  { key: 'hands', label: 'Hands/Holding', max: 3 },
+  { key: 'legs', label: 'Legs', max: 1 },
+  { key: 'feet', label: 'Feet', max: 1 },
+  { key: 'belt', label: 'Belt', max: 1 },
+  { key: 'cape', label: 'Cape', max: 1 },
+  { key: 'accessory', label: 'Accessories', max: 10 },
+]
+
+export interface CharSkill {
+  uid: string
+  /** catalog id; custom skills have none */
+  skillId?: string
+  name: string
+  kind: 'attack' | 'damageEffect' | 'utility' | 'spell'
+  stat: StatKey | null
+  rank: number
+  /** rank cap: 15 normally, 20 when a Race/Class allows */
+  max: number
+  marked: boolean
+  grindHours: number
+  notes: string
+  /** weapon currently in hand: its Evade upgrades apply */
+  wielded?: boolean
+  /** custom attack details */
+  customDamage?: string
+  customDamageType?: string
+  customDamageStat?: StatKey | null
+  customMana?: number
+  source?: string
+}
+
+export interface ActiveEffect {
+  uid: string
+  kind: 'buff' | 'debuff'
+  refId?: string
+  name: string
+  stacks: number
+  /** External Buffs: max 3 active (Rule of Three, Core p.95) */
+  external?: boolean
+  active: boolean
+  mods: Modifier[]
+  notes: string
+}
+
+export interface GearItem {
+  uid: string
+  slot: GearSlot
+  name: string
+  mods: Modifier[]
+  notes: string
+}
+
+export interface HotlistEntry {
+  uid: string
+  name: string
+  qty: number
+  kind: 'item' | 'spell' | 'weapon'
+  /** linked character skill (spells/weapons) */
+  skillUid?: string
+  notes: string
+  heal?: HealDef
+  restoreMana?: 'full' | number
+  removesDebuff?: string
+  /** consumed when used */
+  consumable?: boolean
+}
+
+export interface InventoryItem {
+  uid: string
+  name: string
+  qty: number
+  notes: string
+}
+
+export interface Trait {
+  source: string
+  /** stat:* mods here count toward Unenhanced Stats */
+  mods: Modifier[]
+}
+
+export interface LogEntry {
+  at: number
+  text: string
+}
+
+export interface Character {
+  id: string
+  version: number
+  name: string
+  pronouns: string
+  crawlerNumber: string
+  species: 'human' | 'animal'
+  animalType?: string
+  portrait?: string
+  level: number
+  floor: number
+  size: number
+  baseMove: number
+  step: number
+  aiFavor: number
+  popularity: number
+  gold: number
+  miscJunk: number
+  /** starting scores from character creation */
+  base: Record<StatKey, number>
+  /** points spent from level ups */
+  statPoints: Record<StatKey, number>
+  pendingStatPoints: number
+  raceId?: string
+  classId?: string
+  raceName?: string
+  className?: string
+  traits: Trait[]
+  skills: CharSkill[]
+  health: { lost: number; dying: number | null }
+  mana: number
+  effects: ActiveEffect[]
+  gear: GearItem[]
+  hotlist: (HotlistEntry | null)[]
+  inventory: InventoryItem[]
+  deityId?: string
+  worshipTier?: string
+  story: { trauma: string; looseEnds: string; regrets: string; notes: string }
+  grindHoursTotal: number
+  log: LogEntry[]
+  createdAt: number
+  updatedAt: number
+}
+
+export const HOTLIST_SIZE = 10

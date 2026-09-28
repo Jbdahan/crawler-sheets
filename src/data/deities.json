@@ -1,0 +1,101 @@
+[
+ {
+  "id": "apito",
+  "name": "Apito, the Blessed Oak Mother, the Mother of All Gods",
+  "page": 164,
+  "signatureSkills": "Catcher, Shield Spell",
+  "signatureStat": "Intelligence",
+  "rival": "Nekhebit",
+  "sponsor": "The Dream",
+  "offering": "A single tear shed in sadness",
+  "symbol": "Wooden face of a beautiful woman, with green hair shaped like leaves and tree branches cascading down her neck"
+ },
+ {
+  "id": "eileithyia",
+  "name": "Eileithyia, Goddess of Childbirth and Female Pain",
+  "page": 165,
+  "signatureSkills": "Wisp Armor Spell, Heal Other Spell",
+  "signatureStat": "Constitution",
+  "rival": "Grull",
+  "sponsor": "Huanxin Jinx",
+  "offering": "A petal from a blooming flower",
+  "symbol": "A blooming flower"
+ },
+ {
+  "id": "emberus",
+  "name": "Emberus, God of Sun and Ash",
+  "page": 165,
+  "signatureSkills": "Morning Star (Club) Skill, Fire Fingers Spell",
+  "signatureStat": "Constitution",
+  "rival": "Hellik",
+  "sponsor": "Lemig Sortion",
+  "offering": "A single drop of blood",
+  "symbol": "A circular sun disk with triangular rays"
+ },
+ {
+  "id": "eris",
+  "name": "Eris, Goddess of Chaos",
+  "page": 166,
+  "signatureSkills": "Deception Skill, Grand Illusion Spell",
+  "signatureStat": "Charisma",
+  "rival": "Oshun",
+  "sponsor": "Helene Jbarska",
+  "offering": "A secret never previously shared with anyone else",
+  "symbol": "A spinning five-sided coin"
+ },
+ {
+  "id": "grull",
+  "name": "Grull, God of War",
+  "page": 166,
+  "signatureSkills": "Iron Punch Skill, Pugilism Skill",
+  "signatureStat": "Strength",
+  "rival": "Eileithyia",
+  "sponsor": "Skull Empire (in general) or Prince Maestro (specifically)",
+  "offering": "A drop of blood (or blood equivalent) from a slain enemy",
+  "symbol": "A double-headed axe with an oak tree for a handle"
+ },
+ {
+  "id": "hellik",
+  "name": "Hellik, God of Sun and Life",
+  "page": 167,
+  "signatureSkills": "Taunt Skill, Second Chance Spell",
+  "signatureStat": "Charisma",
+  "rival": "Emberus",
+  "sponsor": "Viceroys (The Madness) or Ripper Wonton",
+  "offering": "None required",
+  "symbol": "A sun shining on a field of crops"
+ },
+ {
+  "id": "nekhebit",
+  "name": "Nekhebit, Scavenger Mother Goddess",
+  "page": 167,
+  "signatureSkills": "First Aid Skill, Salvage Skill",
+  "signatureStat": "Intelligence",
+  "rival": "Apito",
+  "sponsor": "Odette",
+  "offering": "A cup of cold water",
+  "symbol": "The bare head of a large vulture"
+ },
+ {
+  "id": "ogun",
+  "name": "Ogun, God of Blacksmithery and Armor",
+  "page": 168,
+  "signatureSkills": "Warhammer Skill, Smithing Skill",
+  "signatureStat": "Strength",
+  "rival": "Legba",
+  "sponsor": "The Dreadnoughts",
+  "offering": "A piece of steel",
+  "symbol": "A large blacksmith’s hammer"
+ },
+ {
+  "id": "taranis",
+  "name": "Taranis, God of Thunder",
+  "page": 168,
+  "signatureSkills": "Dodge Skill, Lightning Bolt Spell",
+  "signatureStat": "Dexterity",
+  "rival": "Emberus",
+  "sponsor": "Monty Winter Jr",
+  "offering": "A jolt of electricity",
+  "symbol": "A jagged, silver lightning bolt"
+ }
+]

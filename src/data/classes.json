@@ -1,0 +1,2520 @@
+[
+ {
+  "id": "boring-ol-arcanist",
+  "name": "Boring Ol’ Arcanist",
+  "kind": "class",
+  "group": "Arcanist",
+  "classType": "Arcanist",
+  "page": 142,
+  "prerequisite": null,
+  "stats": {
+   "int": 3,
+   "dex": 2
+  },
+  "skills": [
+   {
+    "name": "Arcane",
+    "ranks": 5,
+    "kind": "skill"
+   },
+   {
+    "name": "Salvage",
+    "ranks": 3,
+    "kind": "skill"
+   }
+  ],
+  "choices": [
+   {
+    "ranks": 2,
+    "count": 1,
+    "kind": "skill",
+    "text": "+2 in a crafting Skill of your choice"
+   },
+   {
+    "ranks": 1,
+    "count": 1,
+    "kind": "skill",
+    "text": "+1 in a crafting Skill of your choice"
+   }
+  ],
+  "dr": 0,
+  "rank20": [
+   "Arcane and one crafting Skill can be raised to Rank 20"
+  ],
+  "benefits": [
+   "Tier 1 Arcanist table"
+  ],
+  "size": null,
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "alchemist",
+  "name": "Alchemist",
+  "kind": "class",
+  "group": "Arcanist",
+  "classType": "Arcanist",
+  "page": 142,
+  "prerequisite": null,
+  "stats": {
+   "con": 3,
+   "int": 3
+  },
+  "skills": [
+   {
+    "name": "Alchemy",
+    "ranks": 5,
+    "kind": "skill"
+   },
+   {
+    "name": "Infusion",
+    "ranks": 3,
+    "kind": "skill"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [
+   "Alchemy Skill can be raised to Rank 20"
+  ],
+  "benefits": [
+   "Immunity to Poison",
+   "Tier 1 Alchemy table",
+   "At the end of each floor, add 1 to your Skill Advancement Checks for Alchemy and Infusion"
+  ],
+  "size": null,
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "douchy-wizard-school-wand-maker",
+  "name": "Douchy Wizard School Wand-Maker",
+  "kind": "class",
+  "group": "Arcanist",
+  "classType": "Arcanist",
+  "page": 142,
+  "prerequisite": null,
+  "stats": {
+   "int": 5,
+   "str": 1,
+   "dex": 1,
+   "cha": -2
+  },
+  "skills": [
+   {
+    "name": "Arcane",
+    "ranks": 5,
+    "kind": "skill"
+   },
+   {
+    "name": "Lore",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Negotiation",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Salvage",
+    "ranks": 2,
+    "kind": "skill"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [
+   "Arcanist Skill can be raised to Rank 20"
+  ],
+  "benefits": [
+   "Tier-1 crafting table of your choice"
+  ],
+  "size": null,
+  "earthBox": true,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "infernocrafter",
+  "name": "Infernocrafter",
+  "kind": "class",
+  "group": "Arcanist",
+  "classType": "Arcanist",
+  "page": 143,
+  "prerequisite": null,
+  "stats": {
+   "str": 3,
+   "con": 3,
+   "dex": 1
+  },
+  "skills": [
+   {
+    "name": "Arcane",
+    "ranks": 5,
+    "kind": "skill"
+   },
+   {
+    "name": "Smithing",
+    "ranks": 3,
+    "kind": "skill"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [
+   "Arcane Skill can be raised to Rank 20"
+  ],
+  "benefits": [
+   "Resistance to Fire damage",
+   "Tier 1 Arcanist table",
+   "Tier 1 Smithing table"
+  ],
+  "size": null,
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "prison-tattoo-artist",
+  "name": "Prison Tattoo Artist",
+  "kind": "class",
+  "group": "Arcanist",
+  "classType": "Arcanist",
+  "page": 143,
+  "prerequisite": null,
+  "stats": {
+   "con": 3,
+   "dex": 3,
+   "int": 2
+  },
+  "skills": [
+   {
+    "name": "Tattoo Artistry",
+    "ranks": 5,
+    "kind": "skill"
+   },
+   {
+    "name": "Calligraphy",
+    "ranks": 3,
+    "kind": "skill"
+   },
+   {
+    "name": "Dagger",
+    "ranks": 2,
+    "kind": "skill"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [
+   "Tattoo Artistry Skill can be raised to Rank 20"
+  ],
+  "benefits": [
+   "Tier 1 Tattoo chair (table)"
+  ],
+  "size": null,
+  "earthBox": true,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "boring-ol-barbarian",
+  "name": "Boring Ol’ Barbarian",
+  "kind": "class",
+  "group": "Barbarian",
+  "classType": "Barbarian",
+  "page": 144,
+  "prerequisite": null,
+  "stats": {
+   "str": 6,
+   "con": 5
+  },
+  "skills": [
+   {
+    "name": "Endurance",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Intimidate",
+    "ranks": 1,
+    "kind": "skill"
+   }
+  ],
+  "choices": [
+   {
+    "ranks": 3,
+    "count": 1,
+    "kind": "skill",
+    "text": "+3 in a Weapon Skill of your choice"
+   }
+  ],
+  "dr": 2,
+  "rank20": [],
+  "benefits": [
+   "Rage (Benefit): Your melee attacks deal +1 damage for each Health Bar slot you have lost"
+  ],
+  "size": null,
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "gladiator",
+  "name": "Gladiator",
+  "kind": "class",
+  "group": "Barbarian",
+  "classType": "Barbarian, Bard",
+  "page": 144,
+  "prerequisite": null,
+  "stats": {
+   "str": 3,
+   "con": 3,
+   "cha": 3
+  },
+  "skills": [
+   {
+    "name": "Performance",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Intimidate",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Attack of Opportunity",
+    "ranks": 1,
+    "kind": "skill"
+   }
+  ],
+  "choices": [
+   {
+    "ranks": 2,
+    "count": 1,
+    "kind": "skill",
+    "text": "+2 in a Weapon Skill of your choice"
+   }
+  ],
+  "dr": 1,
+  "rank20": [
+   "One Weapon Skill can be raised to Rank 20"
+  ],
+  "benefits": [
+   "Rage (Benefit): Your melee attacks deal +1 damage for each Health Bar slot you have lost",
+   "Once per combat, after you kill an enemy, you can make an Unopposed Performance Skill Check. On an Amazing Success or better, gain +1 Popularity"
+  ],
+  "size": null,
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "harii",
+  "name": "Harii",
+  "kind": "class",
+  "group": "Barbarian",
+  "classType": "Barbarian, Rogue",
+  "page": 144,
+  "prerequisite": null,
+  "stats": {
+   "str": 1,
+   "dex": 1,
+   "int": 1
+  },
+  "skills": [
+   {
+    "name": "Ambush",
+    "ranks": 4,
+    "kind": "skill"
+   },
+   {
+    "name": "Stealth",
+    "ranks": 4,
+    "kind": "skill"
+   }
+  ],
+  "choices": [
+   {
+    "ranks": 2,
+    "count": 1,
+    "kind": "skill",
+    "text": "+2 in one Weapon Skill of your choice"
+   }
+  ],
+  "dr": 1,
+  "rank20": [],
+  "benefits": [
+   "Rage (Benefit): Your melee attacks deal +1 damage for each Health Bar slot you have lost",
+   "Can see in total darkness",
+   "Access to the Desperado Club"
+  ],
+  "size": null,
+  "earthBox": true,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "feral-cat-berserker",
+  "name": "Feral Cat Berserker",
+  "kind": "class",
+  "group": "Barbarian",
+  "classType": "Barbarian",
+  "page": 144,
+  "prerequisite": "This limited Class is only available to cat-based Races, such as Cat, Cat Girl, and Tigran",
+  "stats": {
+   "dex": 2,
+   "str": 2,
+   "cha": 2
+  },
+  "skills": [
+   {
+    "name": "Slice Attack",
+    "ranks": 3,
+    "kind": "skill"
+   },
+   {
+    "name": "Unarmed Combat",
+    "ranks": 3,
+    "kind": "skill"
+   },
+   {
+    "name": "Dodge",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Ambush",
+    "ranks": 1,
+    "kind": "skill"
+   }
+  ],
+  "choices": [],
+  "dr": 1,
+  "rank20": [],
+  "benefits": [
+   "Rage (Benefit): Your melee attacks deal +1 damage for each Health Bar slot you have lost",
+   "Can see in total darkness"
+  ],
+  "size": null,
+  "earthBox": true,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "shieldmaiden",
+  "name": "Shieldmaiden",
+  "kind": "class",
+  "group": "Barbarian",
+  "classType": "Barbarian, Fighter",
+  "page": 144,
+  "prerequisite": null,
+  "stats": {
+   "str": 3,
+   "dex": 3,
+   "cha": 3,
+   "int": -2
+  },
+  "skills": [
+   {
+    "name": "Shield Block",
+    "ranks": 5,
+    "kind": "skill"
+   }
+  ],
+  "choices": [
+   {
+    "ranks": 2,
+    "count": 1,
+    "kind": "skill",
+    "text": "+2 in one Weapon Skill of your choice"
+   }
+  ],
+  "dr": 1,
+  "rank20": [
+   "One Weapon Skill can be raised to Rank 20"
+  ],
+  "benefits": [
+   "Rage (Benefit): Your melee attacks deal +1 damage for each Health Bar slot you have lost",
+   "Add your Str Mod a second time to your melee attack damage against males"
+  ],
+  "size": null,
+  "earthBox": true,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "boring-ol-bard",
+  "name": "Boring Ol’ Bard",
+  "kind": "class",
+  "group": "Bard",
+  "classType": "Bard",
+  "page": 145,
+  "prerequisite": null,
+  "stats": {
+   "cha": 3
+  },
+  "skills": [
+   {
+    "name": "Performance",
+    "ranks": 3,
+    "kind": "skill"
+   },
+   {
+    "name": "Diplomacy",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Good First Impression",
+    "ranks": 1,
+    "kind": "skill"
+   },
+   {
+    "name": "Lore",
+    "ranks": 1,
+    "kind": "skill"
+   }
+  ],
+  "choices": [
+   {
+    "ranks": 1,
+    "count": 1,
+    "kind": "skill",
+    "text": "+1 in a Weapon Skill of your choice"
+   },
+   {
+    "ranks": 2,
+    "count": 1,
+    "kind": "spell",
+    "text": "+2 in a Spell of your choice"
+   }
+  ],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "Access to all membership-based clubs, regardless of current memberships",
+   "Membership in the Dungeon Book of the Floor Club (all Spells)",
+   "Free room at all saferooms",
+   "You may gain access to a Patron",
+   "You pay +1 Mana to cast Spells that are not “Favored: Bard”"
+  ],
+  "size": null,
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "artist-alley-mogul",
+  "name": "Artist Alley Mogul",
+  "kind": "class",
+  "group": "Bard",
+  "classType": "Bard, Merchant",
+  "page": 145,
+  "prerequisite": null,
+  "stats": {
+   "dex": 5,
+   "cha": 5
+  },
+  "skills": [
+   {
+    "name": "Dodge",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Negotiation",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Pathfinder",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Shield",
+    "ranks": 2,
+    "kind": "spell"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [
+   "Dodge Skill can be raised to Rank 20"
+  ],
+  "benefits": [
+   "A 25% discount at all stores plus a 15% bonus to money earned from sales",
+   "10% interest earned on all coins upon descent to the next floor"
+  ],
+  "size": null,
+  "earthBox": true,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "former-child-actor",
+  "name": "Former Child Actor",
+  "kind": "class",
+  "group": "Bard",
+  "classType": "Bard",
+  "page": 145,
+  "prerequisite": "Must have Popularity 3+, receiving the Cut! achievement, to take this Class",
+  "stats": {
+   "cha": 10
+  },
+  "skills": [
+   {
+    "name": "Character Actor",
+    "ranks": 3,
+    "kind": "skill"
+   },
+   {
+    "name": "Cockroach",
+    "ranks": 2,
+    "kind": "skill"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "Add 1 to your Skill Advancement Checks for Charisma-based Skills",
+   "Immunity to Poison and all diseases",
+   "The Manager Benefit"
+  ],
+  "size": null,
+  "earthBox": true,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "necrobard",
+  "name": "NecroBard",
+  "kind": "class",
+  "group": "Bard",
+  "classType": "Bard, Necromancer",
+  "page": 146,
+  "prerequisite": null,
+  "stats": {
+   "int": 3,
+   "con": 3,
+   "cha": 3,
+   "str": -2
+  },
+  "skills": [
+   {
+    "name": "Performance",
+    "ranks": 4,
+    "kind": "skill"
+   },
+   {
+    "name": "Turn Undead",
+    "ranks": 3,
+    "kind": "spell"
+   },
+   {
+    "name": "Panty Dropper",
+    "ranks": 3,
+    "kind": "spell"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "Access to all membership-based clubs, regardless of current memberships",
+   "Free room at all saferooms",
+   "You pay +1 Mana to cast Spells that are not “Favored: Bard” or that don’t deal Necrotic damage"
+  ],
+  "size": null,
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "poet-laureate",
+  "name": "Poet Laureate",
+  "kind": "class",
+  "group": "Bard",
+  "classType": "Bard",
+  "page": 146,
+  "prerequisite": null,
+  "stats": {
+   "int": 3,
+   "cha": 2
+  },
+  "skills": [
+   {
+    "name": "Earworm",
+    "ranks": 2,
+    "kind": "spell"
+   },
+   {
+    "name": "Heal Others",
+    "ranks": 2,
+    "kind": "spell"
+   },
+   {
+    "name": "Shield",
+    "ranks": 2,
+    "kind": "spell"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "+5 Performance Skill with the written word specialty",
+   "Access to all membership-based clubs, regardless of current memberships",
+   "You pay +1 Mana to cast Spells that are not “Favored: Bard”",
+   "Performance Skill can be raised to 20",
+   "You must choose a Patron. The GM will give you a choice of at least two options when you select this class."
+  ],
+  "size": null,
+  "earthBox": true,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "professional-roadie",
+  "name": "Professional Roadie",
+  "kind": "class",
+  "group": "Bard",
+  "classType": "Bard, Rogue",
+  "page": 146,
+  "prerequisite": null,
+  "stats": {},
+  "skills": [
+   {
+    "name": "Performance",
+    "ranks": 4,
+    "kind": "skill"
+   },
+   {
+    "name": "Negotiation",
+    "ranks": 3,
+    "kind": "skill"
+   },
+   {
+    "name": "Iron Stomach",
+    "ranks": 1,
+    "kind": "skill"
+   },
+   {
+    "name": "Repair",
+    "ranks": 1,
+    "kind": "skill"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "+8 split between Strength, Constitution, and Charisma",
+   "+4 Performance Skill, with a guitar specialty",
+   "Advantage on Checks against Poison or effects that give the Shit-Faced Debuff",
+   "At the start of each combat, you may declare that all the damage you deal is Sonic damage",
+   "Roll with Advantage when making a Repair Skill Check"
+  ],
+  "size": null,
+  "earthBox": true,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "spellbinder",
+  "name": "Spellbinder",
+  "kind": "class",
+  "group": "Bard",
+  "classType": "Bard",
+  "page": 147,
+  "prerequisite": null,
+  "stats": {
+   "cha": 2,
+   "int": 2
+  },
+  "skills": [
+   {
+    "name": "Good First Impression",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Lore",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Performance",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Hot Stuff Aura",
+    "ranks": 2,
+    "kind": "spell"
+   },
+   {
+    "name": "Panty Dropper",
+    "ranks": 2,
+    "kind": "spell"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "Add your Cha Mod a second time when making a Cha Skill Check during a potentially hostile situation",
+   "Access to the Spellbook of the Floor club (“Favored: Bard” Spells only)",
+   "Once per day, you can draw the attention of everyone on the battlefield for a round, preventing them from attacking (this includes party members, Mobs, and minions, but not Bosses)"
+  ],
+  "size": null,
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "boring-ol-cleric",
+  "name": "Boring Ol’ Cleric",
+  "kind": "class",
+  "group": "Cleric",
+  "classType": "Cleric",
+  "page": 148,
+  "prerequisite": null,
+  "stats": {
+   "cha": 4,
+   "int": 3
+  },
+  "skills": [
+   {
+    "name": "Religion",
+    "ranks": 3,
+    "kind": "skill"
+   },
+   {
+    "name": "Heal Others",
+    "ranks": 2,
+    "kind": "spell"
+   },
+   {
+    "name": "Shield",
+    "ranks": 2,
+    "kind": "spell"
+   },
+   {
+    "name": "Turn Undead",
+    "ranks": 2,
+    "kind": "spell"
+   }
+  ],
+  "choices": [
+   {
+    "ranks": 2,
+    "count": 1,
+    "kind": "skill",
+    "text": "+2 in a Weapon Skill of your choice"
+   }
+  ],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "Access to the Spell Book of the Level club (“Favored: Cleric” Spells only)",
+   "Access to Club Vanquisher",
+   "Must worship a deity (see Deities & Worship, p. 163)",
+   "You cannot choose a Cleric-type Class if you have access to the Desperado Club"
+  ],
+  "size": null,
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "black-inquisitor-general",
+  "name": "Black Inquisitor General",
+  "kind": "class",
+  "group": "Cleric",
+  "classType": null,
+  "page": 148,
+  "prerequisite": null,
+  "stats": {
+   "str": 3,
+   "int": 3,
+   "cha": 1,
+   "con": -2
+  },
+  "skills": [
+   {
+    "name": "Find Trap",
+    "ranks": 3,
+    "kind": "skill"
+   },
+   {
+    "name": "Trap Engineer",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Religion",
+    "ranks": 1,
+    "kind": "skill"
+   }
+  ],
+  "choices": [
+   {
+    "ranks": 3,
+    "count": 1,
+    "kind": "skill",
+    "text": "+3 in a Weapon Skill of your choice"
+   },
+   {
+    "ranks": 2,
+    "count": 1,
+    "kind": "spell",
+    "text": "+2 in a Spell of your choice"
+   }
+  ],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "Can see in total darkness",
+   "Must worship a deity (see Deities & Worship, p. 163)",
+   "Access to all membership-based clubs, regardless of current memberships"
+  ],
+  "size": null,
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "santero",
+  "name": "Santero",
+  "kind": "class",
+  "group": "Cleric",
+  "classType": "Cleric",
+  "page": 148,
+  "prerequisite": null,
+  "stats": {
+   "str": 3,
+   "cha": 3,
+   "con": 2,
+   "int": -2
+  },
+  "skills": [
+   {
+    "name": "Heal Others",
+    "ranks": 2,
+    "kind": "spell"
+   },
+   {
+    "name": "Shield",
+    "ranks": 2,
+    "kind": "spell"
+   },
+   {
+    "name": "Soul Collector",
+    "ranks": 2,
+    "kind": "spell"
+   },
+   {
+    "name": "Religion",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Endurance",
+    "ranks": 1,
+    "kind": "skill"
+   }
+  ],
+  "choices": [
+   {
+    "ranks": 2,
+    "count": 1,
+    "kind": "skill",
+    "text": "+2 in a Weapon Skill of your choice"
+   }
+  ],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "Access to the Dungeon Book of the Floor club (“Favored: Cleric” Spells only)",
+   "Access to Club Vanquisher",
+   "Must worship a deity (see Deities & Worship, p. 163)",
+   "You cannot choose this Class if you have access to the Desperado Club"
+  ],
+  "size": null,
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "boring-ol-druid",
+  "name": "Boring Ol’ Druid",
+  "kind": "class",
+  "group": "Druid",
+  "classType": "Druid",
+  "page": 148,
+  "prerequisite": null,
+  "stats": {
+   "int": 2,
+   "con": 2,
+   "dex": 2
+  },
+  "skills": [
+   {
+    "name": "Nature’s Breath",
+    "ranks": 3,
+    "kind": "spell"
+   },
+   {
+    "name": "Survival",
+    "ranks": 2,
+    "kind": "skill"
+   }
+  ],
+  "choices": [
+   {
+    "ranks": 3,
+    "count": 1,
+    "kind": "spell",
+    "text": "+3 in a Spell of your choice"
+   },
+   {
+    "ranks": 2,
+    "count": 1,
+    "kind": "spell",
+    "text": "+2 in a Spell of your choice"
+   }
+  ],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "Your Mana recovers at twice the normal rate in a natural environment",
+   "Access to the Dungeon Book of the Floor club (“Favored: Druid” Spells only)"
+  ],
+  "size": null,
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "herbalist",
+  "name": "Herbalist",
+  "kind": "class",
+  "group": "Druid",
+  "classType": "Arcanist, Druid",
+  "page": 149,
+  "prerequisite": null,
+  "stats": {
+   "con": 2,
+   "int": 2
+  },
+  "skills": [
+   {
+    "name": "Alchemy",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Cooking",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "First Aid",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Survival",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Nature’s Breath",
+    "ranks": 2,
+    "kind": "spell"
+   },
+   {
+    "name": "Dirt Clod",
+    "ranks": 2,
+    "kind": "spell"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "Your Mana recovers at twice the normal rate in a natural environment"
+  ],
+  "size": null,
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "lifebringer",
+  "name": "Lifebringer",
+  "kind": "class",
+  "group": "Druid",
+  "classType": "Druid",
+  "page": 149,
+  "prerequisite": null,
+  "stats": {
+   "con": 2,
+   "int": 1
+  },
+  "skills": [
+   {
+    "name": "First Aid",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Pathfinder",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Regeneration",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Survival",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Nature’s Breath",
+    "ranks": 2,
+    "kind": "spell"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "+1 Rank in all Spells with the Heal keyword",
+   "Once per day, you can grant Regeneration at your Skill Rank to all party members within 30 feet for 10 minutes"
+  ],
+  "size": null,
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "physicker",
+  "name": "Physicker",
+  "kind": "class",
+  "group": "Druid",
+  "classType": "Druid",
+  "page": 149,
+  "prerequisite": null,
+  "stats": {
+   "con": 3,
+   "int": 3
+  },
+  "skills": [
+   {
+    "name": "Nature’s Breath",
+    "ranks": 3,
+    "kind": "spell"
+   },
+   {
+    "name": "Oakhide",
+    "ranks": 3,
+    "kind": "spell"
+   },
+   {
+    "name": "Rootfoot",
+    "ranks": 2,
+    "kind": "spell"
+   },
+   {
+    "name": "Solsplash",
+    "ranks": 2,
+    "kind": "spell"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "Double Mana regeneration when outdoors",
+   "Able to grant +1 DR to your party for 1 scene, once per day"
+  ],
+  "size": null,
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "shepherd",
+  "name": "Shepherd",
+  "kind": "class",
+  "group": "Druid",
+  "classType": "Druid",
+  "page": 150,
+  "prerequisite": null,
+  "stats": {
+   "int": 2,
+   "cha": 2,
+   "con": 2
+  },
+  "skills": [
+   {
+    "name": "Animal Handling",
+    "ranks": 3,
+    "kind": "skill"
+   },
+   {
+    "name": "Pathfinder",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Nature’s Breath",
+    "ranks": 2,
+    "kind": "spell"
+   },
+   {
+    "name": "Drain Life",
+    "ranks": 2,
+    "kind": "spell"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "You can see twice as far as most creatures",
+   "Your Mana recovers at twice the normal rate in a natural environment",
+   "The Shepherd may not use melee weapons other than Herding Weapons (see p. 182)",
+   "Gain a friendly Pet",
+   "Pets in your Herd gain +2 DR"
+  ],
+  "size": null,
+  "earthBox": true,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "boring-ol-fighter",
+  "name": "Boring Ol’ Fighter",
+  "kind": "class",
+  "group": "Fighter",
+  "classType": "Fighter",
+  "page": 150,
+  "prerequisite": null,
+  "stats": {
+   "str": 2,
+   "con": 2
+  },
+  "skills": [
+   {
+    "name": "Dodge",
+    "ranks": 3,
+    "kind": "skill"
+   }
+  ],
+  "choices": [
+   {
+    "ranks": 5,
+    "count": 1,
+    "kind": "skill",
+    "text": "+5 in a Weapon Skill of your choice"
+   },
+   {
+    "ranks": 2,
+    "count": 2,
+    "options": [
+     "Aiming",
+     "Attack of Opportunity",
+     "Catcher",
+     "Shield Block",
+     "Zone of Control"
+    ],
+    "text": "+2 to your choice of two of the following Skills: Aiming, Attack of Opportunity, Catcher, Shield Block, or Zone of Control Skills"
+   }
+  ],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "Can access any Weapon Training Guild. Upon arrival on each floor, you receive a coupon good for one free training at a Weapon Training Guild"
+  ],
+  "size": null,
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "pit-fighter",
+  "name": "Pit Fighter",
+  "kind": "class",
+  "group": "Fighter",
+  "classType": "Fighter",
+  "page": 150,
+  "prerequisite": null,
+  "stats": {
+   "dex": 3,
+   "int": 2,
+   "str": 1
+  },
+  "skills": [
+   {
+    "name": "Attack of Opportunity",
+    "ranks": 3,
+    "kind": "skill"
+   },
+   {
+    "name": "Dirty Fighting",
+    "ranks": 3,
+    "kind": "skill"
+   },
+   {
+    "name": "Dodge",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Improvised Weapons",
+    "ranks": 2,
+    "kind": "skill"
+   }
+  ],
+  "choices": [],
+  "dr": 2,
+  "rank20": [],
+  "benefits": [],
+  "size": null,
+  "earthBox": true,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "shotgun-messenger",
+  "name": "Shotgun Messenger",
+  "kind": "class",
+  "group": "Fighter",
+  "classType": "Fighter",
+  "page": 150,
+  "prerequisite": null,
+  "stats": {
+   "str": 2,
+   "con": 2,
+   "dex": 2,
+   "cha": -2
+  },
+  "skills": [
+   {
+    "name": "Aiming",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Intimidate",
+    "ranks": 2,
+    "kind": "skill"
+   }
+  ],
+  "choices": [
+   {
+    "ranks": 5,
+    "count": 1,
+    "kind": "skill",
+    "text": "+5 in a Ranged Weapon Skill"
+   },
+   {
+    "ranks": 1,
+    "count": 0,
+    "group": "muscle-powered movement-related Skills",
+    "text": "+1 in all muscle-powered movement-related Skills"
+   }
+  ],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "Can access any Weapon Training Guild. Each floor, you receive a coupon good for one free training at a Weapon Training Guild",
+   "Access to the Desperado Club"
+  ],
+  "size": null,
+  "earthBox": true,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "straight-to-dvd-action-hero",
+  "name": "Straight-to-DVD Action Hero",
+  "kind": "class",
+  "group": "Fighter",
+  "classType": "Fighter",
+  "page": 151,
+  "prerequisite": null,
+  "stats": {
+   "str": 3,
+   "con": 3,
+   "dex": 3,
+   "cha": 3,
+   "int": -2
+  },
+  "skills": [
+   {
+    "name": "Unarmed Combat",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Driving",
+    "ranks": 1,
+    "kind": "skill"
+   },
+   {
+    "name": "Running",
+    "ranks": 1,
+    "kind": "skill"
+   },
+   {
+    "name": "Performance",
+    "ranks": 1,
+    "kind": "skill"
+   }
+  ],
+  "choices": [],
+  "dr": 1,
+  "rank20": [],
+  "benefits": [
+   "Take no damage from falling",
+   "The Manager Benefit"
+  ],
+  "size": null,
+  "earthBox": true,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "sword-and-boarder",
+  "name": "Sword and Boarder",
+  "kind": "class",
+  "group": "Fighter",
+  "classType": "Fighter",
+  "page": 151,
+  "prerequisite": null,
+  "stats": {
+   "str": 2,
+   "con": 2,
+   "dex": 2,
+   "int": -2
+  },
+  "skills": [
+   {
+    "name": "Shield Block",
+    "ranks": 5,
+    "kind": "skill"
+   },
+   {
+    "name": "Attack of Opportunity",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Catcher",
+    "ranks": 2,
+    "kind": "skill"
+   }
+  ],
+  "choices": [
+   {
+    "ranks": 3,
+    "count": 1,
+    "kind": "skill",
+    "text": "+3 in an Edged Weapon Skill of your choice"
+   }
+  ],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "Access to the Desperado Club"
+  ],
+  "size": null,
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "monster-truck-driver",
+  "name": "Monster Truck Driver",
+  "kind": "class",
+  "group": "Fighter",
+  "classType": "Fighter",
+  "page": 152,
+  "prerequisite": "This limited Class is only available to crawlers who have Rank 5+ in the Driving Skill",
+  "stats": {
+   "con": 4,
+   "dex": 2,
+   "str": -2,
+   "int": -2
+  },
+  "skills": [
+   {
+    "name": "Gear Head",
+    "ranks": 3,
+    "kind": "skill"
+   },
+   {
+    "name": "Driving",
+    "ranks": 3,
+    "kind": "skill"
+   },
+   {
+    "name": "Pathfinder",
+    "ranks": 3,
+    "kind": "skill"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "While moving in combat, you have a Con Mod bonus in your Health Bar slots (only) equal to 1/10th of the Move value of your means of conveyance. If on foot, you must have spent a Move Action during the previous round to gain this bonus",
+   "You bolt across the room and slam through each entity in the way. [Rank = Floor Number] + Dex to hit, 1d12 Bludgeoning, 2d10+3ft Line, then you gain the Fatigued Debuff. Critical Fail on a Natural 4 or less. Cooldown: 30 hours. Add 1d at Rank 5, 10, and 15. Rank only increases by Floor",
+   "Once per combat, roll 1d2 when you lose 2+ Health Bar slots. On a 1, the attacker loses 1 Health Bar slot",
+   "Resistance to Force damage"
+  ],
+  "size": null,
+  "earthBox": true,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "zulu-warrior",
+  "name": "Zulu Warrior",
+  "kind": "class",
+  "group": "Fighter",
+  "classType": "Fighter",
+  "page": 152,
+  "prerequisite": null,
+  "stats": {
+   "str": 3,
+   "con": 3,
+   "dex": 3
+  },
+  "skills": [
+   {
+    "name": "Attack of Opportunity",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Endurance",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Running",
+    "ranks": 2,
+    "kind": "skill"
+   }
+  ],
+  "choices": [
+   {
+    "ranks": 3,
+    "count": 1,
+    "kind": "skill",
+    "text": "+3 in one Melee Weapon Skill of your choice"
+   }
+  ],
+  "dr": 1,
+  "rank20": [
+   "One Weapon Skill can be raised to Rank 20"
+  ],
+  "benefits": [],
+  "size": null,
+  "earthBox": true,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "boring-ol-mage",
+  "name": "Boring Ol’ Mage",
+  "kind": "class",
+  "group": "Mage",
+  "classType": "Mage",
+  "page": 152,
+  "prerequisite": null,
+  "stats": {
+   "int": 5,
+   "cha": 5,
+   "str": -2,
+   "dex": -2
+  },
+  "skills": [
+   {
+    "name": "Lore",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Arcane",
+    "ranks": 1,
+    "kind": "skill"
+   }
+  ],
+  "choices": [
+   {
+    "ranks": 3,
+    "count": 1,
+    "kind": "spell",
+    "text": "+3 in a Fire Spell"
+   },
+   {
+    "ranks": 2,
+    "count": 2,
+    "kind": "spell",
+    "text": "+2 in one Force Spell and one Sonic Spell"
+   },
+   {
+    "ranks": 2,
+    "count": 2,
+    "kind": "spell",
+    "text": "+2 in two different Passive Spells"
+   }
+  ],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "-3 Ranks in all Dexterity Skills (to a minimum of 1 Rank if you have any Ranks)",
+   "-3 Ranks in all Strength Skills (to a minimum of 1 Rank if you have any Ranks)"
+  ],
+  "size": null,
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "blizzardmancer",
+  "name": "Blizzardmancer",
+  "kind": "class",
+  "group": "Mage",
+  "classType": "Mage",
+  "page": 153,
+  "prerequisite": null,
+  "stats": {
+   "int": 4,
+   "dex": 3,
+   "str": -2
+  },
+  "skills": [
+   {
+    "name": "Ice Blast",
+    "ranks": 4,
+    "kind": "spell"
+   },
+   {
+    "name": "Frost Scar",
+    "ranks": 4,
+    "kind": "spell"
+   },
+   {
+    "name": "Aiming",
+    "ranks": 2,
+    "kind": "skill"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "Resistance to Ice damage",
+   "You can use the Aiming Skill for single-target Ice Spells"
+  ],
+  "size": null,
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "crisper",
+  "name": "Crisper",
+  "kind": "class",
+  "group": "Mage",
+  "classType": "Mage",
+  "page": 153,
+  "prerequisite": null,
+  "stats": {
+   "int": 3,
+   "dex": 2,
+   "con": -2
+  },
+  "skills": [
+   {
+    "name": "Wall of Fire",
+    "ranks": 3,
+    "kind": "spell"
+   },
+   {
+    "name": "Fire Fingers",
+    "ranks": 3,
+    "kind": "spell"
+   },
+   {
+    "name": "Fireball",
+    "ranks": 2,
+    "kind": "spell"
+   },
+   {
+    "name": "Wilbur’s Slow-Build Fireblast",
+    "ranks": 2,
+    "kind": "spell"
+   },
+   {
+    "name": "Lore",
+    "ranks": 2,
+    "kind": "skill"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "Resistance to Fire damage",
+   "No DR against Ice or water-based damage"
+  ],
+  "size": null,
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "fire-spiritualist",
+  "name": "Fire Spiritualist",
+  "kind": "class",
+  "group": "Mage",
+  "classType": "Bard, Mage",
+  "page": 153,
+  "prerequisite": null,
+  "stats": {
+   "int": 2,
+   "cha": 2
+  },
+  "skills": [
+   {
+    "name": "Holy Aura",
+    "ranks": 2,
+    "kind": "spell"
+   },
+   {
+    "name": "Hot Stuff Aura",
+    "ranks": 2,
+    "kind": "spell"
+   },
+   {
+    "name": "Heal Others",
+    "ranks": 2,
+    "kind": "spell"
+   },
+   {
+    "name": "Intimate Touches",
+    "ranks": 2,
+    "kind": "spell"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "Heal Others Spell can be raised to 20",
+   "Ethereal Hug: Once per day for one scene, you can grant your party +1 DR, Rank 4 Regeneration (as per the Skill), +1 to hit on Weapon and Spell Skill Checks, and add 1d4 bonus when they deal damage",
+   "Vulnerable to Ice damage"
+  ],
+  "size": null,
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "forsaken-aerialist",
+  "name": "Forsaken Aerialist",
+  "kind": "class",
+  "group": "Mage",
+  "classType": "Mage",
+  "page": 153,
+  "prerequisite": null,
+  "stats": {
+   "int": 5,
+   "cha": -2
+  },
+  "skills": [
+   {
+    "name": "Drain Life",
+    "ranks": 3,
+    "kind": "spell"
+   },
+   {
+    "name": "Soul Collector",
+    "ranks": 3,
+    "kind": "spell"
+   },
+   {
+    "name": "Alchemy",
+    "ranks": 1,
+    "kind": "skill"
+   },
+   {
+    "name": "Infusion",
+    "ranks": 1,
+    "kind": "skill"
+   },
+   {
+    "name": "Tactics",
+    "ranks": 1,
+    "kind": "skill"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "Double the duration of your Rank 5 and lower Spells that have a duration",
+   "Your Spells can be applied to a creature without it realizing it is under a Spell effect"
+  ],
+  "size": null,
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "necromancer",
+  "name": "Necromancer",
+  "kind": "class",
+  "group": "Mage",
+  "classType": "Mage, Necromancer",
+  "page": 154,
+  "prerequisite": null,
+  "stats": {
+   "int": 2,
+   "dex": 2,
+   "con": -2,
+   "cha": -2
+  },
+  "skills": [
+   {
+    "name": "Soul Collector",
+    "ranks": 4,
+    "kind": "spell"
+   },
+   {
+    "name": "Rise, Dead Minion!",
+    "ranks": 4,
+    "kind": "spell"
+   },
+   {
+    "name": "Drain Life",
+    "ranks": 2,
+    "kind": "spell"
+   },
+   {
+    "name": "Second Chance",
+    "ranks": 2,
+    "kind": "spell"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "Once per rest, you can ask the corpse of a dead creature a number of questions equal to your Int. The creature answers as truthfully as it can based on what it knew in life",
+   "Whenever you kill an undead Mob, you heal 1 Health Bar, up to 5 Health Bar per combat"
+  ],
+  "size": null,
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "boring-ol-monk",
+  "name": "Boring Ol’ Monk",
+  "kind": "class",
+  "group": "Monk",
+  "classType": "Monk",
+  "page": 154,
+  "prerequisite": null,
+  "stats": {
+   "con": 3,
+   "dex": 3,
+   "str": 1
+  },
+  "skills": [
+   {
+    "name": "Unarmed Combat",
+    "ranks": 3,
+    "kind": "skill"
+   },
+   {
+    "name": "Foot Soldier",
+    "ranks": 1,
+    "kind": "skill"
+   },
+   {
+    "name": "Iron Punch",
+    "ranks": 1,
+    "kind": "skill"
+   },
+   {
+    "name": "Powerful Strike",
+    "ranks": 1,
+    "kind": "skill"
+   },
+   {
+    "name": "Pugilism",
+    "ranks": 1,
+    "kind": "skill"
+   },
+   {
+    "name": "Smush",
+    "ranks": 1,
+    "kind": "skill"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [
+   "Unarmed Combat Skill can be raised to Rank 20"
+  ],
+  "benefits": [
+   "+1 in Dexterity-based Weapon Skills"
+  ],
+  "size": null,
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "elemental-monk",
+  "name": "Elemental Monk",
+  "kind": "class",
+  "group": "Monk",
+  "classType": "Mage, Monk",
+  "page": 154,
+  "prerequisite": null,
+  "stats": {
+   "int": 2,
+   "dex": 2
+  },
+  "skills": [
+   {
+    "name": "Unarmed Combat",
+    "ranks": 3,
+    "kind": "skill"
+   },
+   {
+    "name": "Dirt Clod",
+    "ranks": 1,
+    "kind": "spell"
+   },
+   {
+    "name": "Fire Fingers",
+    "ranks": 1,
+    "kind": "spell"
+   },
+   {
+    "name": "Frost Scar",
+    "ranks": 1,
+    "kind": "spell"
+   }
+  ],
+  "choices": [
+   {
+    "ranks": 1,
+    "count": 0,
+    "group": "Spells with the Electric, Fire, and Ice damage types",
+    "text": "+1 in all Spells with the Electric, Fire, and Ice damage types"
+   }
+  ],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "Advantage when attacking elemental creatures",
+   "The ability to breathe underwater",
+   "The ability to burrow",
+   "The ability to fly"
+  ],
+  "size": null,
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "prizefighter",
+  "name": "Prizefighter",
+  "kind": "class",
+  "group": "Monk",
+  "classType": "Bard, Monk",
+  "page": 154,
+  "prerequisite": "This limited Class is only available to crawlers who have Rank 5+ in the Pugilism Skill",
+  "stats": {
+   "con": 5,
+   "str": 2,
+   "int": -2,
+   "cha": -2
+  },
+  "skills": [
+   {
+    "name": "Pugilism",
+    "ranks": 5,
+    "kind": "skill"
+   },
+   {
+    "name": "Iron Punch",
+    "ranks": 5,
+    "kind": "skill"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [
+   "Pugilism Skill can be raised to Rank 20"
+  ],
+  "benefits": [
+   "1 × Floor Number gold for every Mob you kill with a Pugilism or Unarmed Combat Skill attack",
+   "When you kill a foe with a Pugilism or Unarmed Combat Skill attack, +1 Popularity"
+  ],
+  "size": null,
+  "earthBox": true,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "spirit-healer",
+  "name": "Spirit Healer",
+  "kind": "class",
+  "group": "Monk",
+  "classType": "Druid, Monk",
+  "page": 155,
+  "prerequisite": null,
+  "stats": {
+   "str": 3,
+   "con": 3,
+   "dex": 1
+  },
+  "skills": [
+   {
+    "name": "Drain Life",
+    "ranks": 3,
+    "kind": "spell"
+   },
+   {
+    "name": "Smush",
+    "ranks": 3,
+    "kind": "skill"
+   },
+   {
+    "name": "Heal Others",
+    "ranks": 2,
+    "kind": "spell"
+   },
+   {
+    "name": "Heal Self",
+    "ranks": 2,
+    "kind": "spell"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [
+   "Heal Others Spell can be raised to Rank 20"
+  ],
+  "benefits": [
+   "Your healing Skills and Spells heal 1 additional Health Bar slot when targeting a single individual",
+   "Access to Club Vanquisher"
+  ],
+  "size": null,
+  "earthBox": true,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "street-monk",
+  "name": "Street Monk",
+  "kind": "class",
+  "group": "Monk",
+  "classType": "Fighter, Monk",
+  "page": 155,
+  "prerequisite": null,
+  "stats": {
+   "dex": 2,
+   "str": 1,
+   "cha": 1
+  },
+  "skills": [
+   {
+    "name": "Dirty Fighting",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Streetwise",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Unarmed Combat",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Pugilism",
+    "ranks": 1,
+    "kind": "skill"
+   }
+  ],
+  "choices": [],
+  "dr": 3,
+  "rank20": [],
+  "benefits": [
+   "+1 in Dexterity-based Weapon Skills"
+  ],
+  "size": null,
+  "earthBox": true,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "boring-ol-paladin",
+  "name": "Boring Ol’ Paladin",
+  "kind": "class",
+  "group": "Paladin",
+  "classType": "Paladin",
+  "page": 155,
+  "prerequisite": null,
+  "stats": {
+   "cha": 3
+  },
+  "skills": [
+   {
+    "name": "Protective Shell",
+    "ranks": 3,
+    "kind": "spell"
+   },
+   {
+    "name": "Heal Others",
+    "ranks": 3,
+    "kind": "spell"
+   },
+   {
+    "name": "Holy Aura",
+    "ranks": 3,
+    "kind": "spell"
+   },
+   {
+    "name": "Catcher",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Shield Block",
+    "ranks": 2,
+    "kind": "skill"
+   }
+  ],
+  "choices": [
+   {
+    "ranks": 3,
+    "count": 1,
+    "kind": "skill",
+    "text": "+3 in a Weapon Skill of your choice"
+   }
+  ],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "Access to Club Vanquisher",
+   "Must worship a deity",
+   "You cannot choose this Class if you have access to the Desperado Club"
+  ],
+  "size": null,
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "cavalier",
+  "name": "Cavalier",
+  "kind": "class",
+  "group": "Paladin",
+  "classType": "Fighter, Paladin",
+  "page": 156,
+  "prerequisite": null,
+  "stats": {
+   "str": 2,
+   "con": 2
+  },
+  "skills": [
+   {
+    "name": "Catcher",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Riding",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Lance",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Shield",
+    "ranks": 2,
+    "kind": "spell"
+   },
+   {
+    "name": "Paladin’s Smite",
+    "ranks": 2,
+    "kind": "spell"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "When protecting someone under your code by using Catcher, gain the benefit of Playing to the Cameras (no Disadvantage, as this is a Passive Skill). This counts as your “once per session” usage",
+   "Gain a bonded Mount one size bigger than you with Move 40, barding with DR 10, a Trample attack, and a pet carrier for it",
+   "When you or your Mount is the target of an Attack, your fancy riding allows you to redirect an attack at your Mount to yourself or vice versa",
+   "Access to Club Vanquisher",
+   "Must worship a deity"
+  ],
+  "size": null,
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "sacred-paladin",
+  "name": "Sacred Paladin",
+  "kind": "class",
+  "group": "Paladin",
+  "classType": "Paladin",
+  "page": 156,
+  "prerequisite": null,
+  "stats": {
+   "str": 3,
+   "cha": 2
+  },
+  "skills": [
+   {
+    "name": "Catcher",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Heal Others",
+    "ranks": 2,
+    "kind": "spell"
+   },
+   {
+    "name": "Paladin’s Smite",
+    "ranks": 2,
+    "kind": "spell"
+   },
+   {
+    "name": "Turn Undead",
+    "ranks": 2,
+    "kind": "spell"
+   }
+  ],
+  "choices": [
+   {
+    "ranks": 2,
+    "count": 1,
+    "kind": "skill",
+    "text": "+2 in a Weapon Skill of your choice"
+   }
+  ],
+  "dr": 2,
+  "rank20": [],
+  "benefits": [
+   "Access to the Dungeon Book of the Floor club (Favored: Cleric or Paladin Spells only)",
+   "Access to Club Vanquisher",
+   "Must worship a deity",
+   "You cannot choose this Class if you have access to the Desperado Club"
+  ],
+  "size": null,
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "boring-ol-rogue",
+  "name": "Boring Ol’ Rogue",
+  "kind": "class",
+  "group": "Rogue",
+  "classType": "Rogue",
+  "page": 156,
+  "prerequisite": null,
+  "stats": {
+   "int": 1,
+   "dex": 1,
+   "cha": 1
+  },
+  "skills": [
+   {
+    "name": "Stealth",
+    "ranks": 3,
+    "kind": "skill"
+   },
+   {
+    "name": "Dagger",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Detect Trap",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Dodge",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Lockpicking",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Ambush",
+    "ranks": 1,
+    "kind": "skill"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "Can see in total darkness",
+   "1 x Floor Number gold for every Mob killed with a melee weapon",
+   "Access to the Desperado Club",
+   "Cannot choose this Class if you have access to Club Vanquisher"
+  ],
+  "size": null,
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "bomb-squad-tech",
+  "name": "Bomb Squad Tech",
+  "kind": "class",
+  "group": "Rogue",
+  "classType": "Rogue",
+  "page": 156,
+  "prerequisite": "This limited Class is only available to crawlers who’ve earned the Boom! Achievement",
+  "stats": {
+   "dex": 2,
+   "con": 1
+  },
+  "skills": [
+   {
+    "name": "Bomb Surgeon",
+    "ranks": 3,
+    "kind": "skill"
+   },
+   {
+    "name": "Find Trap",
+    "ranks": 3,
+    "kind": "skill"
+   }
+  ],
+  "choices": [
+   {
+    "ranks": 2,
+    "count": 0,
+    "group": "Explosive-based Skills",
+    "text": "+2 in all Explosive-based Skills"
+   }
+  ],
+  "dr": 1,
+  "rank20": [],
+  "benefits": [
+   "-2 Intelligence (After all, only dumbasses would choose to do this for a living.)",
+   "Limb Regeneration Benefit: In 12 days minus your Con Mod, one limb fully regrows"
+  ],
+  "size": null,
+  "earthBox": true,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "compensated-anarchist",
+  "name": "Compensated Anarchist",
+  "kind": "class",
+  "group": "Rogue",
+  "classType": "Monk, Rogue",
+  "page": 157,
+  "prerequisite": "This limited Class is only available to crawlers who have Popularity 3 or higher and have Rank 5+ in the Explosives Handling Skill",
+  "stats": {
+   "int": 1
+  },
+  "skills": [
+   {
+    "name": "Backfire",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Escape Plan",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Find Trap",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Bomb Surgeon",
+    "ranks": 1,
+    "kind": "skill"
+   },
+   {
+    "name": "Hide in Shadows",
+    "ranks": 1,
+    "kind": "skill"
+   },
+   {
+    "name": "Trap Engineer",
+    "ranks": 1,
+    "kind": "skill"
+   },
+   {
+    "name": "Unarmed Combat",
+    "ranks": 1,
+    "kind": "skill"
+   },
+   {
+    "name": "Fear",
+    "ranks": 1,
+    "kind": "spell"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "+ 5 Charisma",
+   "Add no Stat Mod bonus damage when using Edged Weapons",
+   "You pay +3 Mana to cast damage-dealing Spells",
+   "At the end of each floor, add 1 to one of your trap-related Skill Advancement Checks",
+   "At the end of each floor, add 1 to one of your bomb-related Skill Advancement Checks",
+   "Access to the Desperado Club",
+   "Access to the Naughty Boys Employment Agency"
+  ],
+  "size": null,
+  "earthBox": true,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "high-rise-grifter",
+  "name": "High Rise Grifter",
+  "kind": "class",
+  "group": "Rogue",
+  "classType": "Rogue",
+  "page": 157,
+  "prerequisite": null,
+  "stats": {
+   "int": 1,
+   "cha": 1
+  },
+  "skills": [
+   {
+    "name": "Deception",
+    "ranks": 4,
+    "kind": "skill"
+   },
+   {
+    "name": "Stealth",
+    "ranks": 4,
+    "kind": "skill"
+   },
+   {
+    "name": "Dagger",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Escape Plan",
+    "ranks": 2,
+    "kind": "skill"
+   },
+   {
+    "name": "Determine Value",
+    "ranks": 1,
+    "kind": "skill"
+   },
+   {
+    "name": "Negotiation",
+    "ranks": 1,
+    "kind": "skill"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [
+   "Access to the Desperado Club",
+   "Cannot choose this Class if you have access to Club Vanquisher"
+  ],
+  "size": null,
+  "earthBox": true,
+  "allStats": 0,
+  "statSplit": null
+ },
+ {
+  "id": "identity-thief",
+  "name": "Identity Thief",
+  "kind": "class",
+  "group": "Rogue",
+  "classType": "Rogue",
+  "page": 157,
+  "prerequisite": null,
+  "stats": {
+   "cha": 4,
+   "dex": 3
+  },
+  "skills": [
+   {
+    "name": "Deception",
+    "ranks": 5,
+    "kind": "skill"
+   },
+   {
+    "name": "Dagger",
+    "ranks": 3,
+    "kind": "skill"
+   },
+   {
+    "name": "Investigation",
+    "ranks": 2,
+    "kind": "skill"
+   }
+  ],
+  "choices": [],
+  "dr": 0,
+  "rank20": [],
+  "benefits": [],
+  "size": null,
+  "earthBox": false,
+  "allStats": 0,
+  "statSplit": null
+ }
+]
