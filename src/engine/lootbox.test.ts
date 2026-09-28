@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { formatLootRow, lootBoxHtml, lootBoxText, type LootBox } from './lootbox'
+import { formatLootRow, itemsTitle, lootBoxHtml, lootBoxText, type LootBox } from './lootbox'
 
 describe('loot box formatting', () => {
   it('formats each row type', () => {
@@ -37,5 +37,16 @@ describe('loot box formatting', () => {
     expect(html).toContain('<i>Ouch &lt;3</i>')
     expect(html).toContain('<li>+1 Dexterity</li>')
     expect(html).not.toContain('<img')
+  })
+
+  it('formats just the items, without the achievement parts', () => {
+    const one: LootBox = { itemsOnly: true, name: 'ignored', description: '', reward: 'ignored', claimUrl: 'https://x/#loot=abc',
+      rows: [{ type: 'custom', kind: 'spell', name: 'Glitter Bomb', mana: '8', effect: 'Blinds everyone' }] }
+    expect(lootBoxText(one)).toBe('Custom Spell: Glitter Bomb (Mana 8): Blinds everyone\nClaim it in Crawler Sheets: https://x/#loot=abc')
+    expect(lootBoxHtml(one)).not.toContain('New Achievement')
+    expect(lootBoxHtml(one)).not.toContain('<ul')
+    const two = { ...one, claimUrl: undefined, rows: [...one.rows, { type: 'gold' as const, value: 5 }] }
+    expect(lootBoxText(two)).toBe('• Custom Spell: Glitter Bomb (Mana 8): Blinds everyone\n• 5 Gold')
+    expect(itemsTitle(two.rows)).toBe('Custom Spell: Glitter Bomb + 1 more')
   })
 })

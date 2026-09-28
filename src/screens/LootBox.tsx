@@ -5,10 +5,10 @@ import { uid } from '../engine/advancement'
 import { claimUrl } from '../engine/lootclaim'
 import { GEAR_SLOTS } from '../engine/types'
 import {
-  LOOT_CATEGORIES, LOOT_TIERS, MOD_TARGETS, TYPED_TARGETS, lootBoxHtml, lootBoxText,
+  LOOT_CATEGORIES, LOOT_TIERS, itemsTitle, MOD_TARGETS, TYPED_TARGETS, lootBoxHtml, lootBoxText,
   type LootBox as Box, type LootMod, type LootRow, type LootRowType,
 } from '../engine/lootbox'
-import { Icon, toast } from '../components/ui'
+import { Icon, Seg, toast } from '../components/ui'
 import { go } from '../router'
 
 const STATS = STAT_KEYS.map((k) => STAT_NAMES[k])
@@ -61,8 +61,10 @@ interface Draft {
   claimId: string
   /** put the claim link at the bottom of the Google Docs copy */
   includeLink: boolean
+  /** a full achievement + loot box, or just item(s) */
+  mode: 'achievement' | 'items'
 }
-const empty = (): Draft => ({ name: '', description: '', tier: 'Bronze', category: 'Adventurer', customReward: '', rows: [], claimId: uid(), includeLink: true })
+const empty = (): Draft => ({ name: '', description: '', tier: 'Bronze', category: 'Adventurer', customReward: '', rows: [], claimId: uid(), includeLink: true, mode: 'achievement' })
 const KEY = 'lootbox.draft'
 
 function loadDraft(): Draft {
@@ -142,14 +144,19 @@ export function LootBox() {
     return { ...x, rows }
   })
 
+  const itemsMode = d.mode === 'items'
   const box: Box = useMemo(() => ({
+    itemsOnly: d.mode === 'items',
     name: d.name,
     description: d.description,
     reward: d.category === '__custom' ? d.customReward : [d.tier, d.category, 'Box'].filter(Boolean).join(' '),
-    image: d.image?.src ? d.image : undefined,
+    image: d.image?.src && d.mode !== 'items' ? d.image : undefined,
     rows: d.rows,
   }), [d])
-  const link = useMemo(() => claimUrl({ v: 1, id: d.claimId, name: d.name.trim(), description: d.description.trim(), reward: box.reward.trim(), rows: d.rows }), [d, box.reward])
+  const link = useMemo(() => claimUrl(d.mode === 'items'
+    ? { v: 1, id: d.claimId, items: true, name: itemsTitle(d.rows), description: '', reward: '', rows: d.rows }
+    : { v: 1, id: d.claimId, name: d.name.trim(), description: d.description.trim(), reward: box.reward.trim(), rows: d.rows }), [d, box.reward])
+  const ready = itemsMode ? !!itemsTitle(d.rows) : !!d.name.trim()
   const html = useMemo(() => lootBoxHtml({ ...box, claimUrl: d.includeLink ? link : undefined }), [box, link, d.includeLink])
   // QR codes top out near 2,900 characters; keep the image paired with the link it encodes
   const [qrFor, setQrFor] = useState<{ link: string; src: string } | null>(null)
@@ -160,7 +167,7 @@ export function LootBox() {
   const qr = qrFor?.link === link ? qrFor.src : null
 
   const copy = async (rich: boolean) => {
-    if (!d.name.trim()) { toast('Give the achievement a name first'); return }
+    if (!ready) { toast(itemsMode ? 'Fill in the item first' : 'Give the achievement a name first'); return }
     const ok = await copyToClipboard(rich ? html : null, lootBoxText({ ...box, claimUrl: d.includeLink ? link : undefined }))
     toast(ok ? (rich ? 'Copied! Now paste it into your Google Doc' : 'Copied as plain text') : "Couldn't copy. Select the preview and copy it by hand")
   }
@@ -184,9 +191,19 @@ export function LootBox() {
           <li><b>Add what's inside</b> with <i>+ Add item</i>. Pick Stats, Skills, Spells, gear and potions from the lists. For anything homebrew, choose <i>Custom</i>: a spell with a Mana cost, or an object with a special rule.</li>
           <li><b>Tap “Copy for Google Docs”</b>, open your Doc and paste. Use <kbd>Ctrl</kbd>+<kbd>V</kbd> on Windows, <kbd>⌘</kbd>+<kbd>V</kbd> on a Mac, or press and hold → Paste on a phone or iPad. The bold, italics, bullets and picture come with it.</li>
         </ol>
-        <p className="small muted">Want players to add the loot to their character sheets? See step 4. Nothing to install and no sign-in. Your draft stays on this device until you tap <i>Start over</i>.</p>
+        <p className="small muted">Just need one custom Skill, Spell or piece of gear? Choose <i>Just an item</i> below to skip the achievement. Want players to add the loot to their character sheets? See the last step. Nothing to install and no sign-in. Your draft stays on this device until you tap <i>Start over</i>.</p>
       </div>
 
+      <div className="card stack">
+        <div className="label">What are you making?</div>
+        <Seg value={d.mode} onChange={(mode) => setD((x) => ({ ...x, mode, rows: mode === 'items' && !x.rows.length ? [newRow('custom')] : x.rows }))} options={[
+          { value: 'achievement', label: 'Achievement + loot box' },
+          { value: 'items', label: 'Just an item' },
+        ]} />
+        {itemsMode && <p className="small muted">Make one or more items with no achievement around them, like a custom Spell, a homebrew Skill or a piece of gear. Use <i>Custom</i> or the Skill list's <i>Custom skill…</i> for anything not in the book.</p>}
+      </div>
+
+      {!itemsMode && <>
       <div className="card stack">
         <h2>1 · Achievement</h2>
         <label><span className="label">Achievement name</span>
@@ -236,9 +253,10 @@ export function LootBox() {
           </label>
         )}
       </div>
+      </>}
 
       <div className="card stack">
-        <h2>2 · What's inside</h2>
+        <h2>{itemsMode ? '1 · The item' : "2 · What's inside"}</h2>
         {d.rows.length === 0 && <div className="empty">Nothing yet. Tap <b>+ Add item</b> below.</div>}
         {d.rows.map((r, i) => (
           <div key={i} className="loot-row">
@@ -253,36 +271,36 @@ export function LootBox() {
             <RowFields row={r} onChange={(x) => setRow(i, x)} />
           </div>
         ))}
-        <button className="btn" onClick={() => setD((x) => ({ ...x, rows: [...x.rows, newRow('stat')] }))}><Icon name="plus" size={18} /> Add item</button>
+        <button className="btn" onClick={() => setD((x) => ({ ...x, rows: [...x.rows, newRow(x.mode === 'items' ? 'custom' : 'stat')] }))}><Icon name="plus" size={18} /> {itemsMode ? 'Add another item' : 'Add item'}</button>
       </div>
 
       <div className="card stack">
-        <h2>3 · Preview &amp; copy</h2>
+        <h2>{itemsMode ? '2' : '3'} · Preview &amp; copy</h2>
         <div className="paper" dangerouslySetInnerHTML={{ __html: html }} />
         <button className="btn primary" onClick={() => copy(true)}>Copy for Google Docs</button>
         <div className="grid2">
           <button className="btn" onClick={() => copy(false)}>Copy as plain text</button>
-          <button className="btn danger" onClick={() => { setD(empty()); setPicMode('none') }}>Start over</button>
+          <button className="btn danger" onClick={() => { setD((x) => ({ ...empty(), mode: x.mode, rows: x.mode === 'items' ? [newRow('custom')] : [] })); setPicMode('none') }}>Start over</button>
         </div>
         <p className="small muted">Plain text is handy for Discord or a text message.</p>
       </div>
 
       <div className="card stack">
-        <h2>4 · Let players add it to their sheet</h2>
+        <h2>{itemsMode ? '3' : '4'} · Let players add it to their sheet</h2>
         <p className="small muted">
           Players open the claim link (or scan the code) in Crawler Sheets, pick their crawler, and approve each reward one by one.
-          Stats, Skills, Spells, gear, potions and gold go straight onto their sheet, and every change is logged in their History with this achievement as the source.
-          The picture isn't included in the link.
+          Stats, Skills, Spells, gear, potions and gold go straight onto their sheet, and every change is logged in their History with {itemsMode ? '“From GM” as the source' : 'this achievement as the source'}.
+          {!itemsMode && ' The picture isn\'t included in the link.'}
         </p>
         <label className="row" style={{ gap: 10 }}>
           <input type="checkbox" checked={d.includeLink} onChange={(e) => set({ includeLink: e.target.checked })} />
           <span>Put the claim link at the bottom of the Google Docs copy</span>
         </label>
-        <button className="btn" disabled={!d.name.trim()} onClick={async () => {
+        <button className="btn" disabled={!ready} onClick={async () => {
           const ok = await copyToClipboard(null, link)
           toast(ok ? 'Claim link copied' : "Couldn't copy the link")
         }}>Copy claim link only</button>
-        {qr && d.name.trim() && (
+        {qr && ready && (
           <div className="center">
             <img src={qr} alt="QR code that opens this loot box in Crawler Sheets" style={{ width: 200, height: 200, background: '#fff', borderRadius: 8, padding: 6 }} />
             <div className="small muted">Players at the table can scan this with their phone camera.</div>

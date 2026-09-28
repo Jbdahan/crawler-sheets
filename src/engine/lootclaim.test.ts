@@ -82,4 +82,12 @@ describe('loot claims', () => {
     expect(next.gear).toHaveLength(1)
     expect(next.inventory[0].name).toBe('Bigboi Boxers')
   })
+
+  it('labels item-only claims as coming from the GM', () => {
+    const item: LootClaim = { ...claim, items: true, name: 'Custom Spell: Glitter Bomb', rows: [claim.rows[7]] }
+    const c = blankCharacter()
+    const changes = planClaim(c, item)
+    const next = applyClaim(c, item, changes, acceptAll(changes.map((x) => x.key)))
+    expect(next.log[0].text).toBe('From GM: Custom Spell: Glitter Bomb: claimed 1 of 1 item')
+  })
 })

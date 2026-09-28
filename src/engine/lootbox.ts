@@ -50,6 +50,8 @@ export interface LootBox {
   rows: LootRow[]
   /** link players open to add this loot to their character */
   claimUrl?: string
+  /** just the item(s): no achievement header, name, snark or reward line */
+  itemsOnly?: boolean
 }
 
 /** One Contents bullet: bold head + plain text. */
@@ -110,8 +112,24 @@ export const lootLines = (box: LootBox) => box.rows.map(formatLootRow).filter((l
 const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!)
 
 /** Inline-styled HTML: Google Docs and Word ignore classes when pasting. */
+/** Short name for a set of items, e.g. "Custom Spell: Glitter Bomb + 2 more". */
+export function itemsTitle(rows: LootRow[]): string {
+  const lines = rows.map(formatLootRow).filter((l): l is LootLine => !!l)
+  if (!lines.length) return ''
+  const first = lines[0].head || lines[0].text
+  return lines.length > 1 ? `${first} + ${lines.length - 1} more` : first
+}
+
+const lineHtml = (l: LootLine) => `${l.head ? `<b>${esc(l.head)}</b>` : ''}${esc(l.text)}`
+
 export function lootBoxHtml(box: LootBox): string {
   const p = (inner: string, style = '') => `<p style="margin:0 0 4pt;${style}">${inner}</p>`
+  if (box.itemsOnly) {
+    const lines = lootLines(box)
+    const out = lines.length === 1 ? [p(lineHtml(lines[0]))] : lines.length ? [`<ul style="margin:0">${lines.map((l) => `<li>${lineHtml(l)}</li>`).join('')}</ul>`] : []
+    if (box.claimUrl) out.push(p(`<b>Claim it:</b> <a href="${esc(box.claimUrl)}">add this to your Crawler Sheet</a>`, 'margin-top:6pt'))
+    return out.join('')
+  }
   const out = [p('<b>New Achievement!</b>', 'font-size:14pt')]
   if (box.name.trim()) out.push(p(`<b>${esc(box.name.trim())}</b>`, 'font-size:16pt'))
   if (box.description.trim()) out.push(p(`<i>${esc(box.description.trim()).replace(/\n/g, '<br>')}</i>`))
@@ -120,13 +138,19 @@ export function lootBoxHtml(box: LootBox): string {
   const lines = lootLines(box)
   if (lines.length) {
     out.push(p('<b>Contents:</b>'))
-    out.push(`<ul style="margin:0">${lines.map((l) => `<li>${l.head ? `<b>${esc(l.head)}</b>` : ''}${esc(l.text)}</li>`).join('')}</ul>`)
+    out.push(`<ul style="margin:0">${lines.map((l) => `<li>${lineHtml(l)}</li>`).join('')}</ul>`)
   }
   if (box.claimUrl) out.push(p(`<b>Claim it:</b> <a href="${esc(box.claimUrl)}">add this loot to your Crawler Sheet</a>`, 'margin-top:6pt'))
   return out.join('')
 }
 
 export function lootBoxText(box: LootBox): string {
+  if (box.itemsOnly) {
+    const lines = lootLines(box).map((l) => `${l.head}${l.text}`)
+    const out = lines.length === 1 ? lines : lines.map((l) => `• ${l}`)
+    if (box.claimUrl) out.push(`Claim it in Crawler Sheets: ${box.claimUrl}`)
+    return out.join('\n')
+  }
   const out = ['New Achievement!']
   if (box.name.trim()) out.push(box.name.trim())
   if (box.description.trim()) out.push(box.description.trim())

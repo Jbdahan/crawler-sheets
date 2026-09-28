@@ -17,6 +17,8 @@ export interface LootClaim {
   description: string
   reward: string
   rows: LootRow[]
+  /** just item(s) from the GM, not an achievement */
+  items?: boolean
 }
 
 export const CLAIM_PREFIX = '#loot='
@@ -44,7 +46,9 @@ export function decodeClaim(input: string): LootClaim | null {
 }
 
 export const claimSource = (claim: LootClaim) =>
-  `Loot: ${claim.name || 'Achievement'}${claim.reward ? ` (${claim.reward})` : ''}`
+  claim.items
+    ? `From GM: ${claim.name || 'item'}`
+    : `Loot: ${claim.name || 'Achievement'}${claim.reward ? ` (${claim.reward})` : ''}`
 
 export interface LootChoice { key: string; label: string }
 

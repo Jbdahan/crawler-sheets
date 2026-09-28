@@ -49,7 +49,7 @@ export function ClaimReview({ claim, charId, onDone }: { claim: LootClaim; charI
     <div className="stack">
       <div className="card">
         <div className="label">From your GM</div>
-        <h2 style={{ marginTop: 4 }}>New Achievement! {claim.name}</h2>
+        <h2 style={{ marginTop: 4 }}>{claim.items ? claim.name : `New Achievement! ${claim.name}`}</h2>
         {claim.description && <p className="muted"><i>{claim.description}</i></p>}
         {claim.reward && <p><b>Reward:</b> {claim.reward}</p>}
       </div>
