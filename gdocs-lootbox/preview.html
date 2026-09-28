@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Loot Box preview</title>
+<style>
+  body { margin: 0; display: flex; gap: 16px; padding: 16px; font-family: Arial, sans-serif; background: #f1f3f4; }
+  iframe { width: 300px; height: calc(100vh - 32px); border: 1px solid #dadce0; background: #fff; flex: 0 0 300px; }
+  #doc { flex: 1; background: #fff; border: 1px solid #dadce0; padding: 24px; overflow: auto; }
+  #doc .t { font-weight: bold; font-size: 14px; }
+  #doc .n { font-weight: bold; font-size: 16px; }
+  #doc .d { font-style: italic; }
+  #doc img { display: block; margin: 6px auto; }
+  #doc pre { font-size: 11px; background: #f8f9fa; padding: 8px; white-space: pre-wrap; word-break: break-all; }
+</style>
+</head>
+<body>
+<!-- Local test harness: runs Sidebar.html with google.script.run stubbed. Not part of the Apps Script project. -->
+<iframe id="sidebar" title="Sidebar"></iframe>
+<div id="doc"><p><i>Inserted boxes appear here.</i></p></div>
+<script>
+  var STUB = [
+    '<script src="data.js"><\/script>',
+    '<script>',
+    'window.google = { script: { get run() {',
+    '  var ok = function () {}, fail = function () {};',
+    '  var api = {',
+    '    withSuccessHandler: function (f) { ok = f; return api; },',
+    '    withFailureHandler: function (f) { fail = f; return api; },',
+    '    getLootData: function () { setTimeout(function () { ok(LOOT_DATA); }, 50); },',
+    '    insertLootBox: function (box) { setTimeout(function () { ok(parent.onInsert(box)); }, 150); },',
+    '  };',
+    '  return api;',
+    '} } };',
+    '<\/script>',
+  ].join('\n');
+
+  window.lastBox = null;
+  window.onInsert = function (box) {
+    window.lastBox = box;
+    var shown = JSON.parse(JSON.stringify(box));
+    if (shown.image && shown.image.data) shown.image.data = shown.image.data.slice(0, 40) + '… (' + box.image.data.length + ' chars)';
+    var doc = document.getElementById('doc');
+    doc.innerHTML = document.getElementById('sidebar').contentDocument.getElementById('preview').innerHTML
+      + '<pre>' + JSON.stringify(shown, null, 2).replace(/</g, '&lt;') + '</pre>';
+    return { warning: '' };
+  };
+
+  fetch('Sidebar.html').then(function (r) { return r.text(); }).then(function (html) {
+    document.getElementById('sidebar').srcdoc = html.replace('<head>', '<head>' + STUB);
+  });
+</script>
+</body>
+</html>

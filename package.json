@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "data": "python3 tools/build_data.py",
-    "extract": "cd tools && ../../dcc-rules/.venv/bin/python extract_rules.py"
+    "extract": "cd tools && ../../dcc-rules/.venv/bin/python extract_rules.py",
+    "lootbox": "python3 tools/build_lootbox_data.py"
   },
   "dependencies": {
     "lz-string": "^1.5.0",

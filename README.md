@@ -34,6 +34,9 @@ npx tsc -b        # type-check
 npm run lint
 ```
 
+## GM tools
+- [`gdocs-lootbox/`](gdocs-lootbox/): a Google Docs sidebar that writes achievement and loot box awards using dropdowns built from this app's Skills and Spells.
+
 ## Rules data
 `src/data/*.json` is generated from the indexed rulebooks in `../dcc-rules`:
 ```bash

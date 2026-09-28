@@ -1,7 +1,35 @@
 {
   "version": "0.0.1",
   "configurations": [
-    { "name": "dev", "runtimeExecutable": "npm", "runtimeArgs": ["run", "dev"], "port": 5173 },
-    { "name": "preview", "runtimeExecutable": "npm", "runtimeArgs": ["run", "preview"], "port": 4173 }
+    {
+      "name": "dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
+      "port": 5173
+    },
+    {
+      "name": "preview",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "preview"
+      ],
+      "port": 4173
+    },
+    {
+      "name": "lootbox-preview",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8765",
+        "-d",
+        "gdocs-lootbox"
+      ],
+      "port": 8765
+    }
   ]
 }

@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html>
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons1.css">
+<style>
+  body { padding: 12px; font-size: 13px; }
+  h3 { margin: 16px 0 6px; font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: #5f6368; }
+  label { display: block; margin: 6px 0 2px; font-size: 12px; color: #3c4043; }
+  input[type=text], input[type=number], input[type=url], select, textarea { width: 100%; box-sizing: border-box; }
+  textarea { min-height: 56px; resize: vertical; }
+  .pair { display: flex; gap: 6px; }
+  .pair > * { flex: 1; min-width: 0; }
+  .pair > .num { flex: 0 0 64px; }
+  .row { border: 1px solid #dadce0; border-radius: 6px; padding: 8px; margin: 8px 0; background: #fafafa; }
+  .row-top { display: flex; gap: 4px; align-items: center; }
+  .row-top select { flex: 1; }
+  .icon { min-width: 0; padding: 0 7px; margin: 0; }
+  .mod { display: flex; gap: 4px; margin-top: 4px; }
+  .mod > select { flex: 1; min-width: 0; }
+  .mod > input { flex: 0 0 52px; }
+  .hidden { display: none !important; }
+  .thumb { max-width: 100%; max-height: 140px; display: block; margin: 6px auto; border-radius: 4px; }
+  .radios label { display: inline-block; margin-right: 10px; }
+  #preview { border: 1px solid #dadce0; border-radius: 6px; padding: 10px; background: #fff; font-family: Arial, sans-serif; }
+  #preview .t { font-weight: bold; font-size: 14px; }
+  #preview .n { font-weight: bold; font-size: 16px; }
+  #preview .d { font-style: italic; }
+  #preview ul { margin: 2px 0 0; padding-left: 20px; }
+  #preview img { display: block; margin: 6px auto; max-width: 100%; }
+  .actions { display: flex; gap: 6px; margin: 14px 0 6px; }
+  #status { min-height: 18px; font-size: 12px; }
+  #status.err { color: #d93025; }
+  #status.ok { color: #188038; }
+</style>
+</head>
+<body>
+<div id="loading">Loading lists…</div>
+<form id="app" class="hidden" onsubmit="return false">
+  <h3>Achievement</h3>
+  <label for="name">Name</label>
+  <input type="text" id="name" placeholder="e.g. Toe Stubber">
+  <label for="desc">Description (the AI's snark)</label>
+  <textarea id="desc" placeholder="Congratulations, Crawler! You have…"></textarea>
+
+  <h3>Reward</h3>
+  <div class="pair">
+    <select id="tier"></select>
+    <select id="category"></select>
+  </div>
+  <input type="text" id="rewardCustom" class="hidden" placeholder="Custom box name" style="margin-top:6px">
+
+  <h3>Picture (optional)</h3>
+  <div class="radios">
+    <label><input type="radio" name="pic" value="none" checked> None</label>
+    <label><input type="radio" name="pic" value="upload"> Upload</label>
+    <label><input type="radio" name="pic" value="url"> URL</label>
+  </div>
+  <input type="file" id="picFile" accept="image/png,image/jpeg,image/gif" class="hidden">
+  <input type="url" id="picUrl" placeholder="https://…/loot-box.png" class="hidden">
+  <div id="picOpts" class="hidden">
+    <img id="thumb" class="thumb hidden" alt="Picture preview">
+    <label for="picWidth">Width in Doc: <span id="picWidthVal">250</span> px</label>
+    <input type="range" id="picWidth" min="150" max="400" step="10" value="250" style="width:100%">
+  </div>
+
+  <h3>Contents</h3>
+  <div id="rows"></div>
+  <button type="button" id="addRow">+ Add item</button>
+
+  <h3>Preview</h3>
+  <div id="preview"></div>
+
+  <div class="actions">
+    <button type="button" class="action" id="insert">Insert into Doc</button>
+    <button type="button" id="clear">Clear</button>
+  </div>
+  <div id="status"></div>
+</form>
+
+<script>
+var D = null;
+var rows = [];
+var pic = { mode: 'none', data: '', mimeType: '', url: '', width: 250 };
+var MAX_UPLOAD = 5 * 1024 * 1024;
+
+var ROW_TYPES = [
+  ['stat', 'Stat boost'], ['skill', 'Skill'], ['spell', 'Spell'], ['gear', 'Gear'],
+  ['defense', 'Defense (DR, Evade, Resist…)'], ['consumable', 'Consumable'], ['gold', 'Gold'], ['custom', 'Custom…'],
+];
+var MOD_TARGETS = [
+  ['stat', 'Stat'], ['dr', 'DR'], ['evade', 'Evade'], ['toHit', 'To-hit'], ['damage', 'Damage'],
+  ['allChecks', 'All Checks'], ['move', 'Move (ft)'], ['hbSlot', 'HB slot value'], ['maxMana', 'Max Mana'],
+  ['skill', 'Skill Rank'], ['resist', 'Resist'], ['immune', 'Immune'], ['vuln', 'Vulnerable'],
+];
+var MOD_NAMES = { dr: 'DR', evade: 'Evade', toHit: 'to hit', damage: 'damage', allChecks: 'all Checks',
+  move: 'ft Move', hbSlot: 'HB slot value', maxMana: 'Max Mana' };
+var TYPE_TARGETS = { resist: 'Resist', immune: 'Immune', vuln: 'Vulnerable' };
+var DEFENSE_NOUNS = { resist: 'Resistance', immune: 'Immunity', vuln: 'Vulnerability' };
+
+// ---------- helpers ----------
+function $(id) { return document.getElementById(id); }
+function el(tag, props, kids) {
+  var e = document.createElement(tag);
+  for (var k in (props || {})) {
+    if (k === 'style') e.style.cssText = props[k];
+    else if (k.slice(0, 2) === 'on') e.addEventListener(k.slice(2), props[k]);
+    else if (k in e) e[k] = props[k];
+    else e.setAttribute(k, props[k]);
+  }
+  (kids || []).forEach(function (c) { if (c != null) e.appendChild(typeof c === 'string' ? document.createTextNode(c) : c); });
+  return e;
+}
+function opts(list, value, placeholder) {
+  var out = placeholder ? [el('option', { value: '', textContent: placeholder })] : [];
+  list.forEach(function (o) {
+    var v = Array.isArray(o) ? o[0] : o, t = Array.isArray(o) ? o[1] : o;
+    out.push(el('option', { value: v, textContent: t, selected: String(v) === String(value) }));
+  });
+  return out;
+}
+function select(list, value, onchange, placeholder, style) {
+  return el('select', { onchange: function (e) { onchange(e.target.value); }, style: style || '' }, opts(list, value, placeholder));
+}
+function input(value, oninput, placeholder, type, cls) {
+  return el('input', { type: type || 'text', value: value == null ? '' : value, placeholder: placeholder || '', className: cls || '',
+    oninput: function (e) { oninput(e.target.value); } });
+}
+function num(v) { var n = parseInt(v, 10); return isNaN(n) ? 0 : n; }
+function signed(n) { n = num(n); return (n >= 0 ? '+' : '') + n; }
+function store(k, v) { try { localStorage.setItem('lootbox.' + k, v); } catch (e) {} }
+function load(k) { try { return localStorage.getItem('lootbox.' + k); } catch (e) { return null; } }
+function escapeHtml(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+// ---------- formatting ----------
+function describeMod(m) {
+  if (m.target === 'stat') return signed(m.value) + ' ' + m.arg;
+  if (m.target === 'skill') return m.arg ? signed(m.value) + ' ' + m.arg : '';
+  if (TYPE_TARGETS[m.target]) return TYPE_TARGETS[m.target] + ' ' + m.arg;
+  return signed(m.value) + ' ' + MOD_NAMES[m.target];
+}
+function joinDetail(parts) {
+  parts = parts.filter(function (p) { return p && p.trim(); }).map(function (p) { return p.trim(); });
+  return parts.length ? ': ' + parts.join('. ') : '';
+}
+
+/** One Contents bullet: {head (bold), text}, or null while incomplete. */
+function formatLine(r) {
+  switch (r.type) {
+    case 'stat': return { head: '', text: signed(r.value) + ' ' + r.stat };
+    case 'skill':
+      if (!r.skill) return null;
+      return r.mode === 'learn'
+        ? { head: 'New Skill: ' + r.skill, text: ' (Rank ' + num(r.value) + ')' }
+        : { head: '', text: signed(r.value) + ' Rank: ' + r.skill };
+    case 'spell':
+      if (!r.spell) return null;
+      var mana = String(r.mana || '').trim();
+      return { head: r.prefix + ': ' + r.spell, text: mana && mana !== 'None' ? ' (Mana ' + mana + ')' : '' };
+    case 'gear':
+      if (!r.name.trim()) return null;
+      var mods = r.mods.map(describeMod).filter(Boolean).join(', ');
+      return { head: r.name.trim() + (r.slot ? ' (' + r.slot + ')' : ''), text: joinDetail([mods, r.condition]) };
+    case 'defense':
+      if (DEFENSE_NOUNS[r.target]) return { head: '', text: DEFENSE_NOUNS[r.target] + ' to ' + r.dtype };
+      return { head: '', text: signed(r.value) + ' ' + MOD_NAMES[r.target] };
+    case 'consumable':
+      var item = r.item === '__custom' ? r.customItem.trim() : r.item;
+      if (!item) return null;
+      return { head: '', text: (num(r.qty) > 1 ? num(r.qty) + '× ' : '') + item };
+    case 'gold': return { head: '', text: num(r.value).toLocaleString() + ' Gold' };
+    case 'custom':
+      if (!r.name.trim()) return null;
+      if (r.kind === 'spell') {
+        var m = String(r.mana || '').trim();
+        return { head: 'Custom Spell: ' + r.name.trim(), text: (m ? ' (Mana ' + m + ')' : '') + joinDetail([r.effect]) };
+      }
+      return { head: r.name.trim(), text: joinDetail([r.effect]) };
+  }
+  return null;
+}
+
+function rewardText() {
+  if ($('category').value === '__custom') return $('rewardCustom').value.trim();
+  return [$('tier').value, $('category').value, 'Box'].filter(Boolean).join(' ');
+}
+
+function buildBox() {
+  var image = null;
+  if (pic.mode === 'upload' && pic.data) image = { kind: 'upload', data: pic.data, mimeType: pic.mimeType, width: pic.width };
+  if (pic.mode === 'url' && pic.url.trim()) image = { kind: 'url', url: pic.url.trim(), width: pic.width };
+  return {
+    name: $('name').value.trim(),
+    description: $('desc').value.trim(),
+    reward: rewardText(),
+    image: image,
+    lines: rows.map(formatLine).filter(Boolean),
+  };
+}
+
+// ---------- rows ----------
+function newRow(type) {
+  switch (type) {
+    case 'stat': return { type: type, stat: D.stats[0], value: 1 };
+    case 'skill': return { type: type, mode: 'boost', skill: '', value: 1 };
+    case 'spell': return { type: type, prefix: 'Spell Tome', spell: '', mana: '' };
+    case 'gear': return { type: type, name: '', slot: D.gearSlots[0], mods: [], condition: '' };
+    case 'defense': return { type: type, target: 'dr', value: 1, dtype: D.damageTypes[0] };
+    case 'consumable': return { type: type, item: D.items[0], customItem: '', qty: 1 };
+    case 'gold': return { type: type, value: 100 };
+    case 'custom': return { type: type, kind: 'object', name: '', mana: '', effect: '' };
+  }
+}
+
+function skillSelect(value, onchange) {
+  var s = el('select', { onchange: function (e) { onchange(e.target.value); } }, [el('option', { value: '', textContent: 'Choose skill…' })]);
+  var groups = {};
+  D.skills.forEach(function (k) {
+    if (!groups[k.group]) { groups[k.group] = el('optgroup', { label: k.group }); s.appendChild(groups[k.group]); }
+    groups[k.group].appendChild(el('option', { value: k.name, textContent: k.name, selected: k.name === value }));
+  });
+  return s;
+}
+
+function rowBody(r) {
+  var up = updatePreview, re = renderRows;
+  switch (r.type) {
+    case 'stat':
+      return [el('div', { className: 'pair' }, [
+        select(D.stats, r.stat, function (v) { r.stat = v; up(); }),
+        input(r.value, function (v) { r.value = v; up(); }, '', 'number', 'num'),
+      ])];
+    case 'skill':
+      return [
+        select([['boost', 'Rank boost'], ['learn', 'Learn new skill']], r.mode, function (v) { r.mode = v; up(); }),
+        el('div', { className: 'pair', style: 'margin-top:4px' }, [
+          skillSelect(r.skill, function (v) { r.skill = v; up(); }),
+          input(r.value, function (v) { r.value = v; up(); }, '', 'number', 'num'),
+        ]),
+      ];
+    case 'spell':
+      return [
+        select(['Spell Tome', 'Learn', 'Scroll'], r.prefix, function (v) { r.prefix = v; up(); }),
+        el('div', { className: 'pair', style: 'margin-top:4px' }, [
+          select(D.spells.map(function (s) { return [s.name, s.name + (s.mana && s.mana !== 'None' ? ' (' + s.mana + ')' : '')]; }), r.spell,
+            function (v) {
+              r.spell = v;
+              var s = D.spells.filter(function (x) { return x.name === v; })[0];
+              r.mana = s ? s.mana : '';
+              re();
+            }, 'Choose spell…'),
+          input(r.mana, function (v) { r.mana = v; up(); }, 'Mana', 'text', 'num'),
+        ]),
+      ];
+    case 'gear':
+      var modEls = r.mods.map(function (m, i) {
+        var arg = null;
+        if (m.target === 'stat') arg = select(D.stats, m.arg, function (v) { m.arg = v; up(); });
+        else if (m.target === 'skill') arg = skillSelect(m.arg, function (v) { m.arg = v; up(); });
+        else if (TYPE_TARGETS[m.target]) arg = select(D.damageTypes, m.arg, function (v) { m.arg = v; up(); });
+        return el('div', { className: 'mod' }, [
+          select(MOD_TARGETS, m.target, function (v) {
+            m.target = v;
+            m.arg = v === 'stat' ? D.stats[0] : v === 'skill' ? '' : TYPE_TARGETS[v] ? D.damageTypes[0] : '';
+            re();
+          }),
+          arg,
+          TYPE_TARGETS[m.target] ? null : input(m.value, function (v) { m.value = v; up(); }, '', 'number'),
+          el('button', { type: 'button', className: 'icon', textContent: '✕', title: 'Remove bonus',
+            onclick: function () { r.mods.splice(i, 1); re(); } }),
+        ]);
+      });
+      return [
+        el('div', { className: 'pair' }, [
+          input(r.name, function (v) { r.name = v; up(); }, 'Item name'),
+          select(D.gearSlots, r.slot, function (v) { r.slot = v; up(); }, '(no slot)'),
+        ]),
+        el('div', {}, modEls),
+        el('button', { type: 'button', textContent: '+ Bonus', style: 'margin-top:4px',
+          onclick: function () { r.mods.push({ target: 'dr', arg: '', value: 1 }); re(); } }),
+        el('label', { textContent: 'Special condition (optional)' }),
+        input(r.condition, function (v) { r.condition = v; up(); }, "e.g. Wearer can't be tripped"),
+      ];
+    case 'defense':
+      return [el('div', { className: 'pair' }, [
+        select([['dr', 'DR'], ['evade', 'Evade'], ['resist', 'Resistance'], ['immune', 'Immunity'], ['vuln', 'Vulnerability']],
+          r.target, function (v) { r.target = v; re(); }),
+        TYPE_TARGETS[r.target]
+          ? select(D.damageTypes, r.dtype, function (v) { r.dtype = v; up(); })
+          : input(r.value, function (v) { r.value = v; up(); }, '', 'number', 'num'),
+      ])];
+    case 'consumable':
+      return [
+        el('div', { className: 'pair' }, [
+          select(D.items.concat([['__custom', 'Other…']]), r.item, function (v) { r.item = v; re(); }),
+          input(r.qty, function (v) { r.qty = v; up(); }, 'Qty', 'number', 'num'),
+        ]),
+        r.item === '__custom' ? input(r.customItem, function (v) { r.customItem = v; up(); }, 'Item name') : null,
+      ];
+    case 'gold':
+      return [input(r.value, function (v) { r.value = v; up(); }, 'Amount', 'number')];
+    case 'custom':
+      var effectLabel = r.kind === 'spell' ? 'Effect' : r.kind === 'object' ? 'Special condition' : 'Details';
+      return [
+        el('div', { className: 'pair' }, [
+          select([['object', 'Object / condition'], ['spell', 'Spell'], ['other', 'Other']], r.kind, function (v) { r.kind = v; re(); }),
+        ]),
+        el('div', { className: 'pair', style: 'margin-top:4px' }, [
+          input(r.name, function (v) { r.name = v; up(); }, 'Name'),
+          r.kind === 'spell' ? input(r.mana, function (v) { r.mana = v; up(); }, 'Mana', 'text', 'num') : null,
+        ]),
+        el('label', { textContent: effectLabel }),
+        el('textarea', { value: r.effect, placeholder: r.kind === 'spell' ? 'What the spell does' : 'e.g. Glows when a mimic is nearby',
+          oninput: function (e) { r.effect = e.target.value; up(); } }),
+      ];
+  }
+  return [];
+}
+
+function renderRows() {
+  var box = $('rows');
+  box.innerHTML = '';
+  rows.forEach(function (r, i) {
+    box.appendChild(el('div', { className: 'row' }, [
+      el('div', { className: 'row-top' }, [
+        select(ROW_TYPES, r.type, function (v) { rows[i] = newRow(v); renderRows(); }),
+        el('button', { type: 'button', className: 'icon', textContent: '↑', title: 'Move up', disabled: i === 0,
+          onclick: function () { rows.splice(i - 1, 0, rows.splice(i, 1)[0]); renderRows(); } }),
+        el('button', { type: 'button', className: 'icon', textContent: '↓', title: 'Move down', disabled: i === rows.length - 1,
+          onclick: function () { rows.splice(i + 1, 0, rows.splice(i, 1)[0]); renderRows(); } }),
+        el('button', { type: 'button', className: 'icon', textContent: '✕', title: 'Remove',
+          onclick: function () { rows.splice(i, 1); renderRows(); } }),
+      ]),
+      el('div', { style: 'margin-top:6px' }, rowBody(r)),
+    ]));
+  });
+  updatePreview();
+}
+
+// ---------- preview ----------
+function updatePreview() {
+  var b = buildBox();
+  var h = '<div class="t">New Achievement!</div>';
+  if (b.name) h += '<div class="n">' + escapeHtml(b.name) + '</div>';
+  if (b.description) h += '<div class="d">' + escapeHtml(b.description).replace(/\n/g, '<br>') + '</div>';
+  if (b.reward) h += '<div><b>Reward:</b> ' + escapeHtml(b.reward) + '</div>';
+  var src = pic.mode === 'upload' && pic.data ? 'data:' + pic.mimeType + ';base64,' + pic.data
+    : pic.mode === 'url' && pic.url.trim() ? pic.url.trim() : '';
+  if (src) h += '<img src="' + escapeHtml(src) + '" style="width:' + Math.round(pic.width * 0.6) + 'px" alt="">';
+  if (b.lines.length) {
+    h += '<div><b>Contents:</b></div><ul>' + b.lines.map(function (l) {
+      return '<li>' + (l.head ? '<b>' + escapeHtml(l.head) + '</b>' : '') + escapeHtml(l.text) + '</li>';
+    }).join('') + '</ul>';
+  }
+  $('preview').innerHTML = h;
+}
+
+// ---------- picture ----------
+function setPicMode(mode) {
+  pic.mode = mode;
+  $('picFile').classList.toggle('hidden', mode !== 'upload');
+  $('picUrl').classList.toggle('hidden', mode !== 'url');
+  $('picOpts').classList.toggle('hidden', mode === 'none');
+  refreshThumb();
+}
+function refreshThumb() {
+  var t = $('thumb');
+  var src = pic.mode === 'upload' && pic.data ? 'data:' + pic.mimeType + ';base64,' + pic.data
+    : pic.mode === 'url' && pic.url.trim() ? pic.url.trim() : '';
+  t.classList.toggle('hidden', !src);
+  if (src) t.src = src; else t.removeAttribute('src');
+  updatePreview();
+}
+
+// ---------- actions ----------
+function setStatus(msg, cls) { var s = $('status'); s.textContent = msg; s.className = cls || ''; }
+
+function insert() {
+  var box = buildBox();
+  if (!box.name) { setStatus('Give the achievement a name first.', 'err'); return; }
+  $('insert').disabled = true;
+  setStatus('Inserting…');
+  google.script.run
+    .withSuccessHandler(function (res) {
+      $('insert').disabled = false;
+      if (res && res.warning) setStatus(res.warning, 'err');
+      else setStatus('Inserted ✓', 'ok');
+    })
+    .withFailureHandler(function (err) {
+      $('insert').disabled = false;
+      setStatus('Insert failed: ' + (err && err.message ? err.message : err), 'err');
+    })
+    .insertLootBox(box);
+}
+
+function clearForm() {
+  $('name').value = '';
+  $('desc').value = '';
+  rows = [];
+  pic.data = ''; pic.mimeType = ''; pic.url = '';
+  $('picFile').value = ''; $('picUrl').value = '';
+  document.querySelector('input[name=pic][value=none]').checked = true;
+  setPicMode('none');
+  renderRows();
+  setStatus('');
+}
+
+function init(data) {
+  D = data;
+  $('tier').append.apply($('tier'), opts(D.tiers, load('tier') || 'Bronze', '(no tier)'));
+  $('category').append.apply($('category'), opts(D.categories.concat([['__custom', 'Custom…']]), load('category') || 'Adventurer', '(no category)'));
+  $('rewardCustom').classList.toggle('hidden', $('category').value !== '__custom');
+
+  $('tier').addEventListener('change', function () { store('tier', this.value); updatePreview(); });
+  $('category').addEventListener('change', function () {
+    store('category', this.value);
+    $('rewardCustom').classList.toggle('hidden', this.value !== '__custom');
+    updatePreview();
+  });
+  ['name', 'desc', 'rewardCustom'].forEach(function (id) { $(id).addEventListener('input', updatePreview); });
+
+  Array.prototype.forEach.call(document.querySelectorAll('input[name=pic]'), function (r) {
+    r.addEventListener('change', function () { setPicMode(this.value); });
+  });
+  $('picFile').addEventListener('change', function () {
+    var f = this.files[0];
+    if (!f) return;
+    if (f.size > MAX_UPLOAD) { setStatus('That picture is over 5 MB. Try a smaller one.', 'err'); this.value = ''; return; }
+    var reader = new FileReader();
+    reader.onload = function () {
+      var s = String(reader.result);
+      pic.mimeType = f.type || 'image/png';
+      pic.data = s.slice(s.indexOf(',') + 1);
+      setStatus('');
+      refreshThumb();
+    };
+    reader.readAsDataURL(f);
+  });
+  $('picUrl').addEventListener('input', function () { pic.url = this.value; refreshThumb(); });
+  $('picWidth').addEventListener('input', function () { pic.width = num(this.value); $('picWidthVal').textContent = this.value; updatePreview(); });
+
+  $('addRow').addEventListener('click', function () { rows.push(newRow('stat')); renderRows(); });
+  $('insert').addEventListener('click', insert);
+  $('clear').addEventListener('click', clearForm);
+
+  $('loading').classList.add('hidden');
+  $('app').classList.remove('hidden');
+  renderRows();
+}
+
+google.script.run
+  .withSuccessHandler(init)
+  .withFailureHandler(function (e) { $('loading').textContent = 'Could not load lists: ' + (e && e.message ? e.message : e); })
+  .getLootData();
+</script>
+</body>
+</html>
