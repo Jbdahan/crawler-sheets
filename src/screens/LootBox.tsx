@@ -233,12 +233,12 @@ export function LootBox() {
               </select>
               <button className="btn icon ghost" disabled={i === 0} onClick={() => moveRow(i, i - 1)} aria-label="Move up">↑</button>
               <button className="btn icon ghost" disabled={i === d.rows.length - 1} onClick={() => moveRow(i, i + 1)} aria-label="Move down">↓</button>
-              <button className="btn icon ghost" onClick={() => set({ rows: d.rows.filter((_, j) => j !== i) })} aria-label="Remove">✕</button>
+              <button className="btn icon ghost" onClick={() => setD((x) => ({ ...x, rows: x.rows.filter((_, j) => j !== i) }))} aria-label="Remove">✕</button>
             </div>
             <RowFields row={r} onChange={(x) => setRow(i, x)} />
           </div>
         ))}
-        <button className="btn" onClick={() => set({ rows: [...d.rows, newRow('stat')] })}><Icon name="plus" size={18} /> Add item</button>
+        <button className="btn" onClick={() => setD((x) => ({ ...x, rows: [...x.rows, newRow('stat')] }))}><Icon name="plus" size={18} /> Add item</button>
       </div>
 
       <div className="card stack">
@@ -263,14 +263,28 @@ function NumInput({ value, onChange, label }: { value: number; onChange: (n: num
   return <input inputMode="numeric" aria-label={label} style={{ width: 80, flex: '0 0 80px' }} value={String(value)} onChange={(e) => onChange(num(e.target.value))} />
 }
 
+const SKILL_NAMES = new Set(SKILLS.map((s) => s.name))
+const CUSTOM = '__custom'
+
+/** Catalog Skills plus "Custom skill…", which swaps in a text box for homebrew names. */
 function SkillSelect({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const [picked, setPicked] = useState(false)
+  const custom = picked || (!!value && !SKILL_NAMES.has(value))
   return (
-    <select className="grow" value={value} onChange={(e) => onChange(e.target.value)} aria-label="Skill">
-      <option value="">Choose a skill…</option>
-      {SKILL_GROUPS.map(([g, names]) => (
-        <optgroup key={g} label={g}>{names.map((n) => <option key={n}>{n}</option>)}</optgroup>
-      ))}
-    </select>
+    <div className="grow" style={{ display: 'grid', gap: 6 }}>
+      <select value={custom ? CUSTOM : value} aria-label="Skill" onChange={(e) => {
+        const v = e.target.value
+        setPicked(v === CUSTOM)
+        onChange(v === CUSTOM ? '' : v)
+      }}>
+        <option value="">Choose a skill…</option>
+        {SKILL_GROUPS.map(([g, names]) => (
+          <optgroup key={g} label={g}>{names.map((n) => <option key={n}>{n}</option>)}</optgroup>
+        ))}
+        <option value={CUSTOM}>Custom skill…</option>
+      </select>
+      {custom && <input value={value} onChange={(e) => onChange(e.target.value)} placeholder="Skill name, e.g. Mimic Wrangling" aria-label="Custom skill name" autoFocus />}
+    </div>
   )
 }
 
