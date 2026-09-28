@@ -40,7 +40,7 @@ describe('loot box formatting', () => {
   })
 
   it('formats just the items, without the achievement parts', () => {
-    const one: LootBox = { itemsOnly: true, name: 'ignored', description: '', reward: 'ignored', claimUrl: 'https://x/#loot=abc',
+    const one: LootBox = { itemsOnly: true, name: '', description: '', reward: 'ignored', claimUrl: 'https://x/#loot=abc',
       rows: [{ type: 'custom', kind: 'spell', name: 'Glitter Bomb', mana: '8', effect: 'Blinds everyone' }] }
     expect(lootBoxText(one)).toBe('Custom Spell: Glitter Bomb (Mana 8): Blinds everyone\nClaim it in Crawler Sheets: https://x/#loot=abc')
     expect(lootBoxHtml(one)).not.toContain('New Achievement')
@@ -48,5 +48,8 @@ describe('loot box formatting', () => {
     const two = { ...one, claimUrl: undefined, rows: [...one.rows, { type: 'gold' as const, value: 5 }] }
     expect(lootBoxText(two)).toBe('• Custom Spell: Glitter Bomb (Mana 8): Blinds everyone\n• 5 Gold')
     expect(itemsTitle(two.rows)).toBe('Custom Spell: Glitter Bomb + 1 more')
+    const titled = { ...two, name: "Goblin's Stash" }
+    expect(lootBoxText(titled)).toBe("Goblin's Stash\n• Custom Spell: Glitter Bomb (Mana 8): Blinds everyone\n• 5 Gold")
+    expect(lootBoxHtml(titled)).toContain("<b>Goblin's Stash</b>")
   })
 })

@@ -50,7 +50,7 @@ export interface LootBox {
   rows: LootRow[]
   /** link players open to add this loot to their character */
   claimUrl?: string
-  /** just the item(s): no achievement header, name, snark or reward line */
+  /** just the item(s) under an optional title (name): no achievement header, snark or reward line */
   itemsOnly?: boolean
 }
 
@@ -126,7 +126,9 @@ export function lootBoxHtml(box: LootBox): string {
   const p = (inner: string, style = '') => `<p style="margin:0 0 4pt;${style}">${inner}</p>`
   if (box.itemsOnly) {
     const lines = lootLines(box)
-    const out = lines.length === 1 ? [p(lineHtml(lines[0]))] : lines.length ? [`<ul style="margin:0">${lines.map((l) => `<li>${lineHtml(l)}</li>`).join('')}</ul>`] : []
+    const out = box.name.trim() ? [p(`<b>${esc(box.name.trim())}</b>`, 'font-size:14pt')] : []
+    if (lines.length === 1) out.push(p(lineHtml(lines[0])))
+    else if (lines.length) out.push(`<ul style="margin:0">${lines.map((l) => `<li>${lineHtml(l)}</li>`).join('')}</ul>`)
     if (box.claimUrl) out.push(p(`<b>Claim it:</b> <a href="${esc(box.claimUrl)}">add this to your Crawler Sheet</a>`, 'margin-top:6pt'))
     return out.join('')
   }
@@ -147,7 +149,8 @@ export function lootBoxHtml(box: LootBox): string {
 export function lootBoxText(box: LootBox): string {
   if (box.itemsOnly) {
     const lines = lootLines(box).map((l) => `${l.head}${l.text}`)
-    const out = lines.length === 1 ? lines : lines.map((l) => `• ${l}`)
+    const out = box.name.trim() ? [box.name.trim()] : []
+    out.push(...(lines.length === 1 ? lines : lines.map((l) => `• ${l}`)))
     if (box.claimUrl) out.push(`Claim it in Crawler Sheets: ${box.claimUrl}`)
     return out.join('\n')
   }
