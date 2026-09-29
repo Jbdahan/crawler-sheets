@@ -24,7 +24,7 @@ export default function App() {
       screen = <CharacterView id={route.id} tab={tab} sub={sub ?? subFromHash()} />
       break
     }
-    case 'print': screen = <Print id={route.id} />; break
+    case 'print': screen = <Print id={route.id} layout={route.layout} />; break
     case 'catalog': screen = <Catalog />; break
     case 'rolls': screen = <RollLog />; break
     case 'loot': screen = <LootBox />; break

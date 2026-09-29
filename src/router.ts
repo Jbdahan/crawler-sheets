@@ -4,7 +4,7 @@ export type Route =
   | { name: 'roster' }
   | { name: 'new' }
   | { name: 'char'; id: string; tab: string }
-  | { name: 'print'; id: string }
+  | { name: 'print'; id: string; layout: 'landscape' | 'portrait' }
   | { name: 'catalog' }
   | { name: 'rolls' }
   | { name: 'loot' }
@@ -18,7 +18,7 @@ export function parseHash(hash: string): Route {
   const parts = h.replace(/^\//, '').split('/').filter(Boolean)
   if (parts[0] === 'new') return { name: 'new' }
   if (parts[0] === 'c' && parts[1]) return { name: 'char', id: parts[1], tab: parts[2] ?? 'hud' }
-  if (parts[0] === 'print' && parts[1]) return { name: 'print', id: parts[1] }
+  if (parts[0] === 'print' && parts[1]) return { name: 'print', id: parts[1], layout: parts[2] === 'portrait' ? 'portrait' : 'landscape' }
   if (parts[0] === 'catalog') return { name: 'catalog' }
   if (parts[0] === 'rolls') return { name: 'rolls' }
   if (parts[0] === 'loot') return { name: 'loot' }

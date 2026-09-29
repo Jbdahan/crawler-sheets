@@ -1,0 +1,90 @@
+/* Portrait US Letter sheet (8.5 × 11 in), modeled on the portrait paper sheet */
+.pt {
+  width: 8.5in; height: 11in; margin: 16px auto; padding: 0.55in 0.6in 0.5in; background: #fff; color: #111;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25); overflow: hidden; display: flex; flex-direction: column; gap: 0.07in;
+  font-size: 9pt; font-family: 'Avenir Next Condensed', 'Arial Narrow', 'Helvetica Neue', Arial, sans-serif;
+}
+@media screen { .pt { zoom: var(--pp-zoom, 1); } }
+@media print {
+  .pt { margin: 0; box-shadow: none; page-break-after: always; break-after: page; zoom: 1; }
+}
+.pt b { font-weight: 800; }
+.pt .tiny { font-size: 7pt; line-height: 1.2; }
+.pt .c { text-align: center; }
+.pt-h { font-weight: 800; text-transform: uppercase; font-size: 10pt; letter-spacing: 0.02em; }
+.pt-h.u { text-decoration: underline; }
+
+.pt-hb { display: grid; grid-template-columns: repeat(10, 1fr); border: 1.2px solid #222; border-radius: 6px; overflow: hidden; }
+.pt-hb .s { height: 0.42in; border-right: 1px solid #222; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 2px 0 1px; }
+.pt-hb .s:last-child { border-right: 0; }
+.pt-hb .s b { font-size: 11pt; }
+.pt-hb .s span { font-size: 6pt; font-weight: 700; }
+.pt-hb .s.lost { background: repeating-linear-gradient(-45deg, #fff, #fff 4px, #bbb 4px, #bbb 5px); }
+
+.pt-idrow { display: grid; grid-template-columns: 1fr 1.25in; gap: 0.12in; align-items: center; }
+.pt-ids { display: flex; flex-direction: column; gap: 8px; }
+.pt-ids .ir { display: flex; gap: 10px; }
+.pt-ids .l { display: flex; gap: 4px; align-items: baseline; min-width: 0; flex-basis: 0; }
+.pt-ids .k { font-weight: 800; text-transform: uppercase; white-space: nowrap; font-size: 9.5pt; }
+.pt-ids .v { flex: 1; border-bottom: 1px solid #222; min-height: 16px; font-size: 10pt; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.pt-mana { border: 1.2px solid #222; border-radius: 6px; text-align: center; }
+.pt-mana .t { font-weight: 800; text-transform: uppercase; border-bottom: 1px solid #222; }
+.pt-mana .mc { display: grid; grid-template-columns: 1fr 1fr; }
+.pt-mana .mc > div { display: flex; flex-direction: column; padding: 1px 0 3px; }
+.pt-mana .mc > div + div { border-left: 1px solid #222; }
+.pt-mana .mc span { font-size: 6.5pt; font-weight: 700; text-transform: uppercase; }
+.pt-mana .mc b { font-size: 12pt; }
+
+.pt-statrow { display: grid; grid-template-columns: repeat(5, 1fr) 1.05in; gap: 5px; }
+.pt-stat { border: 1.2px solid #222; border-radius: 6px; overflow: hidden; }
+.pt-stat .t { text-align: center; font-weight: 800; text-transform: uppercase; font-size: 10pt; border-bottom: 1px solid #222; padding: 1px 0; }
+.pt-stat .r { display: flex; justify-content: space-between; align-items: baseline; padding: 2px 4px; min-height: 0.3in; }
+.pt-stat .r + .r { border-top: 1px solid #222; }
+.pt-stat .r span { font-size: 6.5pt; font-weight: 700; text-transform: uppercase; }
+.pt-stat .r b { font-size: 12pt; }
+.pt-killed { text-align: center; }
+.pt-killed .t { font-weight: 800; font-size: 7pt; text-transform: uppercase; }
+.pt-killed .skull { font-size: 48pt; line-height: 1.1; }
+
+.pt-line { display: flex; gap: 6px; align-items: center; }
+.pt-line .big { font-weight: 800; text-transform: uppercase; font-size: 10.5pt; line-height: 1.05; width: 1in; }
+.pt-line .gap { flex: 1; }
+.pt .bx { text-align: center; }
+.pt .bx .bv { border: 1.2px solid #222; border-radius: 6px; min-width: 0.5in; height: 0.34in; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 10.5pt; padding: 0 4px; }
+.pt .bx.w .bv { min-width: 1.15in; }
+.pt .bx .bl { font-size: 6pt; font-weight: 700; text-transform: uppercase; }
+
+.pt-atk, .pt-tbl { width: 100%; border-collapse: separate; border-spacing: 0; }
+.pt-atk th { font-size: 6.5pt; font-weight: 700; text-transform: uppercase; padding: 0 4px 2px; }
+.pt-atk td { border: 1.2px solid #222; border-radius: 6px; height: 0.3in; padding: 1px 5px; font-size: 8.5pt; vertical-align: middle; }
+.pt-atk { border-spacing: 6px 4px; margin: -4px -6px; width: calc(100% + 12px); }
+.pt-tbl { border: 1.2px solid #222; border-radius: 6px; overflow: hidden; }
+.pt-tbl th { font-size: 7.5pt; font-weight: 800; text-transform: uppercase; border-bottom: 1px solid #222; border-right: 1px solid #222; padding: 3px 4px; }
+.pt-tbl td { border-bottom: 1px solid #222; border-right: 1px solid #222; height: 0.235in; padding: 1px 4px; font-size: 8.5pt; }
+.pt-tbl th:last-child, .pt-tbl td:last-child { border-right: 0; }
+.pt-tbl tr:last-child td { border-bottom: 0; }
+
+.pt-bottom { display: grid; grid-template-columns: 1fr 1fr; gap: 0.12in; flex: 1; min-height: 0; }
+.pt-hot { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.pt-hot .hs { border: 1.2px solid #222; border-radius: 6px; height: 0.72in; padding: 3px 5px; overflow: hidden; font-size: 8.5pt; }
+.pt-right { display: flex; flex-direction: column; gap: 3px; min-height: 0; }
+.pt-right .ul { border-bottom: 1px solid #222; min-height: 17px; font-size: 8.5pt; }
+.pt-gear { border: 1.2px solid #222; border-radius: 6px; padding: 3px 6px; margin-top: 6px; flex: 1; display: flex; flex-direction: column; }
+.pt-gear .gs { border-bottom: 1px solid #222; padding: 3px 0; min-height: 0.26in; }
+.pt-gear .gs.acc { border-bottom: 0; flex: 1; }
+.pt-gear .k { font-weight: 800; text-transform: uppercase; font-size: 8pt; }
+
+.pt-area { border: 1.2px solid #222; border-radius: 6px; padding: 3px 6px; }
+.pt-area .at { font-weight: 800; text-transform: uppercase; font-size: 8.5pt; }
+.pt-area .av { font-size: 9pt; white-space: pre-wrap; }
+
+.pt-others { border: 1.2px solid #222; border-radius: 6px; overflow: hidden; }
+.pt-others .oc { display: grid; grid-template-columns: 0.35in 1fr; }
+.pt-others .oc + .oc { border-top: 1.2px solid #222; }
+.pt-others .oc .n { display: flex; align-items: center; justify-content: center; font-weight: 800; border-right: 1.2px solid #222; }
+.pt-others .g > div { display: grid; border-bottom: 1px solid #222; min-height: 0.24in; }
+.pt-others .g > div:last-child { border-bottom: 0; }
+.pt-others .r3 { grid-template-columns: 1.6fr 1.5fr 1.7fr; }
+.pt-others .r2 { grid-template-columns: 1.6fr 2.5fr 0.7fr; }
+.pt-others .g span { font-weight: 800; text-transform: uppercase; font-size: 7.5pt; padding: 3px 5px; }
+.pt-others .g span + span { border-left: 1px solid #222; }

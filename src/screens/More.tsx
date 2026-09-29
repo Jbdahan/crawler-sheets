@@ -135,7 +135,8 @@ export function More(ctx: Ctx & { sub?: string }) {
           <div className="card-head"><h2>Share &amp; print</h2></div>
           <div className="grid2">
             <button className="btn" onClick={() => setOpen('share')}>Export / share</button>
-            <button className="btn" onClick={() => go(`/print/${c.id}`)}>Printable sheet</button>
+            <button className="btn" onClick={() => go(`/print/${c.id}`)}>Print: landscape</button>
+            <button className="btn" onClick={() => go(`/print/${c.id}/portrait`)}>Print: portrait</button>
           </div>
         </section>
 

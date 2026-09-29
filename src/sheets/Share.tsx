@@ -4,6 +4,7 @@ import QRCode from 'qrcode'
 import type { Character } from '../engine/types'
 import { useStore } from '../store/characters'
 import { Sheet, toast } from '../components/ui'
+import { go } from '../router'
 
 /** Byte-mode QR codes top out near 2,950 characters at low error correction. */
 const QR_LIMIT = 2900
@@ -65,6 +66,11 @@ export function ShareSheet({ c, onClose }: { c: Character; onClose: () => void }
       <div className="stack">
         <button className="btn primary" onClick={async () => { await exportFile(c); markBackedUp(); toast('Exported') }}>Export file (AirDrop, Messages, Files)</button>
         <p className="small muted">Saves as <b>{fileName(c)}</b>: a full backup, including the portrait and history. Import it from the roster screen on any device.</p>
+        <div className="label">Printable sheet / PDF</div>
+        <div className="grid2">
+          <button className="btn" onClick={() => { onClose(); go(`/print/${c.id}`) }}>Landscape</button>
+          <button className="btn" onClick={() => { onClose(); go(`/print/${c.id}/portrait`) }}>Portrait</button>
+        </div>
         <div className="divider" />
         <div className="label">Link</div>
         <p className="small muted">Opening this link in the app imports a copy of this crawler (without the portrait).</p>

@@ -8,30 +8,42 @@ import { signed } from '../components/ui'
 import { describeMod } from '../sheets/ModEditor'
 import { useCharacter } from '../store/characters'
 import { go } from '../router'
+import { Seg } from '../components/ui'
+import { PortraitPages } from './PrintPortrait'
 import './print.css'
 
-/** Landscape US Letter, 4 pages, laid out like the paper character sheet. */
-export function Print({ id }: { id: string }) {
+type Layout = 'landscape' | 'portrait'
+
+/** US Letter, laid out like the paper character sheets: landscape (4 pages) or portrait (4 pages). */
+export function Print({ id, layout = 'landscape' }: { id: string; layout?: Layout }) {
   const c = useCharacter(id)
-  const [scale, setScale] = useState(() => fitScale())
+  const [scale, setScale] = useState(() => fitScale(layout))
   useEffect(() => {
     document.documentElement.classList.add('printing')
-    const onResize = () => setScale(fitScale())
+    const onResize = () => setScale(fitScale(layout))
+    onResize()
     window.addEventListener('resize', onResize)
+    // the paper orientation has to match the layout when printing or saving a PDF
+    const page = document.createElement('style')
+    page.textContent = `@media print { @page { size: letter ${layout}; margin: 0; } }`
+    document.head.appendChild(page)
     return () => {
       document.documentElement.classList.remove('printing')
       window.removeEventListener('resize', onResize)
+      page.remove()
     }
-  }, [])
+  }, [layout])
   if (!c) return <div className="app"><p>Crawler not found.</p></div>
   return (
     <div className="print-root" style={{ ['--pp-zoom' as string]: scale }}>
       <div className="print-bar no-print">
         <button className="btn" onClick={() => go(`/c/${id}/more`)}>‹ Back</button>
-        <span className="grow small">Landscape, US Letter, 100% scale. On iPhone: Share → Print, or pinch out on the preview to save a PDF.</span>
+        <Seg value={layout} onChange={(v) => go(`/print/${id}${v === 'portrait' ? '/portrait' : ''}`)}
+          options={[{ value: 'landscape', label: 'Landscape' }, { value: 'portrait', label: 'Portrait' }]} />
+        <span className="grow small">US Letter, 100% scale. On iPhone: Share → Print, or pinch out on the preview to save a PDF.</span>
         <button className="btn primary" onClick={() => window.print()}>Print / Save PDF</button>
       </div>
-      <PrintPages c={c} />
+      {layout === 'portrait' ? <PortraitPages c={c} /> : <PrintPages c={c} />}
     </div>
   )
 }
@@ -196,9 +208,9 @@ function PrintPages({ c }: { c: Character }) {
   )
 }
 
-/** 11in page = 1056 CSS px; shrink the on-screen preview to fit narrow screens */
-function fitScale() {
-  return Math.min(1, (window.innerWidth - 16) / 1056)
+/** 11in wide (landscape) or 8.5in wide (portrait) at 96 px/in; shrink the preview to fit narrow screens */
+function fitScale(layout: Layout) {
+  return Math.min(1, (window.innerWidth - 16) / (layout === 'portrait' ? 816 : 1056))
 }
 
 function F({ k, v, w = 1 }: { k: string; v: string | number; w?: number }) {
