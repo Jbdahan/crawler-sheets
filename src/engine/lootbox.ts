@@ -37,15 +37,30 @@ export type LootRow =
   | { type: 'defense'; target: 'dr' | 'evade' | 'resist' | 'immune' | 'vuln'; value: number; dtype: string }
   | { type: 'consumable'; item: string; qty: number }
   | { type: 'gold'; value: number }
-  | {
-      type: 'custom'; kind: 'object' | 'spell' | 'other'; name: string; mana: string; effect: string
-      /** custom spells only (optional so older drafts and links still load) */
-      range?: string; duration?: string; upgrades?: SpellUpgrades
-    }
+  | ({ type: 'custom'; kind: 'object' | 'spell' | 'other'; name: string; mana: string; effect: string } & SpellFields)
 
 /** What a custom Spell gains at Ranks 5, 10 and 15, like the book's Spells. */
 export type SpellUpgrades = Partial<Record<'5' | '10' | '15', string>>
 export const UPGRADE_RANKS = ['5', '10', '15'] as const
+
+/**
+ * The rest of a Core Rulebook Spell entry (custom Spells only). All optional,
+ * so older drafts and claim links still load.
+ */
+export interface SpellFields {
+  /** e.g. "Attack, Fire, Area of Effect" */
+  keywords?: string
+  /** the flavor quote under the keywords */
+  quote?: string
+  range?: string
+  duration?: string
+  cooldown?: string
+  limitations?: string
+  aiFavor?: string
+  /** e.g. "1d6 + Int Force, 10ft Blast radius" */
+  baseDamage?: string
+  upgrades?: SpellUpgrades
+}
 
 export type LootRowType = LootRow['type']
 
@@ -62,22 +77,41 @@ export interface LootBox {
   itemsOnly?: boolean
 }
 
-/** One Contents bullet: bold head + plain text. */
+/** A detail line under a bullet; the label is bold ("Mana Cost:"), or empty for plain text. */
+export interface LootDetail { label: string; text: string; italic?: boolean }
+
+/** One Contents bullet: bold head + plain text, plus detail lines (a custom Spell's stat block). */
 export interface LootLine {
   head: string
   text: string
-  /** detail lines shown under the bullet (custom Spell range, duration, upgrades) */
-  sub?: string[]
+  sub?: LootDetail[]
 }
 
-/** Range, Duration and each Rank upgrade of a custom Spell, as detail lines. */
-export function spellDetails(r: { range?: string; duration?: string; upgrades?: SpellUpgrades }): string[] {
-  const out: string[] = []
-  if (r.range?.trim()) out.push(`Range: ${r.range.trim()}`)
-  if (r.duration?.trim()) out.push(`Duration: ${r.duration.trim()}`)
-  for (const k of UPGRADE_RANKS) if (r.upgrades?.[k]?.trim()) out.push(`Rank ${k} upgrade: ${r.upgrades[k]!.trim()}`)
-  return out
+/**
+ * A custom Spell laid out like a Core Rulebook entry: keywords, quote,
+ * Mana Cost, Range, Duration, Cooldown, AI Favor, Limitations, Base Damage,
+ * the description, then the Rank 5/10/15 upgrades.
+ */
+export function spellDetails(r: SpellFields & { mana?: string; effect?: string }): LootDetail[] {
+  const t = (s?: string) => s?.trim() ?? ''
+  const quote = t(r.quote)
+  const rows: LootDetail[] = [
+    { label: '', text: t(r.keywords) },
+    { label: '', text: quote && !/^["“]/.test(quote) ? `“${quote}”` : quote, italic: true },
+    { label: 'Mana Cost', text: t(r.mana) },
+    { label: 'Range', text: t(r.range) },
+    { label: 'Duration', text: t(r.duration) },
+    { label: 'Cooldown', text: t(r.cooldown) },
+    { label: 'AI Favor', text: t(r.aiFavor) },
+    { label: 'Limitations', text: t(r.limitations) },
+    { label: 'Base Damage', text: t(r.baseDamage) },
+    { label: '', text: t(r.effect) },
+    ...UPGRADE_RANKS.map((k) => ({ label: `Rank ${k}`, text: t(r.upgrades?.[k]) })),
+  ]
+  return rows.filter((x) => x.text)
 }
+
+export const detailText = (x: LootDetail) => (x.label ? `${x.label}: ${x.text}` : x.text)
 
 const signed = (n: number) => (n >= 0 ? `+${n}` : `${n}`)
 const detail = (...parts: string[]) => {
@@ -121,9 +155,8 @@ export function formatLootRow(r: LootRow): LootLine | null {
     case 'custom': {
       if (!r.name.trim()) return null
       if (r.kind === 'spell') {
-        const mana = r.mana.trim()
         const sub = spellDetails(r)
-        return { head: `Custom Spell: ${r.name.trim()}`, text: (mana ? ` (Mana ${mana})` : '') + detail(r.effect), ...(sub.length ? { sub } : {}) }
+        return { head: `Custom Spell: ${r.name.trim()}`, text: '', ...(sub.length ? { sub } : {}) }
       }
       return { head: r.name.trim(), text: detail(r.effect) }
     }
@@ -143,10 +176,11 @@ export function itemsTitle(rows: LootRow[]): string {
   return lines.length > 1 ? `${first} + ${lines.length - 1} more` : first
 }
 
-const subHtml = (l: LootLine) => (l.sub?.length ? `<ul style="margin:0">${l.sub.map((s) => `<li>${esc(s)}</li>`).join('')}</ul>` : '')
+const subHtml = (l: LootLine) =>
+  (l.sub ?? []).map((x) => `<br>${x.label ? `<b>${esc(x.label)}:</b> ` : ''}${x.italic ? `<i>${esc(x.text)}</i>` : esc(x.text)}`).join('')
 const lineHtml = (l: LootLine) => `${l.head ? `<b>${esc(l.head)}</b>` : ''}${esc(l.text)}${subHtml(l)}`
 const lineText = (l: LootLine, bullet: string, indent: string) =>
-  [`${bullet}${l.head}${l.text}`, ...(l.sub ?? []).map((s) => `${indent}◦ ${s}`)]
+  [`${bullet}${l.head}${l.text}`, ...(l.sub ?? []).map((x) => `${indent}${detailText(x)}`)]
 
 export function lootBoxHtml(box: LootBox): string {
   const p = (inner: string, style = '') => `<p style="margin:0 0 4pt;${style}">${inner}</p>`
@@ -154,7 +188,7 @@ export function lootBoxHtml(box: LootBox): string {
     const lines = lootLines(box)
     const out = box.name.trim() ? [p(`<b>${esc(box.name.trim())}</b>`, 'font-size:14pt')] : []
     if (box.description.trim()) out.push(p(`<i>${esc(box.description.trim()).replace(/\n/g, '<br>')}</i>`))
-    if (lines.length === 1) out.push(p(`${lines[0].head ? `<b>${esc(lines[0].head)}</b>` : ''}${esc(lines[0].text)}`) + subHtml(lines[0]))
+    if (lines.length === 1) out.push(p(lineHtml(lines[0])))
     else if (lines.length) out.push(`<ul style="margin:0">${lines.map((l) => `<li>${lineHtml(l)}</li>`).join('')}</ul>`)
     if (box.claimUrl) out.push(p(`<b>Claim it:</b> <a href="${esc(box.claimUrl)}">add this to your Crawler Sheet</a>`, 'margin-top:6pt'))
     return out.join('')

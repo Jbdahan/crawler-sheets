@@ -298,3 +298,4 @@ kbd { font: inherit; font-size: 0.8em; padding: 0 5px; border: 1px solid var(--b
 .paper ul { padding-left: 1.4em; }
 .claim-item.ok { border-color: color-mix(in srgb, var(--good) 55%, var(--border)); }
 .claim-item.skip { opacity: 0.6; }
+.paper a { color: #1a0dab; }

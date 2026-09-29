@@ -490,19 +490,30 @@ function RowFields({ row: r, onChange }: { row: LootRow; onChange: (r: LootRow) 
           </select>
           <input value={r.name} onChange={(e) => onChange({ ...r, name: e.target.value })} placeholder={r.kind === 'spell' ? 'Spell name, e.g. Glitter Bomb' : 'Name'} aria-label="Name" />
           {r.kind === 'spell' && (
-            <div className="grid3">
-              <Field label="Mana cost"><input aria-label="Mana cost" placeholder="e.g. 8" value={r.mana} onChange={(e) => onChange({ ...r, mana: e.target.value })} /></Field>
-              <Field label="Range"><input aria-label="Range" placeholder="e.g. 30 ft" value={r.range ?? ''} onChange={(e) => onChange({ ...r, range: e.target.value })} /></Field>
-              <Field label="Duration"><input aria-label="Duration" placeholder="e.g. 1 minute" value={r.duration ?? ''} onChange={(e) => onChange({ ...r, duration: e.target.value })} /></Field>
-            </div>
+            <>
+              <p className="small muted" style={{ margin: 0 }}>Laid out like a Spell in the Core Rulebook. Fill in what applies and leave the rest blank.</p>
+              <Field label="Keywords"><input aria-label="Keywords" placeholder="e.g. Attack, Force, Area of Effect" value={r.keywords ?? ''} onChange={(e) => onChange({ ...r, keywords: e.target.value })} /></Field>
+              <Field label="Flavor quote"><input aria-label="Flavor quote" placeholder="e.g. Sparkly. Deadly. Mostly sparkly." value={r.quote ?? ''} onChange={(e) => onChange({ ...r, quote: e.target.value })} /></Field>
+              <div className="grid3">
+                <Field label="Mana Cost"><input aria-label="Mana cost" placeholder="e.g. 8" value={r.mana} onChange={(e) => onChange({ ...r, mana: e.target.value })} /></Field>
+                <Field label="Range"><input aria-label="Range" placeholder="e.g. 30 feet" value={r.range ?? ''} onChange={(e) => onChange({ ...r, range: e.target.value })} /></Field>
+                <Field label="Duration"><input aria-label="Duration" placeholder="e.g. 1 minute" value={r.duration ?? ''} onChange={(e) => onChange({ ...r, duration: e.target.value })} /></Field>
+              </div>
+              <div className="grid2">
+                <Field label="Cooldown"><input aria-label="Cooldown" placeholder="e.g. Once per scene" value={r.cooldown ?? ''} onChange={(e) => onChange({ ...r, cooldown: e.target.value })} /></Field>
+                <Field label="AI Favor"><input aria-label="AI Favor" placeholder="e.g. 1" value={r.aiFavor ?? ''} onChange={(e) => onChange({ ...r, aiFavor: e.target.value })} /></Field>
+              </div>
+              <Field label="Limitations"><input aria-label="Limitations" placeholder="e.g. You must be able to see the target" value={r.limitations ?? ''} onChange={(e) => onChange({ ...r, limitations: e.target.value })} /></Field>
+              <Field label="Base Damage"><input aria-label="Base Damage" placeholder="e.g. 1d6 + Int Force, 10ft Blast radius" value={r.baseDamage ?? ''} onChange={(e) => onChange({ ...r, baseDamage: e.target.value })} /></Field>
+            </>
           )}
-          <Field label={r.kind === 'spell' ? 'What the spell does' : r.kind === 'object' ? 'Special condition' : 'Details'}>
+          <Field label={r.kind === 'spell' ? 'Description (what the Spell does)' : r.kind === 'object' ? 'Special condition' : 'Details'}>
             <textarea value={r.effect} onChange={(e) => onChange({ ...r, effect: e.target.value })}
               placeholder={r.kind === 'spell' ? 'e.g. Blinds everyone within 10 ft' : 'e.g. Glows when a mimic is nearby'} />
           </Field>
           {r.kind === 'spell' && (
             <div className="stack">
-              <div className="label">Upgrades (optional)</div>
+              <div className="label">Upgrades</div>
               {UPGRADE_RANKS.map((k) => (
                 <Field key={k} label={`Rank ${k}`}>
                   <input aria-label={`Rank ${k} upgrade`} value={r.upgrades?.[k] ?? ''}

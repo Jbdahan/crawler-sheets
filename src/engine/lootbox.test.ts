@@ -17,7 +17,7 @@ describe('loot box formatting', () => {
     expect(formatLootRow({ type: 'consumable', item: 'Healing Potion', qty: 3 })?.text).toBe('3× Healing Potion')
     expect(formatLootRow({ type: 'gold', value: 1500 })?.text).toBe('1,500 Gold')
     expect(formatLootRow({ type: 'custom', kind: 'spell', name: 'Glitter Bomb', mana: '8', effect: 'Blinds everyone within 10 ft' }))
-      .toEqual({ head: 'Custom Spell: Glitter Bomb', text: ' (Mana 8): Blinds everyone within 10 ft' })
+      .toEqual({ head: 'Custom Spell: Glitter Bomb', text: '', sub: [{ label: 'Mana Cost', text: '8' }, { label: '', text: 'Blinds everyone within 10 ft' }] })
     expect(formatLootRow({ type: 'custom', kind: 'object', name: 'Mimic Spoon', mana: '', effect: 'Glows near mimics' }))
       .toEqual({ head: 'Mimic Spoon', text: ': Glows near mimics' })
   })
@@ -42,28 +42,35 @@ describe('loot box formatting', () => {
   it('formats just the items, without the achievement parts', () => {
     const one: LootBox = { itemsOnly: true, name: '', description: '', reward: 'ignored', claimUrl: 'https://x/#loot=abc',
       rows: [{ type: 'custom', kind: 'spell', name: 'Glitter Bomb', mana: '8', effect: 'Blinds everyone' }] }
-    expect(lootBoxText(one)).toBe('Custom Spell: Glitter Bomb (Mana 8): Blinds everyone\nClaim it in Crawler Sheets: https://x/#loot=abc')
+    expect(lootBoxText(one)).toBe('Custom Spell: Glitter Bomb\n  Mana Cost: 8\n  Blinds everyone\nClaim it in Crawler Sheets: https://x/#loot=abc')
     expect(lootBoxHtml(one)).not.toContain('New Achievement')
     expect(lootBoxHtml(one)).not.toContain('<ul')
     const two = { ...one, claimUrl: undefined, rows: [...one.rows, { type: 'gold' as const, value: 5 }] }
-    expect(lootBoxText(two)).toBe('• Custom Spell: Glitter Bomb (Mana 8): Blinds everyone\n• 5 Gold')
+    expect(lootBoxText(two)).toBe('• Custom Spell: Glitter Bomb\n    Mana Cost: 8\n    Blinds everyone\n• 5 Gold')
     expect(itemsTitle(two.rows)).toBe('Custom Spell: Glitter Bomb + 1 more')
     const titled = { ...two, name: "Goblin's Stash" }
-    expect(lootBoxText(titled)).toBe("Goblin's Stash\n• Custom Spell: Glitter Bomb (Mana 8): Blinds everyone\n• 5 Gold")
+    expect(lootBoxText(titled)).toBe("Goblin's Stash\n• Custom Spell: Glitter Bomb\n    Mana Cost: 8\n    Blinds everyone\n• 5 Gold")
     expect(lootBoxHtml(titled)).toContain("<b>Goblin's Stash</b>")
     const described = { ...titled, description: 'Smells faintly of socks.' }
-    expect(lootBoxText(described)).toBe("Goblin's Stash\nSmells faintly of socks.\n• Custom Spell: Glitter Bomb (Mana 8): Blinds everyone\n• 5 Gold")
+    expect(lootBoxText(described)).toBe("Goblin's Stash\nSmells faintly of socks.\n• Custom Spell: Glitter Bomb\n    Mana Cost: 8\n    Blinds everyone\n• 5 Gold")
     expect(lootBoxHtml(described)).toContain('<i>Smells faintly of socks.</i>')
   })
 
-  it('lists a custom Spell range, duration and upgrades under its bullet', () => {
+  it('lays out a custom Spell like a Core Rulebook entry', () => {
     const spell = { type: 'custom' as const, kind: 'spell' as const, name: 'Glitter Bomb', mana: '8', effect: 'Blinds everyone',
-      range: '30 ft', duration: '1 minute', upgrades: { '5': 'Range doubles', '15': 'Also Deafened' } }
-    expect(formatLootRow(spell)?.sub).toEqual(['Range: 30 ft', 'Duration: 1 minute', 'Rank 5 upgrade: Range doubles', 'Rank 15 upgrade: Also Deafened'])
+      keywords: 'Attack, Force', quote: 'Sparkly.', range: '30 feet', duration: '1 minute', cooldown: 'Once per scene',
+      limitations: 'Line of sight', aiFavor: '1', baseDamage: '1d6 + Int Force', upgrades: { '5': 'Range doubles', '15': 'Also Deafened' } }
+    expect(formatLootRow(spell)?.sub?.map((x) => x.label || x.text)).toEqual([
+      'Attack, Force', '“Sparkly.”', 'Mana Cost', 'Range', 'Duration', 'Cooldown', 'AI Favor', 'Limitations', 'Base Damage',
+      'Blinds everyone', 'Rank 5', 'Rank 15',
+    ])
     const box: LootBox = { name: 'Toe Stubber', description: '', reward: '', rows: [spell] }
-    expect(lootBoxText(box)).toContain('• Custom Spell: Glitter Bomb (Mana 8): Blinds everyone\n    ◦ Range: 30 ft\n    ◦ Duration: 1 minute')
-    expect(lootBoxHtml(box)).toContain('<li>Rank 5 upgrade: Range doubles</li>')
-    expect(lootBoxText({ ...box, itemsOnly: true, name: '' })).toBe('Custom Spell: Glitter Bomb (Mana 8): Blinds everyone\n  ◦ Range: 30 ft\n  ◦ Duration: 1 minute\n  ◦ Rank 5 upgrade: Range doubles\n  ◦ Rank 15 upgrade: Also Deafened')
-    expect(formatLootRow({ ...spell, range: '', duration: undefined, upgrades: undefined })?.sub).toBeUndefined()
+    expect(lootBoxText(box)).toContain('• Custom Spell: Glitter Bomb\n    Attack, Force\n    “Sparkly.”\n    Mana Cost: 8\n    Range: 30 feet\n    Duration: 1 minute\n    Cooldown: Once per scene')
+    const html = lootBoxHtml(box)
+    expect(html).toContain('<br><b>Cooldown:</b> Once per scene')
+    expect(html).toContain('<br><i>“Sparkly.”</i>')
+    expect(html).toContain('<br><b>Rank 5:</b> Range doubles')
+    expect(formatLootRow({ ...spell, mana: '', effect: '', keywords: '', quote: undefined, range: '', duration: '', cooldown: '',
+      limitations: '', aiFavor: '', baseDamage: '', upgrades: undefined })?.sub).toBeUndefined()
   })
 })
