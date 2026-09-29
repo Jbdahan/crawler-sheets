@@ -1,40 +1,46 @@
 import { useState } from 'react'
 import { ITEMS, findSkill } from '../data'
-import { activateHotlist } from '../engine/actions'
+import { isAttackSkill } from '../engine/attacks'
 import { uid } from '../engine/advancement'
 import { HOTLIST_SIZE, type HotlistEntry } from '../engine/types'
-import { PageRef, Seg, Sheet, Stepper, toast } from '../components/ui'
+import { PageRef, Seg, Sheet, Stepper } from '../components/ui'
 import { SpellText } from '../components/SpellText'
+import { attackLine, hotlistAttack, triggerHotlist } from './hotlistUse'
 import type { Ctx } from './ctx'
 
 export function Hotlist(ctx: Ctx) {
-  const { c, d, up } = ctx
+  const { c, up } = ctx
   const [edit, setEdit] = useState<number | null>(null)
-  const use = (e: HotlistEntry) => {
-    const r = activateHotlist(c, e, d)
-    if (r.ok) up(() => r.c)
-    toast(r.message)
-  }
   const setQty = (i: number, qty: number) =>
     up((x) => ({ ...x, hotlist: x.hotlist.map((h, j) => (j === i && h ? { ...h, qty } : h)) }))
   return (
     <div>
       <p className="small muted" style={{ marginTop: 0 }}>
-        10 slots for quick access in combat: using one costs an Action (swapping weapons is free with an Attack). Up to 999 of one item per slot. Spells must be here to cast them in combat (Core p.98, 111, 202).
+        10 slots for quick access in combat: using one costs an Action (swapping weapons is free with an Attack). Up to 999 of one item per slot. Spells must be here to cast them in combat. Attacks here roll to hit and damage when tapped (Core p.98, 111, 202).
       </p>
       <div className="hot">
-        {c.hotlist.slice(0, HOTLIST_SIZE).map((h, i) =>
-          h ? (
+        {c.hotlist.slice(0, HOTLIST_SIZE).map((h, i) => {
+          if (!h) {
+            return (
+              <button key={`e${i}`} className="hotslot emptyslot" onClick={() => setEdit(i)}>
+                <span style={{ fontSize: '1.4rem' }}>+</span>
+                <span className="tiny">Slot {i + 1}</span>
+              </button>
+            )
+          }
+          const atk = hotlistAttack(ctx, h)
+          return (
             <div key={h.uid} className="hotslot">
               <button style={{ background: 'none', border: 0, padding: 0, textAlign: 'left' }} onClick={() => setEdit(i)}>
                 <div className="n">{h.name}</div>
                 {h.kind === 'spell' ? <div className="tiny muted">{spellNote(ctx, h)}</div> : null}
+                {atk && <div className="small num" style={{ fontWeight: 800, color: 'var(--accent)' }}>{attackLine(ctx, atk)}</div>}
               </button>
               {h.kind === 'spell'
                 ? spellNotes(ctx, h) && <SpellText text={spellNotes(ctx, h)} lines={2} />
-                : h.notes && <SpellText text={h.notes} lines={3} />}
+                : h.kind === 'item' && h.notes && <SpellText text={h.notes} lines={3} />}
               <div className="grow" />
-              {h.kind !== 'spell' && (
+              {h.kind === 'item' && (
                 <div className="row between">
                   <span className="q num" style={{ color: h.qty ? undefined : 'var(--danger)' }}>×{h.qty}</span>
                   <span className="row" style={{ gap: 2 }}>
@@ -43,17 +49,12 @@ export function Hotlist(ctx: Ctx) {
                   </span>
                 </div>
               )}
-              <button className={`btn small ${h.kind === 'spell' ? 'mana' : 'good'}`} disabled={h.kind !== 'spell' && h.consumable && h.qty <= 0} onClick={() => use(h)}>
-                {h.kind === 'spell' ? 'Cast' : h.consumable ? 'Use' : 'Swap in'}
+              <button className={`btn small ${h.kind === 'spell' ? 'mana' : atk ? 'primary' : 'good'}`} disabled={h.kind === 'item' && h.consumable && h.qty <= 0} onClick={() => triggerHotlist(ctx, h)}>
+                {atk ? (h.kind === 'spell' ? 'Cast & attack 🎲' : 'Attack 🎲') : h.kind === 'spell' ? 'Cast' : h.consumable ? 'Use' : 'Use'}
               </button>
             </div>
-          ) : (
-            <button key={`e${i}`} className="hotslot emptyslot" onClick={() => setEdit(i)}>
-              <span style={{ fontSize: '1.4rem' }}>+</span>
-              <span className="tiny">Slot {i + 1}</span>
-            </button>
-          ),
-        )}
+          )
+        })}
       </div>
       {edit !== null && <HotlistEditor {...ctx} index={edit} onClose={() => setEdit(null)} />}
     </div>
@@ -73,7 +74,8 @@ function spellNotes({ c }: Ctx, h: HotlistEntry) {
   return findSkill(s?.skillId) ? '' : [s?.notes, h.notes].filter(Boolean).join(' · ')
 }
 
-function HotlistEditor({ c, up, index, onClose }: Ctx & { index: number; onClose: () => void }) {
+function HotlistEditor(ctx: Ctx & { index: number; onClose: () => void }) {
+  const { c, up, index, onClose } = ctx
   const cur = c.hotlist[index]
   const [tab, setTab] = useState<'item' | 'spell' | 'weapon' | 'custom'>(cur ? (cur.kind === 'item' ? 'custom' : cur.kind) : 'item')
   const [draft, setDraft] = useState<HotlistEntry>(cur ?? { uid: uid(), name: '', qty: 1, kind: 'item', notes: '', consumable: true })
@@ -82,11 +84,11 @@ function HotlistEditor({ c, up, index, onClose }: Ctx & { index: number; onClose
     onClose()
   }
   const spells = c.skills.filter((s) => s.kind === 'spell')
-  const weapons = c.skills.filter((s) => s.kind === 'attack')
+  const weapons = c.skills.filter((s) => s.kind === 'attack' && isAttackSkill(s))
   return (
     <Sheet title={cur ? `Slot ${index + 1}: ${cur.name}` : `Hotlist slot ${index + 1}`} onClose={onClose}>
       <div className="stack">
-        <Seg value={tab} onChange={setTab} options={[{ value: 'item', label: 'Items' }, { value: 'spell', label: 'Spells' }, { value: 'weapon', label: 'Weapons' }, { value: 'custom', label: 'Custom / edit' }]} />
+        <Seg value={tab} onChange={setTab} options={[{ value: 'item', label: 'Items' }, { value: 'spell', label: 'Spells' }, { value: 'weapon', label: 'Attacks' }, { value: 'custom', label: 'Custom / edit' }]} />
         {tab === 'item' && (
           <div className="list">
             {ITEMS.map((it) => (
@@ -111,13 +113,14 @@ function HotlistEditor({ c, up, index, onClose }: Ctx & { index: number; onClose
         )}
         {tab === 'weapon' && (
           <div className="list">
-            {!weapons.length && <div className="empty">No weapon Skills yet.</div>}
+            {!weapons.length && <div className="empty">No attack Skills yet. Add one on the Skills tab.</div>}
             {weapons.map((s) => (
               <div className="li" key={s.uid}>
-                <div className="main"><div className="name">{s.name}</div></div>
-                <button className="btn small" onClick={() => save({ uid: uid(), name: s.name, qty: 1, kind: 'weapon', skillUid: s.uid, notes: 'Swap free with an Attack', consumable: false })}>Put here</button>
+                <div className="main"><div className="name">{s.name}</div><div className="meta num">Rank {s.rank} · {attackLine(ctx, s)}</div></div>
+                <button className="btn small primary" onClick={() => save({ uid: uid(), name: s.name, qty: 1, kind: 'weapon', skillUid: s.uid, notes: '', consumable: false })}>Put here</button>
               </div>
             ))}
+            <p className="small faint">Tapping an attack slot rolls to hit, then damage. Attack Spells (Fire Fingers, Magic Missile…) go under Spells and spend their Mana when cast.</p>
           </div>
         )}
         {tab === 'custom' && (
