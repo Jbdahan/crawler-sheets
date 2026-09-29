@@ -299,3 +299,9 @@ kbd { font: inherit; font-size: 0.8em; padding: 0 5px; border: 1px solid var(--b
 .claim-item.ok { border-color: color-mix(in srgb, var(--good) 55%, var(--border)); }
 .claim-item.skip { opacity: 0.6; }
 .paper a { color: #1a0dab; }
+
+/* expandable spell descriptions */
+.spelltext { font-size: 0.86rem; line-height: 1.45; color: var(--text); }
+.spelltext > div + div { margin-top: 2px; }
+.spelltext b { color: var(--muted); font-weight: 700; }
+.linkbtn { background: none; border: 0; padding: 4px 0 0; color: var(--accent); font-weight: 700; font-size: 0.82rem; }

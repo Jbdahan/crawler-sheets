@@ -4,6 +4,7 @@ import { activateHotlist } from '../engine/actions'
 import { uid } from '../engine/advancement'
 import { HOTLIST_SIZE, type HotlistEntry } from '../engine/types'
 import { PageRef, Seg, Sheet, Stepper, toast } from '../components/ui'
+import { SpellText } from '../components/SpellText'
 import type { Ctx } from './ctx'
 
 export function Hotlist(ctx: Ctx) {
@@ -27,8 +28,11 @@ export function Hotlist(ctx: Ctx) {
             <div key={h.uid} className="hotslot">
               <button style={{ background: 'none', border: 0, padding: 0, textAlign: 'left' }} onClick={() => setEdit(i)}>
                 <div className="n">{h.name}</div>
-                <div className="tiny muted">{h.kind === 'spell' ? spellNote(ctx, h) : h.notes}</div>
+                {h.kind === 'spell' ? <div className="tiny muted">{spellNote(ctx, h)}</div> : null}
               </button>
+              {h.kind === 'spell'
+                ? spellNotes(ctx, h) && <SpellText text={spellNotes(ctx, h)} lines={2} />
+                : h.notes && <SpellText text={h.notes} lines={3} />}
               <div className="grow" />
               {h.kind !== 'spell' && (
                 <div className="row between">
@@ -60,7 +64,13 @@ function spellNote({ c }: Ctx, h: HotlistEntry) {
   const s = c.skills.find((x) => x.uid === h.skillUid)
   const def = findSkill(s?.skillId)
   const cost = s?.customMana ?? def?.mana
-  return [cost !== undefined ? `${cost} Mana` : '', def?.summary ?? h.notes].filter(Boolean).join(' · ')
+  return [cost !== undefined ? `${cost} Mana` : '', def?.summary].filter(Boolean).join(' · ')
+}
+
+/** a custom Spell's full entry lives in its notes */
+function spellNotes({ c }: Ctx, h: HotlistEntry) {
+  const s = c.skills.find((x) => x.uid === h.skillUid)
+  return findSkill(s?.skillId) ? '' : [s?.notes, h.notes].filter(Boolean).join(' · ')
 }
 
 function HotlistEditor({ c, up, index, onClose }: Ctx & { index: number; onClose: () => void }) {

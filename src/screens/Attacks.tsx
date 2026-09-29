@@ -6,6 +6,7 @@ import type { CharSkill } from '../engine/types'
 import { openRoll } from '../components/Roller'
 import { Breakdown, PageRef, Sheet, signed, toast } from '../components/ui'
 import { SkillPicker } from '../sheets/SkillSheets'
+import { SpellText } from '../components/SpellText'
 import type { Ctx } from './ctx'
 
 export function Attacks(ctx: Ctx) {
@@ -123,12 +124,16 @@ export function Attacks(ctx: Ctx) {
                     <div key={s.uid} className="li">
                       <div className="main">
                         <div className="name">{s.name} <span className="pill">R{s.rank}</span></div>
-                        <div className="meta">{def?.summary}</div>
+                        {def?.summary && <div className="meta">{def.summary}</div>}
                         <div className="meta faint">{[def?.range, def?.duration, def?.cooldown && `Cooldown ${def.cooldown}`].filter(Boolean).join(' · ')}</div>
+                        {!def && s.notes && <SpellText text={s.notes} lines={2} />}
                       </div>
-                      <button className="btn small mana" disabled={d.flags.cantCast || c.mana < (cost ?? 0)} onClick={() => cast(s)}>
-                        Cast{cost !== undefined ? ` · ${cost}` : ''}
-                      </button>
+                      <div className="stack" style={{ alignSelf: 'flex-start' }}>
+                        <button className="btn small mana" disabled={d.flags.cantCast || c.mana < (cost ?? 0)} onClick={() => cast(s)}>
+                          Cast{cost !== undefined ? ` · ${cost}` : ''}
+                        </button>
+                        <button className="btn small ghost" onClick={() => setInfo(s)}>Details</button>
+                      </div>
                     </div>
                   )
                 })}
@@ -150,6 +155,8 @@ function AttackInfo({ c, d, s, onClose }: Ctx & { s: CharSkill; onClose: () => v
     <Sheet title={s.name} onClose={onClose}>
       <div className="stack">
         {def?.summary && <p>{def.summary}</p>}
+        {!def && s.notes && <SpellText text={s.notes} startOpen lines={99} />}
+        {def && s.notes && <p className="small">{s.notes}</p>}
         <div className="small muted">{def?.keywords?.join(', ')} <PageRef page={def?.page} /></div>
         {[['Range', def?.range], ['Mana', def?.manaText], ['Cooldown', def?.cooldown], ['Duration', def?.duration], ['AI Favor', def?.aiFavor], ['Limitations', def?.limitations]]
           .filter(([, v]) => v)

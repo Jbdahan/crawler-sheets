@@ -5,6 +5,7 @@ import { checkBonus, skillStat } from '../engine/derived'
 import type { CharSkill } from '../engine/types'
 import { openRoll } from '../components/Roller'
 import { PageRef, Seg, Sheet, Stepper, signed, toast } from '../components/ui'
+import { SpellText } from '../components/SpellText'
 import type { Ctx } from '../screens/ctx'
 
 const KIND_LABEL: Record<SkillKind, string> = { attack: 'Attack', damageEffect: 'Damage Effect', utility: 'Utility', spell: 'Spell' }
@@ -133,6 +134,7 @@ export function SkillDetail({ c, d, up, s, onClose }: Ctx & { s: CharSkill; onCl
     <Sheet title={cur.name} onClose={onClose}>
       <div className="stack">
         {def?.summary && <p>{def.summary}</p>}
+        {!def && cur.notes && <div className="infobox"><SpellText text={cur.notes} startOpen lines={99} /></div>}
         <div className="small muted">
           {def ? KIND_LABEL[def.kind] : 'Custom'} · {def?.checkType ?? (stat ? 'Check' : 'Passive')}{def?.keywords?.length ? ` · ${def.keywords.join(', ')}` : ''} <PageRef page={def?.page} />
         </div>
@@ -166,7 +168,7 @@ export function SkillDetail({ c, d, up, s, onClose }: Ctx & { s: CharSkill; onCl
         )}
         {[['Range', def?.range], ['Mana', def?.manaText], ['Cooldown', def?.cooldown], ['Duration', def?.duration], ['Limitations', def?.limitations]]
           .filter(([, v]) => v).map(([k, v]) => <div key={k} className="small"><b>{k}:</b> {v}</div>)}
-        <label><span className="label">Notes</span><input value={cur.notes} onChange={(e) => set({ notes: e.target.value })} placeholder="specialty, source, reminders…" /></label>
+        <label><span className="label">Notes</span><textarea rows={Math.min(10, Math.max(2, Math.ceil(cur.notes.length / 40)))} value={cur.notes} onChange={(e) => set({ notes: e.target.value })} placeholder="specialty, source, reminders…" /></label>
         {cur.source && <div className="small faint">From: {cur.source}</div>}
         <button className="btn danger" onClick={remove}>Remove skill</button>
       </div>
