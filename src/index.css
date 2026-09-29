@@ -305,3 +305,27 @@ kbd { font: inherit; font-size: 0.8em; padding: 0 5px; border: 1px solid var(--b
 .spelltext > div + div { margin-top: 2px; }
 .spelltext b { color: var(--muted); font-weight: 700; }
 .linkbtn { background: none; border: 0; padding: 4px 0 0; color: var(--accent); font-weight: 700; font-size: 0.82rem; }
+
+/* compact Hotlist strip on the HUD: one scrolling row */
+.hotstrip-card { padding-bottom: 10px; }
+.hotstrip-card .card-head { margin-bottom: 6px; }
+.hotstrip { display: flex; gap: 6px; overflow-x: auto; scroll-snap-type: x proximity; padding-bottom: 2px; scrollbar-width: none; }
+.hotstrip::-webkit-scrollbar { display: none; }
+.hs-tile {
+  flex: 0 0 auto; width: 112px; scroll-snap-align: start;
+  display: flex; flex-direction: column; gap: 3px; text-align: left;
+  padding: 6px 8px; border-radius: var(--radius-sm);
+  background: var(--surface-2); border: 1px solid var(--border);
+}
+.hs-tile.spell { border-color: color-mix(in srgb, var(--mana) 45%, var(--border)); }
+.hs-tile.item { border-color: color-mix(in srgb, var(--good) 40%, var(--border)); }
+.hs-tile:active { transform: translateY(1px); }
+.hs-tile:disabled { opacity: 0.45; }
+.hs-name { font-weight: 800; font-size: 0.82rem; line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hs-meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.74rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.hs-act { font-weight: 800; color: var(--accent); }
+@media (min-width: 760px) { .hotstrip { flex-wrap: wrap; overflow: visible; } }
+/* let grid children shrink so the scrolling strip can't widen the page */
+.hud > * { min-width: 0; }
+.hs-tile { width: 120px; }
+.hs-name { white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; min-height: 2.3em; }

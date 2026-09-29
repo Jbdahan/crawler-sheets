@@ -3,7 +3,9 @@ import { STAT_ABBR, STAT_KEYS, STAT_NAMES, SIZES, type StatKey } from '../data'
 import { difficulty } from '../engine/attacks'
 import type { Part, Total } from '../engine/derived'
 import { HB_SLOTS, REST_LABEL, heal, rest, setLost, setMana, tickDying, type RestKind } from '../engine/health'
-import type { ActiveEffect } from '../engine/types'
+import { HOTLIST_SIZE, type ActiveEffect, type HotlistEntry } from '../engine/types'
+import { activateHotlist } from '../engine/actions'
+import { findSkill } from '../data'
 import { openRoll } from '../components/Roller'
 import { Breakdown, Sheet, signed, toast } from '../components/ui'
 import { DamageSheet } from '../sheets/DamageSheet'
@@ -77,6 +79,8 @@ export function Hud(ctx: Ctx) {
           <button className="btn grow" onClick={() => setSheet('rest')}>Rest…</button>
         </div>
       </section>
+
+      <HotlistStrip {...ctx} />
 
       <section className="card">
         <div className="card-head">
@@ -216,6 +220,47 @@ export function Hud(ctx: Ctx) {
         </Sheet>
       )}
     </div>
+  )
+}
+
+/** Compact, use-only view of the Hotlist; editing stays on the Hotlist tab. */
+function HotlistStrip({ c, d, up }: Ctx) {
+  const entries = c.hotlist.map((h, i) => ({ h, i })).filter((x): x is { h: HotlistEntry; i: number } => !!x.h)
+  const use = (h: HotlistEntry) => {
+    const r = activateHotlist(c, h, d)
+    if (r.ok) up(() => r.c)
+    toast(r.message)
+  }
+  return (
+    <section className="card span2 hotstrip-card">
+      <div className="card-head">
+        <h2>Hotlist</h2>
+        <span className="small muted">{entries.length}/{HOTLIST_SIZE}</span>
+        <button className="btn small ghost" onClick={() => go(`/c/${c.id}/hotlist`)}>Edit</button>
+      </div>
+      {entries.length === 0 ? (
+        <div className="small muted">Empty. Add potions, spells and weapons on the Hotlist tab.</div>
+      ) : (
+        <div className="hotstrip">
+          {entries.map(({ h, i }) => {
+            const s = h.kind === 'spell' ? c.skills.find((x) => x.uid === h.skillUid) : undefined
+            const cost = s ? s.customMana ?? findSkill(s.skillId)?.mana : undefined
+            const out = h.kind !== 'spell' && h.consumable && h.qty <= 0
+            const noMana = h.kind === 'spell' && (d.flags.cantCast || c.mana < (cost ?? 0))
+            return (
+              <button key={h.uid} className={`hs-tile ${h.kind}`} disabled={out || noMana} onClick={() => use(h)}
+                title={h.kind === 'spell' ? `Cast ${h.name}` : `Use ${h.name}`} aria-label={`${h.kind === 'spell' ? 'Cast' : 'Use'} ${h.name}, slot ${i + 1}`}>
+                <span className="hs-name">{h.name}</span>
+                <span className="hs-meta">
+                  {h.kind === 'spell' ? (cost !== undefined ? `${cost} Mana` : 'Spell') : h.kind === 'weapon' ? 'Swap' : `×${h.qty}`}
+                  <span className="hs-act">{h.kind === 'spell' ? 'Cast' : h.kind === 'weapon' ? '⇄' : 'Use'}</span>
+                </span>
+              </button>
+            )
+          })}
+        </div>
+      )}
+    </section>
   )
 }
 
