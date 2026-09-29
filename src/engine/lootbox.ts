@@ -37,7 +37,15 @@ export type LootRow =
   | { type: 'defense'; target: 'dr' | 'evade' | 'resist' | 'immune' | 'vuln'; value: number; dtype: string }
   | { type: 'consumable'; item: string; qty: number }
   | { type: 'gold'; value: number }
-  | { type: 'custom'; kind: 'object' | 'spell' | 'other'; name: string; mana: string; effect: string }
+  | {
+      type: 'custom'; kind: 'object' | 'spell' | 'other'; name: string; mana: string; effect: string
+      /** custom spells only (optional so older drafts and links still load) */
+      range?: string; duration?: string; upgrades?: SpellUpgrades
+    }
+
+/** What a custom Spell gains at Ranks 5, 10 and 15, like the book's Spells. */
+export type SpellUpgrades = Partial<Record<'5' | '10' | '15', string>>
+export const UPGRADE_RANKS = ['5', '10', '15'] as const
 
 export type LootRowType = LootRow['type']
 
@@ -55,7 +63,21 @@ export interface LootBox {
 }
 
 /** One Contents bullet: bold head + plain text. */
-export interface LootLine { head: string; text: string }
+export interface LootLine {
+  head: string
+  text: string
+  /** detail lines shown under the bullet (custom Spell range, duration, upgrades) */
+  sub?: string[]
+}
+
+/** Range, Duration and each Rank upgrade of a custom Spell, as detail lines. */
+export function spellDetails(r: { range?: string; duration?: string; upgrades?: SpellUpgrades }): string[] {
+  const out: string[] = []
+  if (r.range?.trim()) out.push(`Range: ${r.range.trim()}`)
+  if (r.duration?.trim()) out.push(`Duration: ${r.duration.trim()}`)
+  for (const k of UPGRADE_RANKS) if (r.upgrades?.[k]?.trim()) out.push(`Rank ${k} upgrade: ${r.upgrades[k]!.trim()}`)
+  return out
+}
 
 const signed = (n: number) => (n >= 0 ? `+${n}` : `${n}`)
 const detail = (...parts: string[]) => {
@@ -100,7 +122,8 @@ export function formatLootRow(r: LootRow): LootLine | null {
       if (!r.name.trim()) return null
       if (r.kind === 'spell') {
         const mana = r.mana.trim()
-        return { head: `Custom Spell: ${r.name.trim()}`, text: (mana ? ` (Mana ${mana})` : '') + detail(r.effect) }
+        const sub = spellDetails(r)
+        return { head: `Custom Spell: ${r.name.trim()}`, text: (mana ? ` (Mana ${mana})` : '') + detail(r.effect), ...(sub.length ? { sub } : {}) }
       }
       return { head: r.name.trim(), text: detail(r.effect) }
     }
@@ -120,7 +143,10 @@ export function itemsTitle(rows: LootRow[]): string {
   return lines.length > 1 ? `${first} + ${lines.length - 1} more` : first
 }
 
-const lineHtml = (l: LootLine) => `${l.head ? `<b>${esc(l.head)}</b>` : ''}${esc(l.text)}`
+const subHtml = (l: LootLine) => (l.sub?.length ? `<ul style="margin:0">${l.sub.map((s) => `<li>${esc(s)}</li>`).join('')}</ul>` : '')
+const lineHtml = (l: LootLine) => `${l.head ? `<b>${esc(l.head)}</b>` : ''}${esc(l.text)}${subHtml(l)}`
+const lineText = (l: LootLine, bullet: string, indent: string) =>
+  [`${bullet}${l.head}${l.text}`, ...(l.sub ?? []).map((s) => `${indent}◦ ${s}`)]
 
 export function lootBoxHtml(box: LootBox): string {
   const p = (inner: string, style = '') => `<p style="margin:0 0 4pt;${style}">${inner}</p>`
@@ -128,7 +154,7 @@ export function lootBoxHtml(box: LootBox): string {
     const lines = lootLines(box)
     const out = box.name.trim() ? [p(`<b>${esc(box.name.trim())}</b>`, 'font-size:14pt')] : []
     if (box.description.trim()) out.push(p(`<i>${esc(box.description.trim()).replace(/\n/g, '<br>')}</i>`))
-    if (lines.length === 1) out.push(p(lineHtml(lines[0])))
+    if (lines.length === 1) out.push(p(`${lines[0].head ? `<b>${esc(lines[0].head)}</b>` : ''}${esc(lines[0].text)}`) + subHtml(lines[0]))
     else if (lines.length) out.push(`<ul style="margin:0">${lines.map((l) => `<li>${lineHtml(l)}</li>`).join('')}</ul>`)
     if (box.claimUrl) out.push(p(`<b>Claim it:</b> <a href="${esc(box.claimUrl)}">add this to your Crawler Sheet</a>`, 'margin-top:6pt'))
     return out.join('')
@@ -149,9 +175,9 @@ export function lootBoxHtml(box: LootBox): string {
 
 export function lootBoxText(box: LootBox): string {
   if (box.itemsOnly) {
-    const lines = lootLines(box).map((l) => `${l.head}${l.text}`)
+    const lines = lootLines(box)
     const out = [box.name.trim(), box.description.trim()].filter(Boolean)
-    out.push(...(lines.length === 1 ? lines : lines.map((l) => `• ${l}`)))
+    out.push(...lines.flatMap((l) => (lines.length === 1 ? lineText(l, '', '  ') : lineText(l, '• ', '    '))))
     if (box.claimUrl) out.push(`Claim it in Crawler Sheets: ${box.claimUrl}`)
     return out.join('\n')
   }
@@ -160,7 +186,7 @@ export function lootBoxText(box: LootBox): string {
   if (box.description.trim()) out.push(box.description.trim())
   if (box.reward.trim()) out.push(`Reward: ${box.reward.trim()}`)
   const lines = lootLines(box)
-  if (lines.length) out.push('Contents:', ...lines.map((l) => `• ${l.head}${l.text}`))
+  if (lines.length) out.push('Contents:', ...lines.flatMap((l) => lineText(l, '• ', '    ')))
   if (box.claimUrl) out.push(`Claim it in Crawler Sheets: ${box.claimUrl}`)
   return out.join('\n')
 }

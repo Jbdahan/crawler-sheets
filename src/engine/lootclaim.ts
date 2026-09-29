@@ -5,7 +5,7 @@ import LZString from 'lz-string'
 import { STAT_KEYS, STAT_NAMES, findSkill, normName, type StatKey } from '../data'
 import { addSkillRanks, log, newSkill, uid } from './advancement'
 import { derive } from './derived'
-import { describeLootMod, formatLootRow, type LootMod, type LootRow } from './lootbox'
+import { describeLootMod, formatLootRow, spellDetails, type LootMod, type LootRow } from './lootbox'
 import { GEAR_SLOTS, type Character, type GearSlot, type Modifier } from './types'
 
 /** What travels in a claim link (no picture: it would make the link too long). */
@@ -243,9 +243,10 @@ export function planClaim(c: Character, claim: LootClaim): LootChange[] {
           const mana = Number(r.mana)
           changes.push({
             ...base,
-            detail: `Learn custom Spell ${name} at Rank 1${r.mana.trim() ? ` (${r.mana.trim()} Mana)` : ''}`,
+            detail: `Learn custom Spell ${name} at Rank 1${r.mana.trim() ? ` (${r.mana.trim()} Mana)` : ''}${spellDetails(r).length ? '; range, duration and upgrades are saved in its notes' : ''}`,
             apply: (x) => {
-              const s = { ...newSkill(undefined, name, 1, source), kind: 'spell' as const, notes: r.effect.trim() }
+              const notes = [r.effect.trim(), ...spellDetails(r)].filter(Boolean).join(' · ')
+              const s = { ...newSkill(undefined, name, 1, source), kind: 'spell' as const, notes }
               return { ...x, skills: [...x.skills, Number.isFinite(mana) && r.mana.trim() ? { ...s, customMana: mana } : s] }
             },
             summary: () => `Learned custom Spell ${name}`,

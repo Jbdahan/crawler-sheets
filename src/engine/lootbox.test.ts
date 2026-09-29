@@ -55,4 +55,15 @@ describe('loot box formatting', () => {
     expect(lootBoxText(described)).toBe("Goblin's Stash\nSmells faintly of socks.\n• Custom Spell: Glitter Bomb (Mana 8): Blinds everyone\n• 5 Gold")
     expect(lootBoxHtml(described)).toContain('<i>Smells faintly of socks.</i>')
   })
+
+  it('lists a custom Spell range, duration and upgrades under its bullet', () => {
+    const spell = { type: 'custom' as const, kind: 'spell' as const, name: 'Glitter Bomb', mana: '8', effect: 'Blinds everyone',
+      range: '30 ft', duration: '1 minute', upgrades: { '5': 'Range doubles', '15': 'Also Deafened' } }
+    expect(formatLootRow(spell)?.sub).toEqual(['Range: 30 ft', 'Duration: 1 minute', 'Rank 5 upgrade: Range doubles', 'Rank 15 upgrade: Also Deafened'])
+    const box: LootBox = { name: 'Toe Stubber', description: '', reward: '', rows: [spell] }
+    expect(lootBoxText(box)).toContain('• Custom Spell: Glitter Bomb (Mana 8): Blinds everyone\n    ◦ Range: 30 ft\n    ◦ Duration: 1 minute')
+    expect(lootBoxHtml(box)).toContain('<li>Rank 5 upgrade: Range doubles</li>')
+    expect(lootBoxText({ ...box, itemsOnly: true, name: '' })).toBe('Custom Spell: Glitter Bomb (Mana 8): Blinds everyone\n  ◦ Range: 30 ft\n  ◦ Duration: 1 minute\n  ◦ Rank 5 upgrade: Range doubles\n  ◦ Rank 15 upgrade: Also Deafened')
+    expect(formatLootRow({ ...spell, range: '', duration: undefined, upgrades: undefined })?.sub).toBeUndefined()
+  })
 })

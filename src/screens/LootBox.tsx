@@ -5,7 +5,7 @@ import { uid } from '../engine/advancement'
 import { claimUrl } from '../engine/lootclaim'
 import { GEAR_SLOTS } from '../engine/types'
 import {
-  LOOT_CATEGORIES, LOOT_TIERS, itemsTitle, MOD_TARGETS, TYPED_TARGETS, lootBoxHtml, lootBoxText,
+  LOOT_CATEGORIES, LOOT_TIERS, UPGRADE_RANKS, itemsTitle, MOD_TARGETS, TYPED_TARGETS, lootBoxHtml, lootBoxText,
   type LootBox as Box, type LootMod, type LootRow, type LootRowType,
 } from '../engine/lootbox'
 import { Icon, Seg, toast } from '../components/ui'
@@ -389,11 +389,13 @@ function RowFields({ row: r, onChange }: { row: LootRow; onChange: (r: LootRow) 
           </select>
           <div className="row">
             <select className="grow" value={r.spell} aria-label="Spell" onChange={(e) => {
+              if (e.target.value === CUSTOM) { onChange({ ...newRow('custom'), kind: 'spell' } as LootRow); return }
               const s = SPELL_LIST.find((x) => x.name === e.target.value)
               onChange({ ...r, spell: e.target.value, mana: s?.manaText ?? (s?.mana != null ? String(s.mana) : '') })
             }}>
               <option value="">Choose a spell…</option>
               {SPELL_LIST.map((s) => <option key={s.id} value={s.name}>{s.name}{s.manaText && s.manaText !== 'None' ? ` (${s.manaText} Mana)` : ''}</option>)}
+              <option value={CUSTOM}>Custom spell…</option>
             </select>
             <input aria-label="Mana cost" placeholder="Mana" style={{ width: 80, flex: '0 0 80px' }} value={r.mana} onChange={(e) => onChange({ ...r, mana: e.target.value })} />
           </div>
@@ -483,17 +485,33 @@ function RowFields({ row: r, onChange }: { row: LootRow; onChange: (r: LootRow) 
         <>
           <select value={r.kind} onChange={(e) => onChange({ ...r, kind: e.target.value as typeof r.kind })} aria-label="Custom kind">
             <option value="object">Object with a special condition</option>
-            <option value="spell">Spell (with a Mana cost)</option>
+            <option value="spell">Spell</option>
             <option value="other">Something else</option>
           </select>
-          <div className="row">
-            <input className="grow" value={r.name} onChange={(e) => onChange({ ...r, name: e.target.value })} placeholder="Name" aria-label="Name" />
-            {r.kind === 'spell' && <input aria-label="Mana cost" placeholder="Mana" style={{ width: 80, flex: '0 0 80px' }} value={r.mana} onChange={(e) => onChange({ ...r, mana: e.target.value })} />}
-          </div>
+          <input value={r.name} onChange={(e) => onChange({ ...r, name: e.target.value })} placeholder={r.kind === 'spell' ? 'Spell name, e.g. Glitter Bomb' : 'Name'} aria-label="Name" />
+          {r.kind === 'spell' && (
+            <div className="grid3">
+              <Field label="Mana cost"><input aria-label="Mana cost" placeholder="e.g. 8" value={r.mana} onChange={(e) => onChange({ ...r, mana: e.target.value })} /></Field>
+              <Field label="Range"><input aria-label="Range" placeholder="e.g. 30 ft" value={r.range ?? ''} onChange={(e) => onChange({ ...r, range: e.target.value })} /></Field>
+              <Field label="Duration"><input aria-label="Duration" placeholder="e.g. 1 minute" value={r.duration ?? ''} onChange={(e) => onChange({ ...r, duration: e.target.value })} /></Field>
+            </div>
+          )}
           <Field label={r.kind === 'spell' ? 'What the spell does' : r.kind === 'object' ? 'Special condition' : 'Details'}>
             <textarea value={r.effect} onChange={(e) => onChange({ ...r, effect: e.target.value })}
               placeholder={r.kind === 'spell' ? 'e.g. Blinds everyone within 10 ft' : 'e.g. Glows when a mimic is nearby'} />
           </Field>
+          {r.kind === 'spell' && (
+            <div className="stack">
+              <div className="label">Upgrades (optional)</div>
+              {UPGRADE_RANKS.map((k) => (
+                <Field key={k} label={`Rank ${k}`}>
+                  <input aria-label={`Rank ${k} upgrade`} value={r.upgrades?.[k] ?? ''}
+                    placeholder={k === '5' ? 'e.g. Range doubles' : k === '10' ? 'e.g. +1d6 damage' : 'e.g. Targets are also Blinded'}
+                    onChange={(e) => onChange({ ...r, upgrades: { ...r.upgrades, [k]: e.target.value } })} />
+                </Field>
+              ))}
+            </div>
+          )}
         </>
       )
   }

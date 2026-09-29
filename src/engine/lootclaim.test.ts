@@ -90,4 +90,14 @@ describe('loot claims', () => {
     const next = applyClaim(c, item, changes, acceptAll(changes.map((x) => x.key)))
     expect(next.log[0].text).toBe('From GM: Custom Spell: Glitter Bomb: claimed 1 of 1 item')
   })
+
+  it('saves a custom Spell range, duration and upgrades in its notes', () => {
+    const c = blankCharacter()
+    const spell: LootClaim = { ...claim, rows: [{ type: 'custom', kind: 'spell', name: 'Glitter Bomb', mana: '8', effect: 'Blinds everyone',
+      range: '30 ft', duration: '1 minute', upgrades: { '10': '+1d6 damage' } }] }
+    const [ch] = planClaim(c, spell)
+    const s = ch.apply(c).skills.find((x) => x.name === 'Glitter Bomb')!
+    expect(s.notes).toBe('Blinds everyone · Range: 30 ft · Duration: 1 minute · Rank 10 upgrade: +1d6 damage')
+    expect(s.customMana).toBe(8)
+  })
 })
