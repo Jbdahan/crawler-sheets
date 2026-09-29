@@ -6,15 +6,17 @@ import { openRoll } from '../components/Roller'
 import { Seg, signed } from '../components/ui'
 import { SkillDetail, SkillPicker } from '../sheets/SkillSheets'
 import { AdvancementSheet, GrindSheet } from '../sheets/Progress'
-import type { AdvanceWindow } from '../engine/advancement'
+import { moveSkill, type AdvanceWindow } from '../engine/advancement'
 import type { Ctx } from './ctx'
 
-const GROUPS: { kind: CharSkill['kind']; label: string }[] = [
+type Group = { kind: CharSkill['kind']; label: string }
+// Spells sit right after Attacks; Utility (usually the longest list) gets its own column on iPad
+const LEFT: Group[] = [
   { kind: 'attack', label: 'Attack Skills' },
-  { kind: 'damageEffect', label: 'Damage Effects' },
-  { kind: 'utility', label: 'Utility Skills' },
   { kind: 'spell', label: 'Spells' },
+  { kind: 'damageEffect', label: 'Damage Effects' },
 ]
+const RIGHT: Group[] = [{ kind: 'utility', label: 'Utility Skills' }]
 
 export function Skills(ctx: Ctx) {
   const { c, d, up } = ctx
@@ -23,9 +25,11 @@ export function Skills(ctx: Ctx) {
   const [adv, setAdv] = useState<AdvanceWindow | null>(null)
   const [grind, setGrind] = useState(false)
   const [sort, setSort] = useState<'group' | 'name' | 'rank'>('group')
+  const [reorder, setReorder] = useState(false)
+  const move = (uid: string, dir: -1 | 1 | 'top' | 'bottom') => up((x) => ({ ...x, skills: moveSkill(x.skills, uid, dir) }))
   const marked = c.skills.filter((s) => s.marked).length
 
-  const row = (s: CharSkill) => {
+  const row = (s: CharSkill, i = 0, list: CharSkill[] = []) => {
     const def = findSkill(s.skillId)
     const stat = skillStat(s)
     const passive = def?.passive || (!stat && !def)
@@ -43,7 +47,13 @@ export function Skills(ctx: Ctx) {
             {s.grindHours ? ` · ${s.grindHours}h ground` : ''}
           </div>
         </button>
-        {!passive ? (
+        {reorder && sort === 'group' ? (
+          <span className="row" style={{ gap: 4 }}>
+            <button className="btn small icon" style={{ width: 36 }} disabled={i === 0} onClick={() => move(s.uid, 'top')} aria-label={`Move ${s.name} to top`}>⤒</button>
+            <button className="btn small icon" style={{ width: 36 }} disabled={i === 0} onClick={() => move(s.uid, -1)} aria-label={`Move ${s.name} up`}>↑</button>
+            <button className="btn small icon" style={{ width: 36 }} disabled={i === list.length - 1} onClick={() => move(s.uid, 1)} aria-label={`Move ${s.name} down`}>↓</button>
+          </span>
+        ) : !passive ? (
           <button className="btn small" style={{ minWidth: 58 }} onClick={() => openRoll({ kind: 'skill', charId: c.id, skillUid: s.uid, attack: s.kind === 'attack' || (s.kind === 'spell' && !!def?.attack) })}>
             {signed(total)} 🎲
           </button>
@@ -70,24 +80,34 @@ export function Skills(ctx: Ctx) {
           </div>
         </div>
         <div style={{ marginTop: 8 }}>
-          <Seg value={sort} onChange={setSort} options={[{ value: 'group', label: 'By type' }, { value: 'name', label: 'A–Z' }, { value: 'rank', label: 'Rank' }]} />
+          <div className="row wrap between">
+            <Seg value={sort} onChange={(v) => { setSort(v); if (v !== 'group') setReorder(false) }} options={[{ value: 'group', label: 'By type' }, { value: 'name', label: 'A–Z' }, { value: 'rank', label: 'Rank' }]} />
+            {sort === 'group' && (
+              <button className={`btn small${reorder ? ' primary' : ''}`} onClick={() => setReorder(!reorder)}>{reorder ? 'Done reordering' : '↕ Reorder'}</button>
+            )}
+          </div>
+          {reorder && <div className="small muted" style={{ marginTop: 6 }}>Use ⤒ ↑ ↓ to set your own order within each type. The Attacks tab follows the same order.</div>}
         </div>
       </div>
       {sort === 'group' ? (
         <div className="cols2" style={{ marginTop: 12 }}>
-          {GROUPS.map((g) => {
-            const list = c.skills.filter((s) => s.kind === g.kind)
-            if (!list.length) return null
-            return (
-              <section className="card" key={g.kind}>
-                <h3>{g.label}</h3>
-                <div className="list">{list.map(row)}</div>
-              </section>
-            )
-          })}
+          {[LEFT, RIGHT].map((col, ci) => (
+            <div key={ci}>
+              {col.map((g) => {
+                const list = c.skills.filter((s) => s.kind === g.kind)
+                if (!list.length) return null
+                return (
+                  <section className="card" key={g.kind} style={{ marginTop: 0, marginBottom: 12 }}>
+                    <h3>{g.label} <span className="small muted">({list.length})</span></h3>
+                    <div className="list">{list.map((s, i) => row(s, i, list))}</div>
+                  </section>
+                )
+              })}
+            </div>
+          ))}
         </div>
       ) : (
-        <section className="card" style={{ marginTop: 12 }}><div className="list">{sorted(c.skills).map(row)}</div></section>
+        <section className="card" style={{ marginTop: 12 }}><div className="list">{sorted(c.skills).map((s) => row(s))}</div></section>
       )}
       <p className="small faint" style={{ marginTop: 10 }}>
         ✔ marks a Skill for its next Advancement Check. It's marked automatically when you roll it. Rank ≤4 checks happen every 2 hours of play; Rank 5+ at the end of each floor (Core p.169).

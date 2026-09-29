@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { CLASSES, RACES, findSkill } from '../data'
-import { addSkillRanks, applyRaceClass, crawlerKillLevels, levelUp, newSkill, addGrind, resolveAdvancement, eligibleForAdvancement } from './advancement'
+import { moveSkill, addSkillRanks, applyRaceClass, crawlerKillLevels, levelUp, newSkill, addGrind, resolveAdvancement, eligibleForAdvancement } from './advancement'
 import { attackCalc, difficulty } from './attacks'
 import { blankCharacter } from './character'
 import { degreeOf, formatDice, netMode, parseDice, rankDamageDice } from './dice'
@@ -206,5 +206,19 @@ describe('Advancement', () => {
     expect(r.levels).toBe(1)
     expect(r.c.level).toBe(7)
     expect(r.ready).toEqual([club.uid])
+  })
+})
+
+describe('Skill order', () => {
+  it('reorders within a type and leaves other types in place', () => {
+    let c = crawler()
+    for (const n of ['Club', 'Perception', 'Axe', 'Stealth']) c = addSkillRanks(c, n, 1, 'test')
+    const names = (skills: typeof c.skills) => skills.map((s) => s.name)
+    expect(names(c.skills)).toEqual(['Heal', 'Club', 'Perception', 'Axe', 'Stealth'])
+    const axe = c.skills.find((s) => s.name === 'Axe')!.uid
+    expect(names(moveSkill(c.skills, axe, -1))).toEqual(['Heal', 'Axe', 'Perception', 'Club', 'Stealth'])
+    const stealth = c.skills.find((s) => s.name === 'Stealth')!.uid
+    expect(names(moveSkill(c.skills, stealth, 'top'))).toEqual(['Heal', 'Club', 'Stealth', 'Axe', 'Perception'])
+    expect(moveSkill(c.skills, axe, 1)).toBe(c.skills)
   })
 })

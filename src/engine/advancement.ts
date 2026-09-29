@@ -195,3 +195,19 @@ export function applyRaceClass(c: Character, def: RaceClassDef, choice: RaceClas
 export function changeFloor(c: Character, floor: number): Character {
   return log({ ...c, floor: Math.max(1, floor) }, `Floor ${c.floor} → ${floor}`)
 }
+
+/** Move a skill up or down among the skills of the same type; other types keep their places. */
+export function moveSkill(skills: CharSkill[], uid: string, dir: -1 | 1 | 'top' | 'bottom'): CharSkill[] {
+  const s = skills.find((k) => k.uid === uid)
+  if (!s) return skills
+  const same = skills.filter((k) => k.kind === s.kind)
+  const i = same.indexOf(s)
+  const j = dir === 'top' ? 0 : dir === 'bottom' ? same.length - 1 : i + dir
+  if (j < 0 || j >= same.length || j === i) return skills
+  const reordered = [...same]
+  reordered.splice(i, 1)
+  reordered.splice(j, 0, s)
+  // put the reordered group back into the slots that type already occupies
+  let n = 0
+  return skills.map((k) => (k.kind === s.kind ? reordered[n++] : k))
+}
