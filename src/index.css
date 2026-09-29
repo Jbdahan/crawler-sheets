@@ -306,25 +306,31 @@ kbd { font: inherit; font-size: 0.8em; padding: 0 5px; border: 1px solid var(--b
 .spelltext b { color: var(--muted); font-weight: 700; }
 .linkbtn { background: none; border: 0; padding: 4px 0 0; color: var(--accent); font-weight: 700; font-size: 0.82rem; }
 
-/* compact Hotlist strip on the HUD: one scrolling row of one-line tiles; tap a tile to use it */
+/* compact Hotlist on the HUD: 2 rows of 5 even rectangles; tap a tile to use it */
 .hotstrip-card { padding-bottom: 10px; }
 .hotstrip-card .card-head { margin-bottom: 6px; }
-.hotstrip { display: flex; align-items: center; gap: 6px; overflow-x: auto; scroll-snap-type: x proximity; padding-bottom: 2px; scrollbar-width: none; }
-.hotstrip::-webkit-scrollbar { display: none; }
-.hs-tile {
-  flex: 0 0 auto; max-width: 220px; scroll-snap-align: start;
-  display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;
-  height: 36px; padding: 0 12px; border-radius: 99px;
-  background: var(--surface-2); border: 1px solid var(--border);
+.hotgrid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 5px; align-items: start; }
+.hg-tile {
+  height: 56px; min-width: 0; padding: 4px 5px; margin: 0; align-self: start; vertical-align: top;
+  display: flex; flex-direction: column; justify-content: space-between; text-align: left;
+  border-radius: var(--radius-sm); background: var(--surface-2); border: 1px solid var(--border);
 }
-.hs-tile.spell { border-color: color-mix(in srgb, var(--mana) 45%, var(--border)); }
-.hs-tile.item { border-color: color-mix(in srgb, var(--good) 40%, var(--border)); }
-.hs-tile.attack { border-color: color-mix(in srgb, var(--accent) 50%, var(--border)); }
-.hs-tile:active { transform: translateY(1px); }
-.hs-tile:disabled { opacity: 0.45; }
-.hs-name { font-weight: 800; font-size: 0.84rem; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
-.hs-meta { font-size: 0.76rem; color: var(--muted); flex-shrink: 0; }
-.hs-tile.attack .hs-meta { color: var(--accent); font-weight: 700; }
-@media (min-width: 760px) { .hotstrip { flex-wrap: wrap; overflow: visible; } }
+.hg-tile.hg-spell { border-color: color-mix(in srgb, var(--mana) 50%, var(--border)); }
+.hg-tile.hg-item { border-color: color-mix(in srgb, var(--good) 45%, var(--border)); }
+.hg-tile.hg-attack { border-color: color-mix(in srgb, var(--accent) 55%, var(--border)); }
+.hg-tile.empty { border-style: dashed; background: transparent; align-items: center; justify-content: center; }
+.hg-tile:active { transform: translateY(1px); }
+.hg-tile:disabled { opacity: 0.45; }
+.hg-name { font-weight: 800; font-size: 0.7rem; line-height: 1.15; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow-wrap: break-word; -webkit-hyphens: auto; hyphens: auto; }
+.hg-tile.hg-attack .hg-name { -webkit-line-clamp: 1; display: block; white-space: nowrap; text-overflow: ellipsis; }
+.hg-meta b { font-weight: 800; }
+.hg-meta { font-size: 0.64rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hg-tile.hg-attack .hg-meta { color: var(--accent); font-weight: 700; }
+.hg-tile.empty .hg-meta { color: var(--faint); }
+@media (min-width: 760px) {
+  .hg-tile { height: 60px; padding: 6px 8px; }
+  .hg-name { font-size: 0.82rem; }
+  .hg-meta { font-size: 0.74rem; }
+}
 /* let grid children shrink so the scrolling strip can't widen the page */
 .hud > * { min-width: 0; }
