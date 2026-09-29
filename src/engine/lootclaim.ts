@@ -6,6 +6,7 @@ import { STAT_KEYS, STAT_NAMES, findSkill, normName, type StatKey } from '../dat
 import { addSkillRanks, log, newSkill, uid } from './advancement'
 import { derive } from './derived'
 import { describeLootMod, detailText, formatLootRow, spellDetails, type LootMod, type LootRow } from './lootbox'
+import { addToHotlist, hotlistSlotFor } from './inventory'
 import { GEAR_SLOTS, type Character, type GearSlot, type Modifier } from './types'
 
 /** What travels in a claim link (no picture: it would make the link too long). */
@@ -85,6 +86,21 @@ function addInventory(c: Character, name: string, qty: number, notes: string): C
   return { ...c, inventory: [...c.inventory, { uid: uid(), name, qty, notes }] }
 }
 
+/**
+ * A usable item (scroll, potion, custom object): Inventory, or straight onto the
+ * Hotlist when a slot is free or already holds the same item.
+ */
+function stash(c: Character, name: string, qty: number, notes: string, inventoryDetail: string): Pick<LootChange, 'detail' | 'choices' | 'apply' | 'summary'> {
+  const slot = hotlistSlotFor(c, name)
+  const label = `${qty > 1 ? `${qty}× ` : ''}${name}`
+  return {
+    detail: slot >= 0 ? `${inventoryDetail}, or put it on the Hotlist` : `${inventoryDetail} (the Hotlist is full)`,
+    choices: slot >= 0 ? [{ key: 'inventory', label: 'Inventory' }, { key: 'hotlist', label: 'Hotlist' }] : undefined,
+    apply: (x, choice) => (choice === 'hotlist' ? addToHotlist(x, name, qty, notes) ?? addInventory(x, name, qty, notes) : addInventory(x, name, qty, notes)),
+    summary: (choice) => `${label}${choice === 'hotlist' ? ' (to Hotlist)' : ''}`,
+  }
+}
+
 const findCharSkill = (c: Character, name: string) => {
   const def = findSkill(name)
   return c.skills.find((s) => (def && s.skillId === def.id) || normName(s.name) === normName(name))
@@ -161,12 +177,7 @@ export function planClaim(c: Character, claim: LootClaim): LootChange[] {
       case 'spell': {
         const mana = r.mana && r.mana !== 'None' ? `${r.mana} Mana` : ''
         if (r.prefix === 'Scroll') {
-          changes.push({
-            ...base,
-            detail: `Inventory: Scroll of ${r.spell}${mana ? ` (${mana})` : ''}`,
-            apply: (x) => addInventory(x, `Scroll of ${r.spell}`, 1, mana),
-            summary: () => `Scroll of ${r.spell}`,
-          })
+          changes.push({ ...base, ...stash(c, `Scroll of ${r.spell}`, 1, mana, `Inventory: Scroll of ${r.spell}${mana ? ` (${mana})` : ''}`) })
           return
         }
         const have = findCharSkill(c, r.spell)
@@ -221,12 +232,7 @@ export function planClaim(c: Character, claim: LootClaim): LootChange[] {
       }
       case 'consumable': {
         const have = c.inventory.find((i) => normName(i.name) === normName(r.item) && !i.notes)
-        changes.push({
-          ...base,
-          detail: have ? `Inventory: ${r.item} ${have.qty} → ${have.qty + r.qty}` : `Inventory: add ${r.qty}× ${r.item}`,
-          apply: (x) => addInventory(x, r.item.trim(), r.qty, ''),
-          summary: () => `${r.qty}× ${r.item}`,
-        })
+        changes.push({ ...base, ...stash(c, r.item.trim(), r.qty, '', have ? `Inventory: ${r.item} ${have.qty} → ${have.qty + r.qty}` : `Inventory: add ${r.qty}× ${r.item}`) })
         return
       }
       case 'gold':
@@ -252,12 +258,7 @@ export function planClaim(c: Character, claim: LootClaim): LootChange[] {
             summary: () => `Learned custom Spell ${name}`,
           })
         } else {
-          changes.push({
-            ...base,
-            detail: `Inventory: ${name}${r.effect.trim() ? `, with the note "${r.effect.trim()}"` : ''}`,
-            apply: (x) => addInventory(x, name, 1, r.effect.trim()),
-            summary: () => name,
-          })
+          changes.push({ ...base, ...stash(c, name, 1, r.effect.trim(), `Inventory: ${name}${r.effect.trim() ? `, with the note "${r.effect.trim()}"` : ''}`) })
         }
         return
       }

@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { uid } from '../engine/advancement'
+import { hotlistSlotFor, moveInventoryToHotlist } from '../engine/inventory'
 import { GEAR_SLOTS, type GearItem, type GearSlot, type InventoryItem } from '../engine/types'
-import { Sheet, Stepper } from '../components/ui'
+import { Icon, Sheet, Stepper, toast } from '../components/ui'
 import { ModEditor, describeMod } from '../sheets/ModEditor'
 import type { Ctx } from './ctx'
 
@@ -15,6 +16,15 @@ export function Gear(ctx: Ctx) {
     up((x) => ({ ...x, gear: x.gear.some((y) => y.uid === g.uid) ? x.gear.map((y) => (y.uid === g.uid ? g : y)) : [...x.gear, g] }))
   const unequip = (g: GearItem) =>
     up((x) => ({ ...x, gear: x.gear.filter((y) => y.uid !== g.uid), inventory: [...x.inventory, { uid: uid(), name: g.name, qty: 1, notes: [g.notes, ...g.mods.map(describeMod)].filter(Boolean).join(' · ') }] }))
+  /** move an Inventory item (all of it, or `qty`) onto the Hotlist */
+  const toHotlist = (it: InventoryItem, qty?: number) => {
+    const slot = hotlistSlotFor(c, it.name)
+    const next = moveInventoryToHotlist(c, it.uid, qty)
+    if (!next) { toast('The Hotlist is full. Clear a slot first'); return false }
+    up(() => next)
+    toast(`${qty ?? it.qty}× ${it.name} → Hotlist slot ${slot + 1}`)
+    return true
+  }
   const saveInv = (it: InventoryItem) =>
     up((x) => ({ ...x, inventory: x.inventory.some((y) => y.uid === it.uid) ? x.inventory.map((y) => (y.uid === it.uid ? it : y)) : [...x.inventory, it] }))
 
@@ -67,6 +77,7 @@ export function Gear(ctx: Ctx) {
                   {it.notes && <div className="meta">{it.notes}</div>}
                 </button>
                 <Stepper value={it.qty} min={0} max={99999} onChange={(v) => saveInv({ ...it, qty: v })} />
+                <button className="btn small icon ghost" title="Move to Hotlist" aria-label={`Move ${it.name} to Hotlist`} disabled={it.qty <= 0} onClick={() => toHotlist(it)}><Icon name="bolt" size={18} /></button>
               </div>
             ))}
           </div>
@@ -87,6 +98,8 @@ export function Gear(ctx: Ctx) {
       {inv && (
         <Sheet title={inv.name || 'Inventory item'} onClose={() => setInv(null)}>
           <InvEditor item={c.inventory.find((i) => i.uid === inv.uid) ?? inv}
+            hotlistSlot={c.inventory.some((i) => i.uid === inv.uid) ? hotlistSlotFor(c, inv.name) : undefined}
+            onHotlist={(qty) => { const cur = c.inventory.find((i) => i.uid === inv.uid); if (cur && toHotlist(cur, qty)) setInv(null) }}
             onSave={(it) => { saveInv(it); setInv(null) }}
             onDelete={() => { up((x) => ({ ...x, inventory: x.inventory.filter((y) => y.uid !== inv.uid) })); setInv(null) }}
             onEquip={(slot) => {
@@ -120,7 +133,15 @@ function GearEditor({ item, onSave, onUnequip, onDelete }: { item: GearItem; onS
   )
 }
 
-function InvEditor({ item, onSave, onDelete, onEquip }: { item: InventoryItem; onSave: (i: InventoryItem) => void; onDelete: () => void; onEquip: (s: GearSlot) => void }) {
+function InvEditor({ item, onSave, onDelete, onEquip, hotlistSlot, onHotlist }: {
+  item: InventoryItem
+  onSave: (i: InventoryItem) => void
+  onDelete: () => void
+  onEquip: (s: GearSlot) => void
+  /** where "Move to Hotlist" would put it (-1: Hotlist full; undefined: item not saved yet) */
+  hotlistSlot?: number
+  onHotlist: (qty?: number) => void
+}) {
   const [it, setIt] = useState(item)
   const [slot, setSlot] = useState<GearSlot>('accessory')
   return (
@@ -135,6 +156,21 @@ function InvEditor({ item, onSave, onDelete, onEquip }: { item: InventoryItem; o
         </select>
         <button className="btn" onClick={() => onEquip(slot)}>Equip</button>
       </div>
+      {hotlistSlot !== undefined && (
+        <div className="stack">
+          <div className="label">Hotlist (use in combat)</div>
+          {hotlistSlot < 0 ? (
+            <p className="small muted" style={{ margin: 0 }}>The Hotlist is full. Clear a slot on the Hotlist tab first.</p>
+          ) : (
+            <div className={item.qty > 1 ? 'grid2' : ''}>
+              {item.qty > 1 && <button className="btn" onClick={() => onHotlist(1)}>Move 1 to Hotlist</button>}
+              <button className="btn good" style={{ width: '100%' }} disabled={item.qty <= 0} onClick={() => onHotlist()}>
+                {item.qty > 1 ? `Move all ${item.qty}` : 'Move to Hotlist'} (slot {hotlistSlot + 1})
+              </button>
+            </div>
+          )}
+        </div>
+      )}
       <button className="btn danger" onClick={onDelete}>Delete</button>
     </div>
   )
