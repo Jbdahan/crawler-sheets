@@ -63,10 +63,11 @@ interface Draft {
   includeLink: boolean
   /** a full achievement + loot box, or just item(s) */
   mode: 'achievement' | 'items'
-  /** optional heading for item mode */
+  /** optional heading and description for item mode */
   itemTitle: string
+  itemDescription: string
 }
-const empty = (): Draft => ({ name: '', description: '', tier: 'Bronze', category: 'Adventurer', customReward: '', rows: [], claimId: uid(), includeLink: true, mode: 'achievement', itemTitle: '' })
+const empty = (): Draft => ({ name: '', description: '', tier: 'Bronze', category: 'Adventurer', customReward: '', rows: [], claimId: uid(), includeLink: true, mode: 'achievement', itemTitle: '', itemDescription: '' })
 const KEY = 'lootbox.draft'
 
 function loadDraft(): Draft {
@@ -150,13 +151,13 @@ export function LootBox() {
   const box: Box = useMemo(() => ({
     itemsOnly: d.mode === 'items',
     name: d.mode === 'items' ? d.itemTitle : d.name,
-    description: d.description,
+    description: d.mode === 'items' ? d.itemDescription : d.description,
     reward: d.category === '__custom' ? d.customReward : [d.tier, d.category, 'Box'].filter(Boolean).join(' '),
     image: d.image?.src && d.mode !== 'items' ? d.image : undefined,
     rows: d.rows,
   }), [d])
   const link = useMemo(() => claimUrl(d.mode === 'items'
-    ? { v: 1, id: d.claimId, items: true, name: d.itemTitle.trim() || itemsTitle(d.rows), description: '', reward: '', rows: d.rows }
+    ? { v: 1, id: d.claimId, items: true, name: d.itemTitle.trim() || itemsTitle(d.rows), description: d.itemDescription.trim(), reward: '', rows: d.rows }
     : { v: 1, id: d.claimId, name: d.name.trim(), description: d.description.trim(), reward: box.reward.trim(), rows: d.rows }), [d, box.reward])
   const ready = itemsMode ? !!itemsTitle(d.rows) : !!d.name.trim()
   const html = useMemo(() => lootBoxHtml({ ...box, claimUrl: d.includeLink ? link : undefined }), [box, link, d.includeLink])
@@ -262,6 +263,11 @@ export function LootBox() {
         {itemsMode && (
           <label><span className="label">Title (optional)</span>
             <input value={d.itemTitle} onChange={(e) => set({ itemTitle: e.target.value })} placeholder="e.g. Found in the Goblin's Stash" />
+          </label>
+        )}
+        {itemsMode && (
+          <label><span className="label">Description (optional)</span>
+            <textarea value={d.itemDescription} onChange={(e) => set({ itemDescription: e.target.value })} placeholder="e.g. It smells faintly of socks. The System AI is not impressed." />
           </label>
         )}
         {d.rows.length === 0 && <div className="empty">Nothing yet. Tap <b>+ Add item</b> below.</div>}

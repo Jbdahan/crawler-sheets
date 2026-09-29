@@ -51,5 +51,8 @@ describe('loot box formatting', () => {
     const titled = { ...two, name: "Goblin's Stash" }
     expect(lootBoxText(titled)).toBe("Goblin's Stash\n• Custom Spell: Glitter Bomb (Mana 8): Blinds everyone\n• 5 Gold")
     expect(lootBoxHtml(titled)).toContain("<b>Goblin's Stash</b>")
+    const described = { ...titled, description: 'Smells faintly of socks.' }
+    expect(lootBoxText(described)).toBe("Goblin's Stash\nSmells faintly of socks.\n• Custom Spell: Glitter Bomb (Mana 8): Blinds everyone\n• 5 Gold")
+    expect(lootBoxHtml(described)).toContain('<i>Smells faintly of socks.</i>')
   })
 })
