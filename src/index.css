@@ -334,3 +334,18 @@ kbd { font: inherit; font-size: 0.8em; padding: 0 5px; border: 1px solid var(--b
 }
 /* let grid children shrink so the scrolling strip can't widen the page */
 .hud > * { min-width: 0; }
+
+/* thin Mana strip right under the Health Bar: label, bar and buttons on one line */
+.mana-card { padding: 8px 10px; }
+.mana-row { display: flex; align-items: center; gap: 5px; }
+.mana-label { font-weight: 800; font-size: 0.9rem; margin-right: 2px; }
+.mana-bar { position: relative; flex: 1; min-width: 56px; height: 26px; border-radius: 6px; background: var(--surface-3); overflow: hidden; }
+.mana-bar > div { height: 100%; background: var(--mana); transition: width 0.2s; }
+.mana-bar > span { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 0.78rem; font-weight: 800; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.6); }
+.mana-btn { flex: 0 0 auto; width: 32px; height: 28px; padding: 0; border-radius: 6px; border: 1px solid var(--border); background: var(--surface-2); font-weight: 700; font-size: 0.8rem; }
+.mana-btn.minus { background: color-mix(in srgb, var(--mana) 20%, var(--surface-2)); border-color: color-mix(in srgb, var(--mana) 50%, var(--border)); }
+.mana-btn.wide { width: 40px; }
+.mana-btn:active { transform: translateY(1px); }
+@media (min-width: 760px) { .mana-btn { width: 44px; height: 30px; } .mana-btn.wide { width: 52px; } }
+/* the HUD grid already spaces cards; drop the stacked-card margin so gaps stay even */
+.hud > .card + .card { margin-top: 0; }

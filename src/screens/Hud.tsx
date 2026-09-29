@@ -80,20 +80,20 @@ export function Hud(ctx: Ctx) {
         </div>
       </section>
 
-      <HotlistStrip {...ctx} />
-
-      <section className="card">
-        <div className="card-head">
-          <h2>Mana</h2>
-          <span className="num" style={{ fontWeight: 800, color: 'var(--mana)' }}>{c.mana} / {maxMana}</span>
-        </div>
-        <div className="meter"><div style={{ width: `${maxMana ? Math.min(100, (c.mana / maxMana) * 100) : 0}%` }} /></div>
-        <div className="row wrap" style={{ marginTop: 10 }}>
-          {[-5, -1].map((n) => <button key={n} className="btn mana" onClick={() => up((x) => setMana(x, x.mana + n, d))}>{n}</button>)}
-          {[1, 5].map((n) => <button key={n} className="btn" onClick={() => up((x) => setMana(x, x.mana + n, d))}>+{n}</button>)}
-          <button className="btn grow" onClick={() => up((x) => setMana(x, maxMana, d))}>Full</button>
+      <section className="card span2 mana-card">
+        <div className="mana-row">
+          <span className="mana-label">Mana</span>
+          <div className="mana-bar" role="meter" aria-label="Mana" aria-valuemin={0} aria-valuemax={maxMana} aria-valuenow={c.mana}>
+            <div style={{ width: `${maxMana ? Math.min(100, (c.mana / maxMana) * 100) : 0}%` }} />
+            <span className="num">{c.mana} / {maxMana}</span>
+          </div>
+          {[-5, -1].map((n) => <button key={n} className="mana-btn minus" onClick={() => up((x) => setMana(x, x.mana + n, d))} aria-label={`Mana ${n}`}>{n}</button>)}
+          {[1, 5].map((n) => <button key={n} className="mana-btn" onClick={() => up((x) => setMana(x, x.mana + n, d))} aria-label={`Mana +${n}`}>+{n}</button>)}
+          <button className="mana-btn wide" onClick={() => up((x) => setMana(x, maxMana, d))}>Full</button>
         </div>
       </section>
+
+      <HotlistStrip {...ctx} />
 
       <section className="card">
         <div className="kpis">
