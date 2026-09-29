@@ -211,3 +211,22 @@ export function moveSkill(skills: CharSkill[], uid: string, dir: -1 | 1 | 'top' 
   let n = 0
   return skills.map((k) => (k.kind === s.kind ? reordered[n++] : k))
 }
+
+/** Remove one permanent bonus (e.g. a claimed loot Stat bonus); drops the source when it's empty. */
+export function removeTraitMod(c: Character, source: string, index: number): Character {
+  const traits = c.traits
+    .map((t) => (t.source === source ? { ...t, mods: t.mods.filter((_, i) => i !== index) } : t))
+    .filter((t) => t.mods.length > 0)
+  return { ...c, traits }
+}
+
+/** Remove everything a source added: its permanent bonuses and the Skills/Spells it granted. */
+export function removeSource(c: Character, source: string): Character {
+  const gone = new Set(c.skills.filter((s) => s.source === source).map((s) => s.uid))
+  return log({
+    ...c,
+    traits: c.traits.filter((t) => t.source !== source),
+    skills: c.skills.filter((s) => !gone.has(s.uid)),
+    hotlist: c.hotlist.map((h) => (h?.skillUid && gone.has(h.skillUid) ? null : h)),
+  }, `Removed ${source}`)
+}

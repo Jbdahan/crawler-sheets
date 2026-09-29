@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { DEITIES, STAT_KEYS, STAT_NAMES, SIZES, findClass, findDeity, findRace } from '../data'
-import type { AdvanceWindow } from '../engine/advancement'
+import { removeSource, removeTraitMod, type AdvanceWindow } from '../engine/advancement'
+import { describeMod } from '../sheets/ModEditor'
 import { Confirm, PageRef, Sheet, Stepper, toast } from '../components/ui'
 import { AdvancementSheet, FloorSheet, GrindSheet, LevelUpSheet, StatAllocSheet } from '../sheets/Progress'
 import { RaceClassWizard } from '../sheets/RaceClass'
@@ -11,7 +12,7 @@ import { useStore } from '../store/characters'
 import { go } from '../router'
 import type { Ctx } from './ctx'
 
-type Open = null | 'level' | 'floor' | 'stats' | 'grind' | 'raceclass' | 'identity' | 'share' | 'delete' | { adv: AdvanceWindow } | { claim: LootClaim }
+type Open = null | { removeSource: string } | 'level' | 'floor' | 'stats' | 'grind' | 'raceclass' | 'identity' | 'share' | 'delete' | { adv: AdvanceWindow } | { claim: LootClaim }
 
 export function More(ctx: Ctx & { sub?: string }) {
   const { c, up, sub } = ctx
@@ -128,6 +129,8 @@ export function More(ctx: Ctx & { sub?: string }) {
           </div>
         </section>
 
+        <LootAddOns {...ctx} onRemoveAll={(source) => setOpen({ removeSource: source })} />
+
         <section className="card">
           <div className="card-head"><h2>Share &amp; print</h2></div>
           <div className="grid2">
@@ -152,6 +155,10 @@ export function More(ctx: Ctx & { sub?: string }) {
         <button className="btn danger" style={{ width: '100%', marginTop: 12 }} onClick={() => setOpen('delete')}>Delete crawler</button>
       </div>
 
+      {open && typeof open === 'object' && 'removeSource' in open && (
+        <Confirm yes="Remove" text={`Remove everything that came from “${open.removeSource.replace(/^(Loot|From GM): /, '')}”: its bonuses and any Skills or Spells it added? Gear, items and gold are removed from the Gear tab.`}
+          onNo={() => setOpen(null)} onYes={() => { up((x) => removeSource(x, open.removeSource)); toast('Removed'); setOpen(null) }} />
+      )}
       {open === 'level' && <LevelUpSheet {...ctx} onClose={() => setOpen(null)} onAdvance={onAdvance} />}
       {open === 'floor' && <FloorSheet {...ctx} onClose={() => setOpen(null)} onAdvance={onAdvance} />}
       {open === 'stats' && <StatAllocSheet {...ctx} onClose={() => setOpen(null)} />}
@@ -235,5 +242,49 @@ function IdentitySheet({ c, up, onClose }: Ctx & { onClose: () => void }) {
         <button className="btn primary" onClick={onClose}>Done</button>
       </div>
     </Sheet>
+  )
+}
+
+/** Bonuses and Skills added by claimed loot (or other non-Race/Class sources), each removable. */
+function LootAddOns({ c, up, onRemoveAll }: Ctx & { onRemoveAll: (source: string) => void }) {
+  const isRaceClass = (src: string) => src.startsWith('Race:') || src.startsWith('Class:')
+  const sources = [...new Set([
+    ...c.traits.map((t) => t.source),
+    ...c.skills.map((s) => s.source ?? '').filter((src) => /^(Loot|From GM): /.test(src)),
+  ])].filter((src) => src && !isRaceClass(src))
+  if (!sources.length) return null
+  return (
+    <section className="card">
+      <div className="card-head"><h2>Loot add-ons</h2></div>
+      <p className="small muted" style={{ marginTop: 0 }}>Permanent bonuses and Skills added from loot. Tap ✕ to remove one, or remove everything from a box. Gear, items and gold are managed on the Gear tab.</p>
+      {sources.map((src) => {
+        const trait = c.traits.find((t) => t.source === src)
+        const skills = c.skills.filter((s) => s.source === src)
+        return (
+          <div key={src} className="infobox" style={{ marginTop: 8 }}>
+            <div className="row between">
+              <b className="grow">{src.replace(/^(Loot|From GM): /, '')}</b>
+              <button className="btn small danger" onClick={() => onRemoveAll(src)}>Remove all</button>
+            </div>
+            <div className="list">
+              {trait?.mods.map((m, i) => (
+                <div key={`m${i}`} className="li" style={{ padding: '6px 0' }}>
+                  <span className="grow">{describeMod(m)}</span>
+                  <button className="btn small ghost" aria-label={`Remove ${describeMod(m)}`}
+                    onClick={() => { up((x) => removeTraitMod(x, src, i)); toast(`Removed ${describeMod(m)}`) }}>✕</button>
+                </div>
+              ))}
+              {skills.map((s) => (
+                <div key={s.uid} className="li" style={{ padding: '6px 0' }}>
+                  <span className="grow">{s.kind === 'spell' ? 'Spell' : 'Skill'}: {s.name} (Rank {s.rank})</span>
+                  <button className="btn small ghost" aria-label={`Remove ${s.name}`}
+                    onClick={() => { up((x) => ({ ...x, skills: x.skills.filter((k) => k.uid !== s.uid), hotlist: x.hotlist.map((h) => (h?.skillUid === s.uid ? null : h)) })); toast(`Removed ${s.name}`) }}>✕</button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )
+      })}
+    </section>
   )
 }

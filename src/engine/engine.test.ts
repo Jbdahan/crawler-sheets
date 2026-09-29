@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { CLASSES, RACES, findSkill } from '../data'
-import { moveSkill, addSkillRanks, applyRaceClass, crawlerKillLevels, levelUp, newSkill, addGrind, resolveAdvancement, eligibleForAdvancement } from './advancement'
+import { moveSkill, removeSource, removeTraitMod, addSkillRanks, applyRaceClass, crawlerKillLevels, levelUp, newSkill, addGrind, resolveAdvancement, eligibleForAdvancement } from './advancement'
 import { attackCalc, difficulty } from './attacks'
 import { blankCharacter } from './character'
 import { degreeOf, formatDice, netMode, parseDice, rankDamageDice } from './dice'
@@ -220,5 +220,22 @@ describe('Skill order', () => {
     const stealth = c.skills.find((s) => s.name === 'Stealth')!.uid
     expect(names(moveSkill(c.skills, stealth, 'top'))).toEqual(['Heal', 'Club', 'Stealth', 'Axe', 'Perception'])
     expect(moveSkill(c.skills, axe, 1)).toBe(c.skills)
+  })
+})
+
+describe('Removing loot add-ons', () => {
+  it('removes one bonus, or everything from a source', () => {
+    let c = crawler({ base: { str: 3, int: 3, con: 3, dex: 3, cha: 3 } })
+    const src = 'Loot: Bronze Box'
+    c = { ...c, traits: [{ source: src, mods: [{ target: 'stat:str', value: 2 }, { target: 'dr', value: 1 }] }] }
+    c = addSkillRanks(c, 'Fireball', 1, src)
+    expect(derive(c).unenhanced.str).toBe(5)
+    const one = removeTraitMod(c, src, 0)
+    expect(derive(one).unenhanced.str).toBe(3)
+    expect(derive(one).dr.total).toBe(1)
+    expect(removeTraitMod(one, src, 0).traits).toEqual([])
+    const all = removeSource(c, src)
+    expect(all.traits).toEqual([])
+    expect(all.skills.some((s) => s.name === 'Fireball')).toBe(false)
   })
 })
