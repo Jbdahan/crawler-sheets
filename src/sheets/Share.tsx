@@ -8,8 +8,11 @@ import { Sheet, toast } from '../components/ui'
 /** Byte-mode QR codes top out near 2,950 characters at low error correction. */
 const QR_LIMIT = 2900
 
-export function fileName(c: Character) {
-  return `${(c.name || 'crawler').replace(/[^\w-]+/g, '_')}.dcc.json`
+/** e.g. "Keisha_L10_F4_20260929.dcc.json": name, Level, Floor, and the export date (YYYYMMDD) */
+export function fileName(c: Character, now = new Date()) {
+  const name = (c.name || 'crawler').replace(/[^\w-]+/g, '_').replace(/^_+|_+$/g, '') || 'crawler'
+  const date = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}`
+  return `${name}_L${c.level}_F${c.floor}_${date}.dcc.json`
 }
 
 export function shareUrl(c: Character) {
@@ -61,7 +64,7 @@ export function ShareSheet({ c, onClose }: { c: Character; onClose: () => void }
     <Sheet title="Share / back up" onClose={onClose}>
       <div className="stack">
         <button className="btn primary" onClick={async () => { await exportFile(c); markBackedUp(); toast('Exported') }}>Export file (AirDrop, Messages, Files)</button>
-        <p className="small muted">The file is a full backup, including the portrait and history. Import it from the roster screen on any device.</p>
+        <p className="small muted">Saves as <b>{fileName(c)}</b>: a full backup, including the portrait and history. Import it from the roster screen on any device.</p>
         <div className="divider" />
         <div className="label">Link</div>
         <p className="small muted">Opening this link in the app imports a copy of this crawler (without the portrait).</p>
