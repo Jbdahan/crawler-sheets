@@ -253,10 +253,7 @@ function HotlistStrip(ctx: Ctx) {
               <button key={h.uid} className={`hs-tile ${atk ? 'attack' : h.kind}`} disabled={out || noMana || (!!atk && d.flags.cantAct)}
                 onClick={() => triggerHotlist(ctx, h)} aria-label={`${verb} ${h.name}, slot ${i + 1}`}>
                 <span className="hs-name">{h.name}</span>
-                <span className="hs-meta">
-                  <span className="num">{meta}{atk && h.kind === 'spell' && cost !== undefined ? ` · ${cost}M` : ''}</span>
-                  <span className="hs-act">{atk ? '🎲' : verb}</span>
-                </span>
+                <span className="hs-meta num">{meta}{atk && h.kind === 'spell' && cost !== undefined ? ` · ${cost}M` : ''}</span>
               </button>
             )
           })}

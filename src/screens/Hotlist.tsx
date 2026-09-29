@@ -51,7 +51,7 @@ export function Hotlist(ctx: Ctx) {
                 </div>
               )}
               <button className={`btn small ${h.kind === 'spell' ? 'mana' : atk ? 'primary' : 'good'}`} disabled={h.kind === 'item' && h.consumable && h.qty <= 0} onClick={() => triggerHotlist(ctx, h)}>
-                {atk ? (h.kind === 'spell' ? 'Cast & attack 🎲' : 'Attack 🎲') : h.kind === 'spell' ? 'Cast' : h.consumable ? 'Use' : 'Use'}
+                {atk ? (h.kind === 'spell' ? 'Cast & attack' : 'Attack') : h.kind === 'spell' ? 'Cast' : 'Use'}
               </button>
             </div>
           )
