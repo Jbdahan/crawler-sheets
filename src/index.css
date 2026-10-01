@@ -361,3 +361,14 @@ kbd { font: inherit; font-size: 0.8em; padding: 0 5px; border: 1px solid var(--b
   padding: 6px 10px; font-weight: 800; font-size: 0.85rem; white-space: nowrap; box-shadow: 0 8px 22px rgba(0,0,0,0.5);
 }
 html.slot-drag-active, html.slot-drag-active body { overscroll-behavior: none; }
+
+/* Mana cost tag on HUD spell tiles: same spot for every spell (tile size unchanged) */
+.hg-cost {
+  display: inline-block; margin-left: 4px; padding: 0 3px; border-radius: 4px; vertical-align: 1px;
+  font-size: 0.6rem; font-weight: 800; line-height: 1.35;
+  background: color-mix(in srgb, var(--mana) 30%, var(--surface-3)); color: var(--mana);
+}
+/* spell tiles use two detail lines, so keep the name to one line like attack tiles */
+.hg-tile.hg-two .hg-name { -webkit-line-clamp: 1; display: block; white-space: nowrap; text-overflow: ellipsis; }
+@media (min-width: 760px) { .hg-cost { font-size: 0.7rem; } }
+.hg-meta > .hg-cost:first-child { margin-left: 0; }

@@ -253,15 +253,19 @@ function HotlistStrip(ctx: Ctx) {
           const noMana = h.kind === 'spell' && (d.flags.cantCast || c.mana < (cost ?? 0))
           const verb = atk ? 'Attack' : h.kind === 'spell' ? 'Cast' : 'Use'
           const [toHit, dmg] = atk ? attackLine(ctx, atk).split(' · ') : []
+          const costTag = h.kind === 'spell' && cost !== undefined
+            ? <span className="hg-cost inline" aria-label={`${cost} Mana`}>{cost}M</span>
+            : null
+          // spells (attack or not) show their Mana cost on the first detail line, beside to-hit or "Spell"
           const meta = atk
-            ? <><b>{toHit}</b><br />{dmg}</>
-            : h.kind === 'spell' ? (cost !== undefined ? `${cost} Mana` : 'Spell')
+            ? <><b>{toHit}</b>{costTag}<br />{dmg}</>
+            : h.kind === 'spell' ? <>{costTag ?? <>&nbsp;</>}<br />Spell</>
             : h.kind === 'weapon' ? 'Attack' : `×${h.qty}`
           // not `disabled`: a disabled button can't be picked up and dragged
           const blocked = out || noMana || (!!atk && d.flags.cantAct)
           const sp = slotProps(i, h.name)
           return (
-            <button key={h.uid} {...sp} className={`hg-tile hg-${atk ? 'attack' : h.kind}${blocked ? ' is-blocked' : ''}${sp.className}`} aria-disabled={blocked}
+            <button key={h.uid} {...sp} className={`hg-tile hg-${atk ? 'attack' : h.kind}${h.kind === 'spell' ? ' hg-two' : ''}${blocked ? ' is-blocked' : ''}${sp.className}`} aria-disabled={blocked}
               onClick={() => { if (!blocked) triggerHotlist(ctx, h) }} aria-label={`${verb} ${h.name}, slot ${i + 1}`} title={`${verb} ${h.name}`}>
               <span className="hg-name">{h.name}</span>
               <span className="hg-meta num">{meta}</span>
