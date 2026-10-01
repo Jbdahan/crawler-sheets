@@ -7,6 +7,7 @@ import { HOTLIST_SIZE, type ActiveEffect, type HotlistEntry } from '../engine/ty
 import { attackLine, hotlistAttack, hotlistSkill, triggerHotlist } from './hotlistUse'
 import { findSkill } from '../data'
 import { openRoll } from '../components/Roller'
+import { swapSlots, useSlotDrag } from '../components/useSlotDrag'
 import { Breakdown, Sheet, signed, toast } from '../components/ui'
 import { DamageSheet } from '../sheets/DamageSheet'
 import { AddEffectSheet, EditEffectSheet, MAX_EXTERNAL, externalCount } from '../sheets/EffectSheets'
@@ -225,7 +226,8 @@ export function Hud(ctx: Ctx) {
 
 /** Compact, use-only view of the Hotlist; editing stays on the Hotlist tab. */
 function HotlistStrip(ctx: Ctx) {
-  const { c, d } = ctx
+  const { c, d, up } = ctx
+  const { slotProps, ghost } = useSlotDrag((from, to) => up((x) => ({ ...x, hotlist: swapSlots(x.hotlist, from, to) })))
   const entries = c.hotlist.map((h, i) => ({ h, i })).filter((x): x is { h: HotlistEntry; i: number } => !!x.h)
   return (
     <section className="card span2 hotstrip-card">
@@ -237,8 +239,9 @@ function HotlistStrip(ctx: Ctx) {
       <div className="hotgrid">
         {c.hotlist.slice(0, HOTLIST_SIZE).map((h, i) => {
           if (!h) {
+            const sp = slotProps(i, null)
             return (
-              <button key={`e${i}`} className="hg-tile empty" onClick={() => go(`/c/${c.id}/hotlist`)} aria-label={`Empty slot ${i + 1}: add on the Hotlist tab`}>
+              <button key={`e${i}`} {...sp} className={`hg-tile empty${sp.className}`} onClick={() => go(`/c/${c.id}/hotlist`)} aria-label={`Empty slot ${i + 1}: add on the Hotlist tab`}>
                 <span className="hg-meta">{i + 1}</span>
               </button>
             )
@@ -254,15 +257,19 @@ function HotlistStrip(ctx: Ctx) {
             ? <><b>{toHit}</b><br />{dmg}</>
             : h.kind === 'spell' ? (cost !== undefined ? `${cost} Mana` : 'Spell')
             : h.kind === 'weapon' ? 'Attack' : `×${h.qty}`
+          // not `disabled`: a disabled button can't be picked up and dragged
+          const blocked = out || noMana || (!!atk && d.flags.cantAct)
+          const sp = slotProps(i, h.name)
           return (
-            <button key={h.uid} className={`hg-tile hg-${atk ? 'attack' : h.kind}`} disabled={out || noMana || (!!atk && d.flags.cantAct)}
-              onClick={() => triggerHotlist(ctx, h)} aria-label={`${verb} ${h.name}, slot ${i + 1}`} title={`${verb} ${h.name}`}>
+            <button key={h.uid} {...sp} className={`hg-tile hg-${atk ? 'attack' : h.kind}${blocked ? ' is-blocked' : ''}${sp.className}`} aria-disabled={blocked}
+              onClick={() => { if (!blocked) triggerHotlist(ctx, h) }} aria-label={`${verb} ${h.name}, slot ${i + 1}`} title={`${verb} ${h.name}`}>
               <span className="hg-name">{h.name}</span>
               <span className="hg-meta num">{meta}</span>
             </button>
           )
         })}
       </div>
+      {ghost}
     </section>
   )
 }

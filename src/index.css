@@ -349,3 +349,15 @@ kbd { font: inherit; font-size: 0.8em; padding: 0 5px; border: 1px solid var(--b
 @media (min-width: 760px) { .mana-btn { width: 44px; height: 30px; } .mana-btn.wide { width: 52px; } }
 /* the HUD grid already spaces cards; drop the stacked-card margin so gaps stay even */
 .hud > .card + .card { margin-top: 0; }
+
+/* press-and-hold drag between Hotlist slots */
+[data-slot] { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+.hg-tile.is-blocked { opacity: 0.45; }
+.slot-dragging { opacity: 0.35; }
+.slot-over { outline: 2px solid var(--accent); outline-offset: 1px; }
+.slot-ghost {
+  position: fixed; z-index: 80; pointer-events: none; transform: translate(-50%, -120%);
+  background: var(--surface-3); color: var(--text); border: 1px solid var(--accent); border-radius: var(--radius-sm);
+  padding: 6px 10px; font-weight: 800; font-size: 0.85rem; white-space: nowrap; box-shadow: 0 8px 22px rgba(0,0,0,0.5);
+}
+html.slot-drag-active, html.slot-drag-active body { overscroll-behavior: none; }

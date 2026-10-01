@@ -6,6 +6,7 @@ import { HOTLIST_STACK, moveHotlistToInventory, moveInventoryToHotlist } from '.
 import { HOTLIST_SIZE, type HotlistEntry } from '../engine/types'
 import { PageRef, Seg, Sheet, Stepper } from '../components/ui'
 import { SpellText } from '../components/SpellText'
+import { swapSlots, useSlotDrag } from '../components/useSlotDrag'
 import { attackLine, hotlistAttack, triggerHotlist } from './hotlistUse'
 import type { Ctx } from './ctx'
 
@@ -14,24 +15,28 @@ export function Hotlist(ctx: Ctx) {
   const [edit, setEdit] = useState<number | null>(null)
   const setQty = (i: number, qty: number) =>
     up((x) => ({ ...x, hotlist: x.hotlist.map((h, j) => (j === i && h ? { ...h, qty } : h)) }))
+  const { slotProps, ghost } = useSlotDrag((from, to) => up((x) => ({ ...x, hotlist: swapSlots(x.hotlist, from, to) })))
   return (
     <div>
       <p className="small muted" style={{ marginTop: 0 }}>
         10 slots for quick access in combat: using one costs an Action (swapping weapons is free with an Attack). Up to 999 of one item per slot. Spells must be here to cast them in combat. Attacks here roll to hit and damage when tapped (Core p.98, 111, 202).
       </p>
+      <p className="small muted">Press and hold a slot, then drag it onto another slot to rearrange.</p>
       <div className="hot">
         {c.hotlist.slice(0, HOTLIST_SIZE).map((h, i) => {
           if (!h) {
+            const sp = slotProps(i, null)
             return (
-              <button key={`e${i}`} className="hotslot emptyslot" onClick={() => setEdit(i)}>
+              <button key={`e${i}`} {...sp} className={`hotslot emptyslot${sp.className}`} onClick={() => setEdit(i)}>
                 <span style={{ fontSize: '1.4rem' }}>+</span>
                 <span className="tiny">Slot {i + 1}</span>
               </button>
             )
           }
           const atk = hotlistAttack(ctx, h)
+          const sp = slotProps(i, h.name)
           return (
-            <div key={h.uid} className="hotslot">
+            <div key={h.uid} {...sp} className={`hotslot${sp.className}`}>
               <button style={{ background: 'none', border: 0, padding: 0, textAlign: 'left' }} onClick={() => setEdit(i)}>
                 <div className="n">{h.name}</div>
                 {h.kind === 'spell' ? <div className="tiny muted">{spellNote(ctx, h)}</div> : null}
@@ -57,6 +62,7 @@ export function Hotlist(ctx: Ctx) {
           )
         })}
       </div>
+      {ghost}
       {edit !== null && <HotlistEditor {...ctx} index={edit} onClose={() => setEdit(null)} />}
     </div>
   )
