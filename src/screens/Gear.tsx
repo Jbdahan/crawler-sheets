@@ -52,6 +52,8 @@ export function Gear(ctx: Ctx) {
     up(() => next)
     toast(`${g.name} on Hotlist slot ${hotlistSlotOfGear(next, g.uid) + 1}`)
   }
+  /** equipped Accessories also list in Inventory (same item, not a copy) */
+  const accessories = c.gear.filter((g) => g.slot === 'accessory')
   const saveInv = (it: InventoryItem) =>
     up((x) => ({ ...x, inventory: x.inventory.some((y) => y.uid === it.uid) ? x.inventory.map((y) => (y.uid === it.uid ? it : y)) : [...x.inventory, it] }))
 
@@ -96,8 +98,16 @@ export function Gear(ctx: Ctx) {
             <button className="btn small" onClick={() => setBulk(true)}>+ Add a list</button>
             <button className="btn small" onClick={() => setInv({ uid: uid(), name: '', qty: 1, notes: '' })}>+ Add</button>
           </div>
-          {!c.inventory.length && <div className="empty">Nothing yet. Items here are weightless and give no bonuses.</div>}
+          {!c.inventory.length && !accessories.length && <div className="empty">Nothing yet. Items here are weightless and give no bonuses.</div>}
           <div className="list">
+            {accessories.map((g) => (
+              <div key={g.uid} className="li">
+                <button className="main" style={{ background: 'none', border: 0, textAlign: 'left', padding: 0 }} onClick={() => setEdit(g)}>
+                  <div className="name">{g.name || 'Unnamed'} <span className="pill good">Equipped</span></div>
+                  <div className="meta">{['Accessory', ...g.mods.map(describeMod), g.notes].filter(Boolean).join(' · ')}</div>
+                </button>
+              </div>
+            ))}
             {c.inventory.map((it) => (
               <div key={it.uid} className="li">
                 <button className="main" style={{ background: 'none', border: 0, textAlign: 'left', padding: 0 }} onClick={() => setInv(it)}>
