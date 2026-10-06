@@ -8,6 +8,7 @@ import { attackLine, hotlistAttack, hotlistSkill, triggerHotlist } from './hotli
 import { findSkill } from '../data'
 import { openRoll } from '../components/Roller'
 import { swapSlots, useSlotDrag } from '../components/useSlotDrag'
+import { entryQty } from '../engine/inventory'
 import { Breakdown, Sheet, signed, toast } from '../components/ui'
 import { DamageSheet } from '../sheets/DamageSheet'
 import { AddEffectSheet, EditEffectSheet, MAX_EXTERNAL, externalCount } from '../sheets/EffectSheets'
@@ -249,7 +250,8 @@ function HotlistStrip(ctx: Ctx) {
           const atk = hotlistAttack(ctx, h)
           const s = h.kind === 'spell' ? hotlistSkill(ctx, h) : undefined
           const cost = s ? s.customMana ?? findSkill(s.skillId)?.mana : undefined
-          const out = h.kind === 'item' && h.consumable && h.qty <= 0
+          const qty = entryQty(c, h)
+          const out = h.kind === 'item' && h.consumable && qty <= 0
           const noMana = h.kind === 'spell' && (d.flags.cantCast || c.mana < (cost ?? 0))
           const verb = atk ? 'Attack' : h.kind === 'spell' ? 'Cast' : 'Use'
           const [toHit, dmg] = atk ? attackLine(ctx, atk).split(' · ') : []
@@ -260,7 +262,7 @@ function HotlistStrip(ctx: Ctx) {
           const meta = atk
             ? <><b>{toHit}</b>{costTag}<br />{dmg}</>
             : h.kind === 'spell' ? <>{costTag ?? <>&nbsp;</>}<br />Spell</>
-            : h.kind === 'weapon' ? 'Attack' : `×${h.qty}`
+            : h.kind === 'weapon' ? 'Attack' : h.gearUid ? 'Gear' : `×${qty}`
           // not `disabled`: a disabled button can't be picked up and dragged
           const blocked = out || noMana || (!!atk && d.flags.cantAct)
           const sp = slotProps(i, h.name)

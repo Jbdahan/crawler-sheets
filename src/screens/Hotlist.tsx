@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { ITEMS, findSkill, normName } from '../data'
+import { ITEMS, findSkill } from '../data'
 import { isAttackSkill } from '../engine/attacks'
 import { uid } from '../engine/advancement'
-import { HOTLIST_STACK, moveHotlistToInventory, moveInventoryToHotlist } from '../engine/inventory'
+import { HOTLIST_STACK, addToHotlist, entryQty, hotlistSlotOfInventory, linkInventoryToHotlist, removeFromHotlist, setHotlistQty } from '../engine/inventory'
 import { HOTLIST_SIZE, type HotlistEntry } from '../engine/types'
 import { PageRef, Seg, Sheet, Stepper } from '../components/ui'
 import { SpellText } from '../components/SpellText'
@@ -13,8 +13,9 @@ import type { Ctx } from './ctx'
 export function Hotlist(ctx: Ctx) {
   const { c, up } = ctx
   const [edit, setEdit] = useState<number | null>(null)
+  /** counts live on the linked Inventory item */
   const setQty = (i: number, qty: number) =>
-    up((x) => ({ ...x, hotlist: x.hotlist.map((h, j) => (j === i && h ? { ...h, qty } : h)) }))
+    up((x) => (x.hotlist[i] ? setHotlistQty(x, x.hotlist[i]!, qty) : x))
   const { slotProps, ghost } = useSlotDrag((from, to) => up((x) => ({ ...x, hotlist: swapSlots(x.hotlist, from, to) })))
   return (
     <div>
@@ -34,6 +35,7 @@ export function Hotlist(ctx: Ctx) {
             )
           }
           const atk = hotlistAttack(ctx, h)
+          const qty = entryQty(c, h)
           const sp = slotProps(i, h.name)
           return (
             <div key={h.uid} {...sp} className={`hotslot${sp.className}`}>
@@ -46,16 +48,18 @@ export function Hotlist(ctx: Ctx) {
                 ? spellNotes(ctx, h) && <SpellText text={spellNotes(ctx, h)} lines={2} />
                 : h.kind === 'item' && h.notes && <SpellText text={h.notes} lines={3} />}
               <div className="grow" />
-              {h.kind === 'item' && (
+              {h.kind === 'item' && h.gearUid && <div className="tiny muted">Equipped gear</div>}
+              {h.kind === 'item' && !h.gearUid && (
                 <div className="row between">
-                  <span className="q num" style={{ color: h.qty ? undefined : 'var(--danger)' }}>×{h.qty}</span>
+                  <span className="q num" style={{ color: qty ? undefined : 'var(--danger)' }}>×{qty}</span>
                   <span className="row" style={{ gap: 2 }}>
-                    <button className="btn small icon" style={{ width: 30, minHeight: 30 }} onClick={() => setQty(i, Math.max(0, h.qty - 1))}>−</button>
-                    <button className="btn small icon" style={{ width: 30, minHeight: 30 }} onClick={() => setQty(i, Math.min(999, h.qty + 1))}>+</button>
+                    <button className="btn small icon" style={{ width: 30, minHeight: 30 }} onClick={() => setQty(i, qty - 1)}>−</button>
+                    <button className="btn small icon" style={{ width: 30, minHeight: 30 }} onClick={() => setQty(i, qty + 1)}>+</button>
                   </span>
                 </div>
               )}
-              <button className={`btn small ${h.kind === 'spell' ? 'mana' : atk ? 'primary' : 'good'}`} disabled={h.kind === 'item' && h.consumable && h.qty <= 0} onClick={() => triggerHotlist(ctx, h)}>
+              {h.invUid && <div className="tiny faint">In Inventory</div>}
+              <button className={`btn small ${h.kind === 'spell' ? 'mana' : atk ? 'primary' : 'good'}`} disabled={h.kind === 'item' && h.consumable && qty <= 0} onClick={() => triggerHotlist(ctx, h)}>
                 {atk ? (h.kind === 'spell' ? 'Cast & attack' : 'Attack') : h.kind === 'spell' ? 'Cast' : 'Use'}
               </button>
             </div>
@@ -85,9 +89,19 @@ function HotlistEditor(ctx: Ctx & { index: number; onClose: () => void }) {
   const { c, up, index, onClose } = ctx
   const cur = c.hotlist[index]
   const [tab, setTab] = useState<'item' | 'inventory' | 'spell' | 'weapon' | 'custom'>(cur ? (cur.kind === 'item' ? 'custom' : cur.kind) : c.inventory.length ? 'inventory' : 'item')
-  const [draft, setDraft] = useState<HotlistEntry>(cur ?? { uid: uid(), name: '', qty: 1, kind: 'item', notes: '', consumable: true })
+  const curInv = cur?.invUid ? c.inventory.find((i) => i.uid === cur.invUid) : undefined
+  const [draft, setDraft] = useState<HotlistEntry>(cur ? { ...cur, qty: entryQty(c, cur) } : { uid: uid(), name: '', qty: 1, kind: 'item', notes: '', consumable: true })
   const save = (entry: HotlistEntry | null) => {
     up((x) => ({ ...x, hotlist: x.hotlist.map((h, j) => (j === index ? entry : h)) }))
+    onClose()
+  }
+  /** items go into Inventory and this slot shows them; `extra` keeps custom effects (heal, Mana…) */
+  const placeItem = (name: string, qty: number, notes: string, extra: Partial<HotlistEntry> = {}) => {
+    up((x) => {
+      const next = addToHotlist(removeFromHotlist(x, index), name, qty, notes, index)
+      if (!next) return x
+      return { ...next, hotlist: next.hotlist.map((h, j) => (j === index && h ? { ...h, ...extra } : h)) }
+    })
     onClose()
   }
   const spells = c.skills.filter((s) => s.kind === 'spell')
@@ -102,7 +116,7 @@ function HotlistEditor(ctx: Ctx & { index: number; onClose: () => void }) {
               <div className="li" key={it.id}>
                 <div className="main"><div className="name">{it.name}</div><div className="meta">{it.summary}</div></div>
                 <PageRef page={it.page} />
-                <button className="btn small good" onClick={() => save({ uid: uid(), name: it.name, qty: 1, kind: 'item', notes: it.summary, heal: it.heal, restoreMana: it.restoreMana, removesDebuff: it.removesDebuff, consumable: it.consumable })}>Put here</button>
+                <button className="btn small good" onClick={() => placeItem(it.name, 1, '')}>Put here</button>
               </div>
             ))}
           </div>
@@ -111,22 +125,22 @@ function HotlistEditor(ctx: Ctx & { index: number; onClose: () => void }) {
           <div className="list">
             {!c.inventory.length && <div className="empty">Inventory is empty. Scrolls, potions and other loot land there first.</div>}
             {c.inventory.map((it) => {
-              // this slot must be empty or already hold the same item
-              const fits = !cur || (cur.kind === 'item' && normName(cur.name) === normName(it.name) && cur.qty < HOTLIST_STACK)
-              const move = (qty?: number) => {
-                const next = moveInventoryToHotlist(c, it.uid, qty, index)
-                if (next) { up(() => next); onClose() }
+              const at = hotlistSlotOfInventory(c, it.uid)
+              const link = () => {
+                up((x) => linkInventoryToHotlist(at === index ? x : removeFromHotlist(x, index), it.uid, index) ?? x)
+                onClose()
               }
               return (
                 <div className="li" key={it.uid}>
-                  <div className="main"><div className="name">{it.name} <span className="muted num">×{it.qty}</span></div>{it.notes && <div className="meta">{it.notes}</div>}</div>
-                  {it.qty > 1 && <button className="btn small" disabled={!fits} onClick={() => move(1)}>Move 1</button>}
-                  <button className="btn small good" disabled={!fits || it.qty <= 0} onClick={() => move()}>{it.qty > 1 ? 'Move all' : 'Put here'}</button>
+                  <div className="main">
+                    <div className="name">{it.name} <span className="muted num">×{it.qty}</span> {at >= 0 && <span className="pill accent">Hotlist #{at + 1}</span>}</div>
+                    {it.notes && <div className="meta">{it.notes}</div>}
+                  </div>
+                  <button className="btn small good" disabled={at === index} onClick={link}>{at === index ? 'Here' : at >= 0 ? 'Move here' : 'Put here'}</button>
                 </div>
               )
             })}
-            {cur && <p className="small faint">This slot already holds {cur.name}. Only more of the same item can go here; clear the slot first to swap.</p>}
-            <p className="small faint">Moving takes the items out of Inventory. Up to {HOTLIST_STACK} of one item per slot.</p>
+            <p className="small faint">Items stay in Inventory; this slot shows them and uses the same count (up to {HOTLIST_STACK} per slot).</p>
           </div>
         )}
         {tab === 'spell' && (
@@ -167,13 +181,28 @@ function HotlistEditor(ctx: Ctx & { index: number; onClose: () => void }) {
               </label>
             </div>
             <label className="row small"><input type="checkbox" checked={!!draft.consumable} onChange={(e) => setDraft({ ...draft, consumable: e.target.checked })} /> Used up when used (potion, scroll, bomb)</label>
-            <button className="btn primary" disabled={!draft.name.trim()} onClick={() => save({ ...draft, kind: draft.kind === 'spell' ? 'spell' : draft.kind })}>Save slot</button>
+            <button className="btn primary" disabled={!draft.name.trim()} onClick={() => {
+              const extra = { heal: draft.heal, restoreMana: draft.restoreMana, consumable: draft.consumable }
+              if (draft.kind !== 'item') { save({ ...draft }); return }
+              if (curInv) {
+                // editing an item already shown here: update the Inventory item it points at
+                up((x) => ({
+                  ...x,
+                  inventory: x.inventory.map((i) => (i.uid === curInv.uid ? { ...i, name: draft.name.trim(), qty: draft.qty, notes: draft.notes } : i)),
+                  hotlist: x.hotlist.map((h, j) => (j === index && h ? { ...h, ...extra, name: draft.name.trim(), notes: draft.notes } : h)),
+                }))
+                onClose()
+                return
+              }
+              placeItem(draft.name.trim(), draft.qty, draft.notes, extra)
+            }}>Save slot</button>
           </div>
         )}
-        {cur?.kind === 'item' && cur.qty > 0 && (
-          <button className="btn" onClick={() => { up((x) => moveHotlistToInventory(x, index)); onClose() }}>Move back to Inventory (×{cur.qty})</button>
+        {cur && (
+          <button className="btn danger" onClick={() => save(null)}>
+            {cur.invUid ? 'Remove from Hotlist (stays in Inventory)' : cur.gearUid ? 'Remove from Hotlist (stays equipped)' : 'Clear slot'}
+          </button>
         )}
-        {cur && <button className="btn danger" onClick={() => save(null)}>Clear slot</button>}
       </div>
     </Sheet>
   )

@@ -4,6 +4,7 @@ import { checkBonus, derive, skillStat } from '../engine/derived'
 import { HB_SLOTS } from '../engine/health'
 import { GEAR_SLOTS, HOTLIST_SIZE, type Character } from '../engine/types'
 import { signed } from '../components/ui'
+import { entryQty } from '../engine/inventory'
 import { describeMod } from '../sheets/ModEditor'
 import './print-portrait.css'
 
@@ -109,7 +110,7 @@ export function PortraitPages({ c }: { c: Character }) {
               {c.hotlist.slice(0, HOTLIST_SIZE).map((h, i) => (
                 <div key={i} className="hs">
                   {h && <>
-                    <b>{h.name}</b>{h.kind === 'item' && <span> ×{h.qty}</span>}
+                    <b>{h.name}</b>{h.kind === 'item' && !h.gearUid && <span> ×{entryQty(c, h)}</span>}
                     <div className="tiny">{h.kind === 'spell'
                       ? `${findSkill(c.skills.find((s) => s.uid === h.skillUid)?.skillId)?.manaText ?? c.skills.find((s) => s.uid === h.skillUid)?.customMana ?? ''} Mana`
                       : h.notes}</div>

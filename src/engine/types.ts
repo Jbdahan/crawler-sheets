@@ -77,6 +77,10 @@ export interface HotlistEntry {
   kind: 'item' | 'spell' | 'weapon'
   /** linked character skill (spells/weapons) */
   skillUid?: string
+  /** items: the Inventory item this slot shows (the item stays in Inventory; its count is used) */
+  invUid?: string
+  /** items: the equipped Gear item this slot shows */
+  gearUid?: string
   notes: string
   heal?: HealDef
   restoreMana?: 'full' | number

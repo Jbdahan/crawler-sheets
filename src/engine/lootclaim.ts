@@ -95,7 +95,7 @@ function stash(c: Character, name: string, qty: number, notes: string, inventory
   const label = `${qty > 1 ? `${qty}× ` : ''}${name}`
   return {
     detail: slot >= 0 ? `${inventoryDetail}, or put it on the Hotlist` : `${inventoryDetail} (the Hotlist is full)`,
-    choices: slot >= 0 ? [{ key: 'inventory', label: 'Inventory' }, { key: 'hotlist', label: 'Hotlist' }] : undefined,
+    choices: slot >= 0 ? [{ key: 'inventory', label: 'Inventory' }, { key: 'hotlist', label: 'Inventory + Hotlist' }] : undefined,
     apply: (x, choice) => (choice === 'hotlist' ? addToHotlist(x, name, qty, notes) ?? addInventory(x, name, qty, notes) : addInventory(x, name, qty, notes)),
     summary: (choice) => `${label}${choice === 'hotlist' ? ' (to Hotlist)' : ''}`,
   }

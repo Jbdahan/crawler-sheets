@@ -3,6 +3,7 @@ import { ALL_SKILLS, BACKGROUNDS, STAT_ABBR, STAT_KEYS, STAT_NAMES, STORIES, SIZ
 import { STARTING_HAND_TO_HAND, STARTING_SPELLS, STARTING_WEAPONS } from '../data/extras'
 import { newSkill, uid, log } from '../engine/advancement'
 import { blankCharacter } from '../engine/character'
+import { linkHotlistItems } from '../engine/inventory'
 import { derive, statMod } from '../engine/derived'
 import { rollDie } from '../engine/dice'
 import type { Character, CharSkill } from '../engine/types'
@@ -99,6 +100,7 @@ export function CreateWizard() {
     if (combat?.mode === 'spell') {
       const s = addSk(combat.skill, 3, 'Starting spell')
       hot[1] = { uid: uid(), name: s.name, qty: 1, kind: 'spell', skillUid: s.uid, notes: '' }
+      // the potions live in Inventory; slot 3 just shows them (linked after the character is built)
       hot[2] = { uid: uid(), name: 'Standard Mana Potion', qty: 5, kind: 'item', notes: 'Fully restores Mana', restoreMana: 'full', consumable: true }
     }
     if (combat?.mode === 'hand') {
@@ -122,7 +124,7 @@ export function CreateWizard() {
       inventory: [gear.item, gear.weird].filter(Boolean).map((n) => ({ uid: uid(), name: n, qty: 1, notes: '' })),
     }
     if (gear.weapon) c.gear.push({ uid: uid(), slot: 'hands', name: gear.weapon, mods: [], notes: '' })
-    c = { ...c, mana: derive(c).maxMana.total }
+    c = linkHotlistItems({ ...c, mana: derive(c).maxMana.total })
     return log(c, 'Entered the World Dungeon')
   }
 

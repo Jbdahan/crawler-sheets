@@ -3,6 +3,7 @@ import { uid } from './advancement'
 import { derive, type Derived } from './derived'
 import { parseDice, rankDamageDice, rollDie, rollPool } from './dice'
 import { HB_SLOTS, heal, setMana } from './health'
+import { consumeHotlist, entryQty } from './inventory'
 import type { Character, CharSkill, HotlistEntry } from './types'
 
 export interface ActionResult {
@@ -70,7 +71,7 @@ export function activateHotlist(c: Character, entry: HotlistEntry, d: Derived = 
     if (!s) return { c, message: 'Spell not found on this character', ok: false }
     return castSpell(c, s, d)
   }
-  if (entry.consumable && entry.qty <= 0) return { c, message: `No ${entry.name} left`, ok: false }
+  if (entry.consumable && entryQty(c, entry) <= 0) return { c, message: `No ${entry.name} left`, ok: false }
   let next = c
   const bits: string[] = [`Used ${entry.name}`]
   if (entry.heal) {
@@ -91,8 +92,6 @@ export function activateHotlist(c: Character, entry: HotlistEntry, d: Derived = 
     next = { ...next, effects: next.effects.filter((e) => e.refId !== entry.removesDebuff) }
     if (had) bits.push(`removed ${entry.removesDebuff.replace(/-/g, ' ')}`)
   }
-  if (entry.consumable) {
-    next = { ...next, hotlist: next.hotlist.map((h) => (h && h.uid === entry.uid ? { ...h, qty: Math.max(0, h.qty - 1) } : h)) }
-  }
+  if (entry.consumable) next = consumeHotlist(next, entry)
   return { c: next, message: bits.join(' · '), ok: true }
 }

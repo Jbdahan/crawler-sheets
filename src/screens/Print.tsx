@@ -5,6 +5,7 @@ import { checkBonus, derive, skillStat } from '../engine/derived'
 import { HB_SLOTS } from '../engine/health'
 import { GEAR_SLOTS, HOTLIST_SIZE, type Character } from '../engine/types'
 import { signed } from '../components/ui'
+import { entryQty } from '../engine/inventory'
 import { describeMod } from '../sheets/ModEditor'
 import { useCharacter } from '../store/characters'
 import { go } from '../router'
@@ -132,7 +133,7 @@ function PrintPages({ c }: { c: Character }) {
         <div className="pp-band">HOTLIST</div>
         <div className="pp-hot">
           {c.hotlist.slice(0, HOTLIST_SIZE).map((h, i) => (
-            <div key={i} className="hs">{h && <><b>{h.name}</b>{h.kind !== 'spell' && <span> ×{h.qty}</span>}<div className="small">{h.kind === 'spell' ? `${findSkill(c.skills.find((s) => s.uid === h.skillUid)?.skillId)?.manaText ?? ''} Mana` : h.notes}</div></>}</div>
+            <div key={i} className="hs">{h && <><b>{h.name}</b>{h.kind === 'item' && !h.gearUid && <span> ×{entryQty(c, h)}</span>}<div className="small">{h.kind === 'spell' ? `${findSkill(c.skills.find((s) => s.uid === h.skillUid)?.skillId)?.manaText ?? ''} Mana` : h.notes}</div></>}</div>
           ))}
         </div>
         <div className="pp-two">
