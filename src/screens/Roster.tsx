@@ -70,6 +70,9 @@ export function Roster() {
       <p className="small faint center" style={{ marginTop: 24 }}>
         Unofficial fan tool. Rules summaries cite the Dungeon Crawler Carl RPG Core Rulebook (Renegade Game Studios); use your book for full text.
       </p>
+      <p className="small faint center" style={{ marginTop: 6 }}>
+        Version {__APP_VERSION__.version} · {__APP_VERSION__.built}{__APP_VERSION__.sha ? ` · ${__APP_VERSION__.sha}` : ''}
+      </p>
     </div>
   )
 }
