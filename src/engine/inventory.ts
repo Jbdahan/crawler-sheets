@@ -61,3 +61,51 @@ export function moveHotlistToInventory(c: Character, slot: number): Character {
     : [...c.inventory, { uid: uid(), name: h.name, qty: h.qty, notes: h.notes }]
   return { ...c, hotlist, inventory }
 }
+
+export interface ParsedItem { name: string; qty: number; notes: string }
+
+/**
+ * Turn pasted text into Inventory items, one per line. Understands
+ * "3x Torch", "3 Torch", "Torch x3", "Torch (3)" and "Rope - 50 feet" (notes after a dash).
+ * Bullets and numbering are ignored; repeated lines are combined.
+ */
+export function parseItemLines(text: string): ParsedItem[] {
+  const out: ParsedItem[] = []
+  for (const raw of text.split(/\r?\n/)) {
+    let line = raw.trim().replace(/^([-•*·▪◦]|\d+[.)])\s+/, '').trim()
+    if (!line) continue
+    let notes = ''
+    const dash = line.match(/^(.+?)\s+[-–—]\s+(.+)$/)
+    if (dash) {
+      line = dash[1].trim()
+      notes = dash[2].trim()
+    }
+    let qty = 1
+    let m: RegExpMatchArray | null
+    if ((m = line.match(/^(\d+)\s*[x×]\s*(.+)$/i)) || (m = line.match(/^(\d+)\s+(.+)$/))) {
+      qty = Number(m[1])
+      line = m[2]
+    } else if ((m = line.match(/^(.+?)\s*[x×]\s*(\d+)$/i)) || (m = line.match(/^(.+?)\s*\((\d+)\)$/))) {
+      line = m[1]
+      qty = Number(m[2])
+    }
+    const name = line.trim()
+    if (!name) continue
+    const same = out.find((p) => normName(p.name) === normName(name) && p.notes === notes)
+    if (same) same.qty += qty
+    else out.push({ name, qty: Math.max(1, qty), notes })
+  }
+  return out
+}
+
+/** Add items to Inventory, stacking onto an existing item with the same name and notes. */
+export function addInventoryItems(c: Character, items: ParsedItem[]): Character {
+  let inventory = [...c.inventory]
+  for (const it of items) {
+    const same = inventory.find((i) => normName(i.name) === normName(it.name) && i.notes === it.notes)
+    inventory = same
+      ? inventory.map((i) => (i === same ? { ...i, qty: i.qty + it.qty } : i))
+      : [...inventory, { uid: uid(), name: it.name, qty: it.qty, notes: it.notes }]
+  }
+  return { ...c, inventory }
+}

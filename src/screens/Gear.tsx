@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { uid } from '../engine/advancement'
-import { hotlistSlotFor, moveInventoryToHotlist } from '../engine/inventory'
+import { addInventoryItems, hotlistSlotFor, moveInventoryToHotlist, parseItemLines, type ParsedItem } from '../engine/inventory'
 import { GEAR_SLOTS, type GearItem, type GearSlot, type InventoryItem } from '../engine/types'
 import { Icon, Sheet, Stepper, toast } from '../components/ui'
 import { ModEditor, describeMod } from '../sheets/ModEditor'
@@ -10,6 +10,7 @@ export function Gear(ctx: Ctx) {
   const { c, up } = ctx
   const [edit, setEdit] = useState<GearItem | null>(null)
   const [inv, setInv] = useState<InventoryItem | null>(null)
+  const [bulk, setBulk] = useState(false)
 
   const addGear = (slot: GearSlot) => setEdit({ uid: uid(), slot, name: '', mods: [], notes: '' })
   const saveGear = (g: GearItem) =>
@@ -66,6 +67,7 @@ export function Gear(ctx: Ctx) {
         <section className="card">
           <div className="card-head">
             <h2>Inventory</h2>
+            <button className="btn small" onClick={() => setBulk(true)}>+ Add a list</button>
             <button className="btn small" onClick={() => setInv({ uid: uid(), name: '', qty: 1, notes: '' })}>+ Add</button>
           </div>
           {!c.inventory.length && <div className="empty">Nothing yet. Items here are weightless and give no bonuses.</div>}
@@ -85,6 +87,13 @@ export function Gear(ctx: Ctx) {
         </section>
       </div>
 
+      {bulk && (
+        <BulkAdd onClose={() => setBulk(false)} onAdd={(items) => {
+          up((x) => addInventoryItems(x, items))
+          toast(`Added ${items.length} item${items.length === 1 ? '' : 's'} to Inventory`)
+          setBulk(false)
+        }} />
+      )}
       {edit && (
         <Sheet title={edit.name || 'Equip item'} onClose={() => setEdit(null)}>
           <GearEditor
@@ -173,5 +182,37 @@ function InvEditor({ item, onSave, onDelete, onEquip, hotlistSlot, onHotlist }: 
       )}
       <button className="btn danger" onClick={onDelete}>Delete</button>
     </div>
+  )
+}
+
+/** Paste or type many items at once, one per line. */
+function BulkAdd({ onClose, onAdd }: { onClose: () => void; onAdd: (items: ParsedItem[]) => void }) {
+  const [text, setText] = useState('')
+  const items = parseItemLines(text)
+  return (
+    <Sheet title="Add a list of items" onClose={onClose}>
+      <div className="stack">
+        <p className="small muted" style={{ margin: 0 }}>
+          One item per line. Add a quantity like <b>3x Torch</b>, <b>Torch x3</b> or <b>Torch (3)</b>, and notes after a dash: <b>Rope - 50 feet</b>.
+          Items you already have are stacked.
+        </p>
+        <textarea autoFocus rows={8} value={text} onChange={(e) => setText(e.target.value)}
+          placeholder={'3x Torch\nRope - 50 feet\nGoblin Dynamite x2\nSnack Bar (4)'} style={{ minHeight: 160 }} />
+        {items.length > 0 && (
+          <div className="infobox">
+            <div className="label" style={{ marginBottom: 4 }}>{items.length} item{items.length === 1 ? '' : 's'} to add</div>
+            {items.map((it, i) => (
+              <div key={i} className="row between small" style={{ padding: '2px 0' }}>
+                <span>{it.name}{it.notes && <span className="muted"> · {it.notes}</span>}</span>
+                <b className="num">×{it.qty}</b>
+              </div>
+            ))}
+          </div>
+        )}
+        <button className="btn primary" disabled={!items.length} onClick={() => onAdd(items)}>
+          Add {items.length || ''} item{items.length === 1 ? '' : 's'}
+        </button>
+      </div>
+    </Sheet>
   )
 }
