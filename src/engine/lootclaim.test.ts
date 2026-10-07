@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { blankCharacter } from './character'
 import { derive } from './derived'
+import { formatLootRow } from './lootbox'
 import { applyClaim, claimSource, decodeClaim, encodeClaim, planClaim, type Decision, type LootClaim } from './lootclaim'
 
 const claim: LootClaim = {
@@ -99,5 +100,29 @@ describe('loot claims', () => {
     const s = ch.apply(c).skills.find((x) => x.name === 'Glitter Bomb')!
     expect(s.notes).toBe('Range: 30 feet · Cooldown: Once per scene · Blinds everyone · Rank 10: +1d6 damage')
     expect(s.customMana).toBe(8)
+  })
+})
+
+describe('ammo rows', () => {
+  const ammoClaim: LootClaim = { v: 1, id: 'ammo1', name: 'Quiver', description: '', reward: '', rows: [
+    { type: 'ammo', weapon: 'crossbow', prefix: 'Fire', qty: 12, dice: '1d6', dtype: 'Fire', debuff: 'burned', debuffOn: 'amazing' },
+    { type: 'ammo', weapon: 'bow', prefix: '', qty: 20 },
+  ] }
+
+  it('reads like loot', () => {
+    expect(formatLootRow(ammoClaim.rows[0])).toEqual({ head: '12× Fire Bolts', text: ' (Crossbow): +1d6 Fire, Burned on Amazing Success' })
+    expect(formatLootRow(ammoClaim.rows[1])).toEqual({ head: '20× Arrows', text: ' (Bow)' })
+  })
+
+  it('claims into Inventory as ammo for the weapon, stacking on a second claim', () => {
+    const c = blankCharacter()
+    const changes = planClaim(c, ammoClaim)
+    let next = applyClaim(c, ammoClaim, changes, acceptAll(changes.map((x) => x.key)))
+    expect(next.inventory[0]).toMatchObject({ name: 'Fire Bolts', qty: 12, kind: 'ammo', skillId: 'crossbow', ammo: { dice: '1d6', dtype: 'Fire', debuff: 'burned', debuffOn: 'amazing' } })
+    expect(next.inventory[1]).toMatchObject({ name: 'Arrows', qty: 20, kind: 'ammo', skillId: 'bow' })
+    expect(next.inventory[1].ammo).toBeUndefined()
+    const again = planClaim(next, { ...ammoClaim, id: 'ammo2' })
+    next = applyClaim(next, { ...ammoClaim, id: 'ammo2' }, again, acceptAll(again.map((x) => x.key)))
+    expect(next.inventory[0].qty).toBe(24)
   })
 })

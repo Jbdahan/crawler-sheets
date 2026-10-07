@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
-import { DAMAGE_TYPES, ITEMS, SKILLS, SPELLS, STAT_KEYS, STAT_NAMES } from '../data'
+import { DAMAGE_TYPES, DEBUFFS, ITEMS, SKILLS, SPELLS, STAT_KEYS, STAT_NAMES, findSkill } from '../data'
+import { LOOT } from '../data/loot'
+import { AMMO_NOUN, AMMO_WEAPONS } from '../engine/ammo'
 import QRCode from 'qrcode'
 import { uid } from '../engine/advancement'
 import { claimUrl } from '../engine/lootclaim'
@@ -32,6 +34,7 @@ const ROW_TYPES: { value: LootRowType; label: string }[] = [
   { value: 'gear', label: 'Gear / equipment' },
   { value: 'defense', label: 'Defense (DR, Evade, Resistance…)' },
   { value: 'consumable', label: 'Potion / consumable' },
+  { value: 'ammo', label: 'Ammunition (arrows, bolts…)' },
   { value: 'gold', label: 'Gold' },
   { value: 'custom', label: 'Custom (homebrew spell or item)' },
 ]
@@ -44,10 +47,14 @@ function newRow(type: LootRowType): LootRow {
     case 'gear': return { type, name: '', slot: SLOTS[0], mods: [], condition: '' }
     case 'defense': return { type, target: 'dr', value: 1, dtype: DAMAGE_TYPES[0] }
     case 'consumable': return { type, item: ITEM_NAMES[0], qty: 1 }
+    case 'ammo': return { type, weapon: 'crossbow', prefix: 'Fire', qty: 10, ...AMMO_TEMPLATES.find((t) => t.ammoPrefix === 'Fire')?.ammo }
     case 'gold': return { type, value: 100 }
     case 'custom': return { type, kind: 'object', name: '', mana: '', effect: '' }
   }
 }
+
+/** The GM-made ammo templates from the Inventory loot catalog (Fire, Frost, Explosive…). */
+const AMMO_TEMPLATES = LOOT.filter((l) => l.kind === 'ammo')
 
 interface Draft {
   name: string
@@ -475,6 +482,55 @@ function RowFields({ row: r, onChange }: { row: LootRow; onChange: (r: LootRow) 
             <NumInput label="How many" value={r.qty} onChange={(qty) => onChange({ ...r, qty })} />
           </div>
           {!listed && <input value={r.item} onChange={(e) => onChange({ ...r, item: e.target.value })} placeholder="Item name" aria-label="Item name" />}
+        </>
+      )
+    }
+    case 'ammo': {
+      const set = (patch: Partial<typeof r>) => onChange({ ...r, ...patch })
+      const tpl = AMMO_TEMPLATES.find((t) => (t.ammoPrefix ?? '') === r.prefix)
+      return (
+        <>
+          <div className="row">
+            <select className="grow" aria-label="Ammo template" value={tpl ? tpl.id : '__custom'}
+              onChange={(e) => {
+                const t = AMMO_TEMPLATES.find((x) => x.id === e.target.value)
+                if (t) onChange({ type: 'ammo', weapon: r.weapon, qty: r.qty, prefix: t.ammoPrefix ?? '', ...t.ammo })
+              }}>
+              {AMMO_TEMPLATES.map((t) => <option key={t.id} value={t.id}>{t.ammoPrefix || 'Basic'}</option>)}
+              {!tpl && <option value="__custom">Custom</option>}
+            </select>
+            <select className="grow" aria-label="Weapon" value={r.weapon} onChange={(e) => set({ weapon: e.target.value })}>
+              {AMMO_WEAPONS.map((w) => <option key={w} value={w}>{findSkill(w)?.name} ({AMMO_NOUN[w].toLowerCase()})</option>)}
+            </select>
+            <NumInput label="How many" value={r.qty} onChange={(qty) => set({ qty })} />
+          </div>
+          <Field label={`Name (before “${AMMO_NOUN[r.weapon] ?? 'Ammo'}”)`}>
+            <input value={r.prefix} onChange={(e) => set({ prefix: e.target.value })} placeholder="e.g. Exploding Goblin" aria-label="Ammo name" />
+          </Field>
+          <div className="row">
+            <Field label="Extra dice"><input aria-label="Extra dice" value={r.dice ?? ''} placeholder="e.g. 1d6" onChange={(e) => set({ dice: e.target.value.trim() || undefined })} /></Field>
+            <Field label="Damage type">
+              <select aria-label="Damage type" value={r.dtype ?? ''} onChange={(e) => set({ dtype: e.target.value || undefined })}>
+                <option value="">Same as weapon</option>
+                {DAMAGE_TYPES.map((t) => <option key={t}>{t}</option>)}
+              </select>
+            </Field>
+          </div>
+          <div className="row">
+            <Field label="To hit bonus"><NumInput label="To hit bonus" value={r.toHit ?? 0} onChange={(v) => set({ toHit: v || undefined })} /></Field>
+            <Field label="Damage bonus"><NumInput label="Damage bonus" value={r.damage ?? 0} onChange={(v) => set({ damage: v || undefined })} /></Field>
+          </div>
+          <div className="row">
+            <select className="grow" aria-label="Debuff" value={r.debuff ?? ''} onChange={(e) => set({ debuff: e.target.value || undefined, debuffOn: r.debuffOn ?? 'hit' })}>
+              <option value="">No Debuff</option>
+              {DEBUFFS.map((d) => <option key={d.id} value={d.id}>{d.name}</option>)}
+            </select>
+            <select className="grow" aria-label="When" value={r.debuffOn ?? 'hit'} disabled={!r.debuff} onChange={(e) => set({ debuffOn: e.target.value as 'hit' | 'amazing' })}>
+              <option value="hit">On a hit</option>
+              <option value="amazing">On an Amazing Success</option>
+            </select>
+          </div>
+          <p className="small faint" style={{ margin: 0 }}>The book has no ammo table (Core p.181), so these are house rules. Claimed ammo loads on the weapon's attack card; each Attack fires one.</p>
         </>
       )
     }

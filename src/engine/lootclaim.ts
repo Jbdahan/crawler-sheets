@@ -8,7 +8,8 @@ import { derive } from './derived'
 import { describeLootMod, detailText, formatLootRow, spellDetails, type LootMod, type LootRow } from './lootbox'
 import { addToHotlist, hotlistSlotFor } from './inventory'
 import { inferItem } from '../data/loot'
-import { GEAR_SLOTS, type Character, type GearSlot, type Modifier } from './types'
+import { ammoName, ammoWeaponName } from './ammo'
+import { GEAR_SLOTS, type AmmoEffect, type Character, type GearSlot, type Modifier } from './types'
 
 /** What travels in a claim link (no picture: it would make the link too long). */
 export interface LootClaim {
@@ -234,6 +235,28 @@ export function planClaim(c: Character, claim: LootClaim): LootChange[] {
       case 'consumable': {
         const have = c.inventory.find((i) => normName(i.name) === normName(r.item) && !i.notes)
         changes.push({ ...base, ...stash(c, r.item.trim(), r.qty, '', have ? `Inventory: ${r.item} ${have.qty} → ${have.qty + r.qty}` : `Inventory: add ${r.qty}× ${r.item}`) })
+        return
+      }
+      case 'ammo': {
+        const name = ammoName(r.prefix.trim(), r.weapon)
+        const effect: AmmoEffect = {
+          ...(r.dice ? { dice: r.dice, ...(r.dtype ? { dtype: r.dtype } : {}) } : {}),
+          ...(r.toHit ? { toHit: r.toHit } : {}),
+          ...(r.damage ? { damage: r.damage } : {}),
+          ...(r.debuff ? { debuff: r.debuff, debuffOn: r.debuffOn ?? 'hit' } : {}),
+        }
+        const special = Object.keys(effect).length > 0
+        const have = c.inventory.find((i) => i.kind === 'ammo' && i.name === name && i.skillId === r.weapon)
+        changes.push({
+          ...base,
+          detail: have ? `Inventory: ${name} ${have.qty} → ${have.qty + r.qty}` : `Inventory: add ${r.qty}× ${name} for the ${ammoWeaponName(r.weapon)}`,
+          apply: (x) => {
+            const same = x.inventory.find((i) => i.kind === 'ammo' && i.name === name && i.skillId === r.weapon)
+            if (same) return { ...x, inventory: x.inventory.map((i) => (i === same ? { ...i, qty: i.qty + r.qty } : i)) }
+            return { ...x, inventory: [...x.inventory, { uid: uid(), name, qty: r.qty, notes: '', kind: 'ammo' as const, skillId: r.weapon, ...(special ? { ammo: effect } : {}) }] }
+          },
+          summary: () => `${r.qty}× ${name}`,
+        })
         return
       }
       case 'gold':

@@ -1,5 +1,7 @@
 // GM loot box maker: turns form rows into the "New Achievement!" block,
 // as HTML (pastes formatted into Google Docs/Word) and plain text (Discord).
+import { ammoName, ammoWeaponName, describeAmmo } from './ammo'
+import type { AmmoEffect } from './types'
 
 export const LOOT_TIERS = ['Bronze', 'Silver', 'Gold', 'Platinum', 'Legendary', 'Celestial']
 export const LOOT_CATEGORIES = ['Adventurer', 'Boss', 'Fan', 'Benefactor', 'Mystery', 'Quest', 'Floor']
@@ -36,6 +38,7 @@ export type LootRow =
   | { type: 'gear'; name: string; slot: string; mods: LootMod[]; condition: string }
   | { type: 'defense'; target: 'dr' | 'evade' | 'resist' | 'immune' | 'vuln'; value: number; dtype: string }
   | { type: 'consumable'; item: string; qty: number }
+  | ({ type: 'ammo'; weapon: string; prefix: string; qty: number } & AmmoEffect)
   | { type: 'gold'; value: number }
   | ({ type: 'custom'; kind: 'object' | 'spell' | 'other'; name: string; mana: string; effect: string } & SpellFields)
 
@@ -151,6 +154,10 @@ export function formatLootRow(r: LootRow): LootLine | null {
     case 'consumable':
       if (!r.item.trim()) return null
       return { head: '', text: (r.qty > 1 ? `${r.qty}× ` : '') + r.item.trim() }
+    case 'ammo': {
+      const fx = describeAmmo(r)
+      return { head: `${r.qty > 1 ? `${r.qty}× ` : ''}${ammoName(r.prefix.trim(), r.weapon)}`, text: ` (${ammoWeaponName(r.weapon)})${fx === 'Basic ammo' ? '' : `: ${fx.replace(/ · /g, ', ')}`}` }
+    }
     case 'gold': return { head: '', text: `${r.value.toLocaleString('en-US')} Gold` }
     case 'custom': {
       if (!r.name.trim()) return null
