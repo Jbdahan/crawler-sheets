@@ -3,6 +3,7 @@
 import { findSkill, type StatKey } from '../data'
 import { inferItem, statPickName, weaponSkillFor, type LootDef } from '../data/loot'
 import { log, newSkill, uid } from './advancement'
+import { ammoName, describeAmmo } from './ammo'
 import { hotlistItem, linkHotlistItems } from './inventory'
 import { GEAR_SLOTS, type Character, type CharSkill, type GearItem, type GearSlot, type InventoryItem } from './types'
 
@@ -10,9 +11,13 @@ export const scrollName = (spell: string, rank: number) => `Scroll of ${spell} (
 export const bookName = (spell: string, rank: number) => `Spellbook of ${spell} (Rank ${rank})`
 
 /** Build an Inventory item from the loot catalog. */
-export function lootItem(def: LootDef, opts: { qty?: number; spellId?: string; rank?: number; stat?: StatKey } = {}): InventoryItem {
+export function lootItem(def: LootDef, opts: { qty?: number; spellId?: string; rank?: number; stat?: StatKey; weapon?: string } = {}): InventoryItem {
   const qty = Math.max(1, opts.qty ?? def.qty ?? 1)
   const base: InventoryItem = { uid: uid(), name: def.name, qty, notes: def.summary }
+  if (def.kind === 'ammo') {
+    const skillId = opts.weapon ?? 'crossbow'
+    return { ...base, name: ammoName(def.ammoPrefix ?? '', skillId), notes: '', kind: 'ammo', skillId, ...(def.ammo ? { ammo: def.ammo } : {}) }
+  }
   if (def.pick === 'spell') {
     const spell = findSkill(opts.spellId)
     const rank = Math.max(1, opts.rank ?? 1)
@@ -58,12 +63,13 @@ export function scrollSkill(it: Pick<InventoryItem, 'skillId' | 'rank' | 'uid'>)
 }
 
 /** Short line describing what an item is linked to. */
-export function itemLinkLabel(it: Pick<InventoryItem, 'kind' | 'skillId' | 'rank'>): string {
+export function itemLinkLabel(it: Pick<InventoryItem, 'kind' | 'skillId' | 'rank' | 'ammo'>): string {
   const name = findSkill(it.skillId)?.name
   switch (it.kind) {
     case 'weapon': return name ? `${name} Skill` : 'Weapon'
     case 'scroll': return name ? `Scroll · ${name} Rank ${it.rank ?? 1} · no Mana` : 'Scroll'
     case 'book': return name ? `Spellbook · learn ${name} at Rank ${it.rank ?? 1}` : 'Spellbook'
+    case 'ammo': return `${name ?? 'Ammo'} ammo · ${describeAmmo(it.ammo)}`
     case 'skillPotion': return `Potion · +${it.rank ?? 1} Skill Rank${(it.rank ?? 1) === 1 ? '' : 's'} (permanent)`
     default: return ''
   }
@@ -149,3 +155,21 @@ export function addItem(c: Character, item: InventoryItem): { c: Character; invU
 /** Is there room in this Gear slot? */
 export const slotFree = (c: Character, slot: GearSlot) =>
   c.gear.filter((g) => g.slot === slot).length < (GEAR_SLOTS.find((s) => s.key === slot)?.max ?? 1)
+
+/** Source label on a Skill that only exists because equipped gear grants Ranks in it. */
+export const GEAR_SKILL_SOURCE = 'Equipped gear'
+
+/**
+ * Equipped gear that grants Ranks in a Skill you don't have gives you that Skill while you
+ * hold or wear it (Core p.116): add it at Rank 0 so the gear's bonus applies; drop it again
+ * once nothing equipped grants it (unless you've since trained it up).
+ */
+export function syncGearSkills(c: Character): Character {
+  const granted = new Set<string>()
+  for (const g of c.gear) for (const m of g.mods) if (m.target.startsWith('skill:') && m.value > 0) granted.add(m.target.slice(6))
+  const add = [...granted].filter((id) => findSkill(id) && !c.skills.some((s) => s.skillId === id))
+  const stale = (s: CharSkill) => s.source === GEAR_SKILL_SOURCE && s.rank <= 0 && !granted.has(s.skillId ?? '')
+  if (!add.length && !c.skills.some(stale)) return c
+  const skills = [...c.skills.filter((s) => !stale(s)), ...add.map((id) => ({ ...newSkill(findSkill(id), id, 0, GEAR_SKILL_SOURCE), wielded: c.gear.some((g) => g.slot === 'hands' && g.skillId === id) }))]
+  return { ...c, skills }
+}

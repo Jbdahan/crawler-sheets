@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { STAT_ABBR, findSkill, normName } from '../data'
 import { castSpell } from '../engine/actions'
 import { attackCalc, isAttackSkill } from '../engine/attacks'
+import { AMMO_NOUN, basicCount, describeAmmo, loadedAmmo, specialAmmo, usesAmmo } from '../engine/ammo'
 import type { CharSkill } from '../engine/types'
 import { openRoll } from '../components/Roller'
 import { Breakdown, PageRef, Sheet, signed, toast } from '../components/ui'
@@ -91,6 +92,7 @@ export function Attacks(ctx: Ctx) {
                   ))}
                   <button className="btn small ghost" onClick={() => setInfo(s)}>Details</button>
                 </div>
+                {usesAmmo(s) && <AmmoBar {...ctx} s={s} />}
                 {a.unlocked.length > 0 && (
                   <ul className="upgrades">
                     {a.unlocked.map((u) => <li key={u.rank}><span className="r">R{u.rank}</span><span>{u.text}</span></li>)}
@@ -188,5 +190,31 @@ function AttackInfo({ c, d, s, onClose }: Ctx & { s: CharSkill; onClose: () => v
         {a?.notes.map((n) => <p key={n} className="small muted">{n}</p>)}
       </div>
     </Sheet>
+  )
+}
+
+/** Which ammo the next Attack fires; one round is spent per Attack. Basic ammo is only counted when tracked. */
+function AmmoBar({ c, up, s }: Ctx & { s: CharSkill }) {
+  const noun = AMMO_NOUN[s.skillId!]
+  const special = specialAmmo(c, s.skillId)
+  const loaded = loadedAmmo(c, s)
+  const set = (patch: Partial<CharSkill>) => up((x) => ({ ...x, skills: x.skills.map((k) => (k.uid === s.uid ? { ...k, ...patch } : k)) }))
+  const basic = basicCount(c, s.skillId)
+  return (
+    <div className="ammo-bar">
+      <label className="row small" style={{ gap: 6 }}>
+        <span className="label" style={{ margin: 0 }}>{noun}</span>
+        <select value={loaded?.uid ?? ''} onChange={(e) => set({ ammoUid: e.target.value || undefined })} style={{ flex: 1, minWidth: 0 }}>
+          <option value="">Basic {noun.toLowerCase()}{s.trackBasicAmmo ? ` (${basic})` : ''}</option>
+          {special.map((i) => <option key={i.uid} value={i.uid}>{i.name} ({i.qty}){i.ammo ? ` · ${describeAmmo(i.ammo)}` : ''}</option>)}
+        </select>
+      </label>
+      {loaded && loaded.qty <= 0 && <div className="small" style={{ color: 'var(--danger)' }}>Out of {loaded.name}: attacks fire basic {noun.toLowerCase()}</div>}
+      {!special.length && <div className="small faint">No special {noun.toLowerCase()} in Inventory. Add some with + Loot.</div>}
+      <label className="row small" style={{ gap: 6 }}>
+        <input type="checkbox" checked={!!s.trackBasicAmmo} onChange={(e) => set({ trackBasicAmmo: e.target.checked })} />
+        Count basic {noun.toLowerCase()}{s.trackBasicAmmo ? `: ${basic} in Inventory` : ''}
+      </label>
+    </div>
   )
 }

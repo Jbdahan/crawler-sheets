@@ -2,9 +2,11 @@ import { useState } from 'react'
 import { uid } from '../engine/advancement'
 import { addInventoryItems, hotlistSlotOfGear, hotlistSlotOfInventory, linkGearToHotlist, linkHotlistItems, linkInventoryToHotlist, parseItemLines, removeFromHotlist, type ParsedItem } from '../engine/inventory'
 import { addItem, drinkSkillPotion, equipItem, itemLinkLabel, readSpellbook, slotFree, unequipGear, weaponSkill } from '../engine/items'
-import { GEAR_SLOTS, type Character, type GearItem, type GearSlot, type InventoryItem, type ItemKind } from '../engine/types'
-import { SKILLS, SPELLS, findSkill } from '../data'
+import { GEAR_SLOTS, type Character, type GearItem, type GearSlot, type InventoryItem, type ItemKind, type AmmoEffect } from '../engine/types'
+import { DAMAGE_TYPES, DEBUFFS, SKILLS, SPELLS, findSkill } from '../data'
+import { AMMO_NOUN, AMMO_WEAPONS } from '../engine/ammo'
 import { LootPicker } from './LootPicker'
+import { effectiveRank } from '../engine/derived'
 import { inferItem } from '../data/loot'
 import { attackLine, castScroll } from './hotlistUse'
 import { Icon, Sheet, Stepper, toast } from '../components/ui'
@@ -27,7 +29,8 @@ export function Gear(ctx: Ctx) {
   const weaponLine = (skillId?: string) => {
     if (!skillId) return ''
     const s = weaponSkill(c, skillId)
-    return `${s.rank > 0 ? `${s.name} Rank ${s.rank}` : `${s.name}: untrained, Disadvantage`} · ${attackLine(ctx, s)}`
+    const rank = effectiveRank(c, s, ctx.d)
+    return `${rank > 0 ? `${s.name} Rank ${rank}` : `${s.name}: untrained, Disadvantage`} · ${attackLine(ctx, s)}`
   }
   /** Hotlist on/off for an Inventory item: it always stays in Inventory */
   const toggleInvHotlist = (it: InventoryItem) => {
@@ -223,9 +226,55 @@ const KIND_OPTIONS: { value: ItemKind | ''; label: string }[] = [
   { value: 'scroll', label: 'Spell Scroll' },
   { value: 'book', label: 'Spellbook' },
   { value: 'skillPotion', label: 'Potion of +N Skill' },
+  { value: 'ammo', label: 'Ammunition' },
 ]
 const ATTACK_SKILLS = SKILLS.filter((s) => s.kind === 'attack').sort((a, b) => a.name.localeCompare(b.name))
 const SPELL_LIST = [...SPELLS].sort((a, b) => a.name.localeCompare(b.name))
+
+/** Ammunition: which weapon fires it and what each round adds (GM-made; Core p.181 has no ammo table). */
+function AmmoFields({ it, onChange }: { it: InventoryItem; onChange: (i: InventoryItem) => void }) {
+  const a = it.ammo ?? {}
+  const set = (patch: Partial<AmmoEffect>) => {
+    const next = { ...a, ...patch }
+    const empty = !next.dice && !next.toHit && !next.damage && !next.debuff
+    onChange({ ...it, ammo: empty ? undefined : next })
+  }
+  return (
+    <>
+      <label><span className="label">Fired by</span>
+        <select value={it.skillId ?? 'crossbow'} onChange={(e) => onChange({ ...it, skillId: e.target.value })}>
+          {AMMO_WEAPONS.map((w) => <option key={w} value={w}>{findSkill(w)?.name} ({AMMO_NOUN[w].toLowerCase()})</option>)}
+        </select>
+      </label>
+      <div className="label">Each round adds (leave empty for basic ammo)</div>
+      <div className="grid2">
+        <label><span className="label">Extra dice</span><input value={a.dice ?? ''} placeholder="e.g. 1d6" onChange={(e) => set({ dice: e.target.value.trim() || undefined })} /></label>
+        <label><span className="label">Damage type</span>
+          <select value={a.dtype ?? ''} onChange={(e) => set({ dtype: e.target.value || undefined })}>
+            <option value="">Same as weapon</option>
+            {DAMAGE_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
+          </select>
+        </label>
+      </div>
+      <div className="row between"><span>To hit</span><Stepper value={a.toHit ?? 0} min={-10} max={20} onChange={(v) => set({ toHit: v || undefined })} /></div>
+      <div className="row between"><span>Damage</span><Stepper value={a.damage ?? 0} min={-10} max={50} onChange={(v) => set({ damage: v || undefined })} /></div>
+      <div className="grid2">
+        <label><span className="label">Debuff</span>
+          <select value={a.debuff ?? ''} onChange={(e) => set({ debuff: e.target.value || undefined, debuffOn: a.debuffOn ?? 'hit' })}>
+            <option value="">None</option>
+            {DEBUFFS.map((d) => <option key={d.id} value={d.id}>{d.name}</option>)}
+          </select>
+        </label>
+        <label><span className="label">When</span>
+          <select value={a.debuffOn ?? 'hit'} disabled={!a.debuff} onChange={(e) => set({ debuffOn: e.target.value as AmmoEffect['debuffOn'] })}>
+            <option value="hit">On a hit</option>
+            <option value="amazing">On an Amazing Success</option>
+          </select>
+        </label>
+      </div>
+    </>
+  )
+}
 
 /** Which Attack Skill a weapon uses (its attacks use that Rank, your Stats and the Floor). */
 function WeaponSelect({ value, onChange }: { value?: string; onChange: (id: string | undefined) => void }) {
@@ -260,7 +309,7 @@ function InvEditor({ c, item, onSave, onDelete, onEquip, hotlistSlot, onHotlist,
   const dirty = JSON.stringify(it) !== JSON.stringify(item)
   const spell = findSkill(it.skillId)
   const setKind = (kind: ItemKind | '') =>
-    setIt({ ...it, kind: kind || undefined, ...(kind === 'weapon' ? { slot: 'hands' as GearSlot } : {}), ...(kind === 'scroll' || kind === 'book' || kind === 'skillPotion' ? { rank: it.rank ?? 1 } : {}), ...(kind === 'weapon' || kind === 'scroll' || kind === 'book' ? {} : { skillId: undefined }) })
+    setIt({ ...it, kind: kind || undefined, ...(kind === 'weapon' ? { slot: 'hands' as GearSlot } : {}), ...(kind === 'scroll' || kind === 'book' || kind === 'skillPotion' ? { rank: it.rank ?? 1 } : {}), ...(kind === 'ammo' ? { skillId: AMMO_WEAPONS.includes(it.skillId ?? '') ? it.skillId : 'crossbow' } : kind === 'weapon' || kind === 'scroll' || kind === 'book' ? {} : { skillId: undefined }) })
   return (
     <div className="stack">
       <label><span className="label">Name</span><input value={it.name} onChange={(e) => setIt({ ...it, name: e.target.value })} /></label>
@@ -282,6 +331,7 @@ function InvEditor({ c, item, onSave, onDelete, onEquip, hotlistSlot, onHotlist,
           <div className="row between"><span>Spell Rank</span><Stepper value={it.rank ?? 1} min={1} max={20} onChange={(rank) => setIt({ ...it, rank })} /></div>
         </>
       )}
+      {it.kind === 'ammo' && <AmmoFields it={it} onChange={setIt} />}
       {it.kind === 'skillPotion' && <div className="row between"><span>Ranks gained</span><Stepper value={it.rank ?? 1} min={1} max={15} onChange={(rank) => setIt({ ...it, rank })} /></div>}
       {(it.kind === 'gear' || it.kind === 'weapon') && (
         <>
@@ -307,8 +357,8 @@ function InvEditor({ c, item, onSave, onDelete, onEquip, hotlistSlot, onHotlist,
           <button className="btn good" disabled={!potionSkill || it.qty <= 0} onClick={() => onDrink(potionSkill)}>Drink +{it.rank ?? 1}</button>
         </div>
       )}
-      {saved && dirty && it.kind && it.kind !== 'gear' && it.kind !== 'weapon' && <p className="small faint" style={{ margin: 0 }}>Save your changes to use it.</p>}
-      {saved && it.kind !== 'scroll' && it.kind !== 'book' && it.kind !== 'skillPotion' && (
+      {saved && dirty && it.kind && it.kind !== 'gear' && it.kind !== 'weapon' && it.kind !== 'ammo' && <p className="small faint" style={{ margin: 0 }}>Save your changes to use it.</p>}
+      {saved && it.kind !== 'scroll' && it.kind !== 'book' && it.kind !== 'skillPotion' && it.kind !== 'ammo' && (
         <div className="row">
           <select value={slot} onChange={(e) => setSlot(e.target.value as GearSlot)} style={{ flex: 1 }}>
             {GEAR_SLOTS.map((s) => <option key={s.key} value={s.key}>{s.label}</option>)}

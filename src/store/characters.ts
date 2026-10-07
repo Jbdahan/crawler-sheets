@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { uid } from '../engine/advancement'
 import { migrate } from '../engine/character'
+import { syncGearSkills } from '../engine/items'
 import type { Character } from '../engine/types'
 
 export interface RollRecord {
@@ -43,7 +44,7 @@ export const useStore = create<State>()(
         set((s) => {
           const cur = s.characters[id]
           if (!cur) return s
-          const next = fn(cur)
+          const next = syncGearSkills(fn(cur))
           if (next === cur) return s
           return { characters: { ...s.characters, [id]: { ...next, updatedAt: Date.now() } } }
         }),

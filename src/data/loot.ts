@@ -1,9 +1,9 @@
 // Standard loot for the Inventory picker: potions, scrolls, spellbooks, weapons,
 // armor and the sample magic gear from the loot box lists (Core p.99, 115–118, 215–219).
 import { ITEMS, findSkill, SKILLS, STAT_KEYS, STAT_NAMES, normName, type StatKey } from './index'
-import type { GearSlot, InventoryItem, ItemKind, Modifier } from '../engine/types'
+import type { AmmoEffect, GearSlot, InventoryItem, ItemKind, Modifier } from '../engine/types'
 
-export const LOOT_GROUPS = ['Potions', 'Scrolls & Spellbooks', 'Weapons', 'Armor & magic gear', 'Consumables', 'Mundane'] as const
+export const LOOT_GROUPS = ['Potions', 'Scrolls & Spellbooks', 'Weapons', 'Ammunition', 'Armor & magic gear', 'Consumables', 'Mundane'] as const
 export type LootGroup = (typeof LOOT_GROUPS)[number]
 
 export interface LootDef {
@@ -20,8 +20,11 @@ export interface LootDef {
   mods?: Modifier[]
   /** Potion of +N Skill */
   ranks?: number
-  /** the player picks this when adding: a Spell (scroll/book) or a Stat (rings) */
-  pick?: 'spell' | 'stat'
+  /** the player picks this when adding: a Spell (scroll/book), a Stat (rings) or the weapon (ammo) */
+  pick?: 'spell' | 'stat' | 'ammoWeapon'
+  /** ammo: what each round adds, and the name in front of "Bolts"/"Arrows" */
+  ammo?: AmmoEffect
+  ammoPrefix?: string
   /** for pick: 'stat', the bonus */
   statBonus?: number
 }
@@ -84,6 +87,25 @@ const gear: LootDef[] = [
   { id: 'sassy-stiletto', name: 'The Sassy Stiletto', group: 'Armor & magic gear', page: 218, kind: 'weapon', skillId: 'dagger', slot: 'hands', mods: STAT_KEYS.map((k) => stat(k, 5)), summary: '+5 all Stats, Dagger Skill at Rank 15, crits on 16–20. An intelligent dagger.' },
 ]
 
+// The book has no special-ammo table (Core p.181: "Each Attack requires proper ammunition"),
+// so these are GM-made templates; edit the effect to match what your GM hands out.
+const GM = 'GM-made template (no official stats).'
+const ammoDef = (id: string, prefix: string, summary: string, ammo?: AmmoEffect, qty = 10): LootDef => ({
+  id: `ammo-${id}`, name: prefix ? `${prefix} ammo` : 'Basic ammo', group: 'Ammunition', page: 181, kind: 'ammo', pick: 'ammoWeapon',
+  ammoPrefix: prefix, ammo, qty, summary: ammo ? `${summary} ${GM}` : summary,
+})
+const ammunition: LootDef[] = [
+  ammoDef('basic', '', 'Ordinary arrows, bolts, rounds or shells. Only counted if you turn on "Count basic" for the weapon.', undefined, 20),
+  ammoDef('fire', 'Fire', '+1d6 Fire; Burned on an Amazing Success.', { dice: '1d6', dtype: 'Fire', debuff: 'burned', debuffOn: 'amazing' }),
+  ammoDef('frost', 'Frost', '+1d6 Ice; Stiff Legs on an Amazing Success.', { dice: '1d6', dtype: 'Ice', debuff: 'stiff-legs', debuffOn: 'amazing' }),
+  ammoDef('shock', 'Shock', '+1d4 Electric; Stunned on an Amazing Success.', { dice: '1d4', dtype: 'Electric', debuff: 'stunned', debuffOn: 'amazing' }),
+  ammoDef('explosive', 'Explosive', '+1d8 Bludgeoning; Staggered on an Amazing Success.', { dice: '1d8', dtype: 'Bludgeoning', debuff: 'staggered', debuffOn: 'amazing' }),
+  ammoDef('poison', 'Poison', 'Target gains Poisoned on a hit.', { debuff: 'poisoned', debuffOn: 'hit' }),
+  ammoDef('barbed', 'Barbed', 'Target gains Blood Trail on a hit.', { debuff: 'blood-trail', debuffOn: 'hit' }),
+  ammoDef('precision', 'Precision', '+2 to hit.', { toHit: 2 }),
+  ammoDef('heavy', 'Heavy', '+2 damage.', { damage: 2 }),
+]
+
 const ITEM_GROUP = (name: string): LootGroup => (/potion/i.test(name) ? 'Potions' : 'Consumables')
 const consumables: LootDef[] = ITEMS.filter((i) => ITEM_GROUP(i.name) === 'Consumables').map((i) => ({
   id: i.id, name: i.name, group: 'Consumables', page: i.page, summary: i.summary,
@@ -99,7 +121,7 @@ const mundane: LootDef[] = [
   { id: 'headphones', name: 'Headphones and music player', group: 'Mundane', page: 115, summary: 'Background item.' },
 ]
 
-export const LOOT: LootDef[] = [...potions, ...skillPotions, ...magic, ...weapons, ...gear, ...consumables, ...mundane]
+export const LOOT: LootDef[] = [...potions, ...skillPotions, ...magic, ...weapons, ...ammunition, ...gear, ...consumables, ...mundane]
 
 export const statPickName = (def: LootDef, k: StatKey) => `${def.name} of +${def.statBonus} ${STAT_NAMES[k]}`
 
@@ -139,6 +161,11 @@ export function inferItem(it: InventoryItem): InventoryItem {
   }
   const potion = n.match(/^potion of (\d+) skill/)
   if (potion) return { ...it, kind: 'skillPotion', rank: Number(potion[1]) }
+  const ammo = n.match(/\b(arrows?|bolts?|shells?|bullets?|rounds?)\b/)
+  if (ammo) {
+    const skillId = /arrow/.test(ammo[1]) ? 'bow' : /bolt/.test(ammo[1]) ? 'crossbow' : /shell/.test(ammo[1]) ? 'shotgun' : 'handgun'
+    return { ...it, kind: 'ammo', skillId }
+  }
   const weapon = weaponSkillFor(it.name)
   if (weapon) return { ...it, kind: 'weapon', skillId: weapon, slot: 'hands' }
   return it

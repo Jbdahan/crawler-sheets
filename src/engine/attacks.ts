@@ -1,7 +1,8 @@
-import { findSkill, STAT_ABBR, type Dice, type SkillDef, type StatKey } from '../data'
+import { findDebuff, findSkill, STAT_ABBR, type Dice, type SkillDef, type StatKey } from '../data'
 import { addDice, formatDice, parseDice, rankDamageDice, rollDie, type DicePool } from './dice'
 import { checkBonus, derive, type Derived, type Part } from './derived'
-import type { Character, CharSkill } from './types'
+import { firing } from './ammo'
+import type { Character, CharSkill, InventoryItem } from './types'
 
 export interface AttackCalc {
   skill: CharSkill
@@ -12,6 +13,10 @@ export interface AttackCalc {
   baseDice: Dice[]
   /** Rank damage dice: never doubled on a crit (Core p.176) */
   rankDice: DicePool
+  /** special ammo dice: not doubled on a crit either */
+  ammoDice: Dice[]
+  /** the special ammo this Attack fires */
+  ammo?: InventoryItem
   damageStat: StatKey | null
   damageFlat: { total: number; parts: Part[] }
   types: string[]
@@ -35,11 +40,14 @@ export const isAttackSkill = (s: CharSkill) => {
 }
 
 /** Attack Skill Check and damage for the current Stats, Rank and Floor (Core p.82–85, 175–176). */
-export function attackCalc(c: Character, s: CharSkill, d: Derived = derive(c)): AttackCalc {
+export function attackCalc(c: Character, s: CharSkill, d: Derived = derive(c), opts: { ammo?: InventoryItem | null } = {}): AttackCalc {
   const def = findSkill(s.skillId)
   const bonus = d.skillBonus[s.uid] ?? []
   const rank = s.rank + bonus.reduce((a, p) => a + p.value, 0)
-  const toHitParts = [...checkBonus(c, s, d).parts, ...d.toHit.parts]
+  // loaded special ammo (or the round already fired, passed in by the roll)
+  const ammo = opts.ammo === undefined ? firing(c, s) : opts.ammo ?? undefined
+  const fx = ammo?.ammo
+  const toHitParts = [...checkBonus(c, s, d).parts, ...d.toHit.parts, ...(fx?.toHit ? [{ label: ammo!.name, value: fx.toHit }] : [])]
   const toHitTotal = toHitParts.reduce((a, p) => a + p.value, 0)
 
   let baseDice: Dice[] = []
@@ -76,11 +84,15 @@ export function attackCalc(c: Character, s: CharSkill, d: Derived = derive(c)): 
   }
   if (damageStat) flatParts.push({ label: `${STAT_ABBR[damageStat]} Mod`, value: d.mod[damageStat] })
   flatParts.push(...d.damage.parts)
+  if (fx?.damage) flatParts.push({ label: ammo!.name, value: fx.damage })
   const flat = flatParts.reduce((a, p) => a + p.value, 0)
   const rankDice = rankDie ? rankDamageDice(rank) : { dice: [], flat: 0 }
+  const ammoPool = fx?.dice ? parseDice(fx.dice) : null
+  const ammoDice = ammoPool?.dice ?? []
+  if (fx?.dice && fx.dtype && !types.includes(fx.dtype)) types = [...types, fx.dtype]
 
-  // base dice first, then the Rank damage die, then flat modifiers
-  const withRank = (dice: Dice[]) => formatDice([...dice, ...rankDice.dice], flat + rankDice.flat)
+  // base dice first, then the Rank damage die and ammo dice, then flat modifiers
+  const withRank = (dice: Dice[]) => formatDice([...dice, ...rankDice.dice, ...ammoDice], flat + rankDice.flat + (ammoPool?.flat ?? 0))
 
   const modeReasons: string[] = []
   let adv = 0
@@ -96,6 +108,7 @@ export function attackCalc(c: Character, s: CharSkill, d: Derived = derive(c)): 
   if (def?.attackType === 'ranged' || def?.kind === 'spell') notes.push('Ranged/Spell attacks within melee reach of a foe have Disadvantage.')
   if (def?.aiFavor) notes.push(`AI Favor: ${def.aiFavor}`)
   if (def?.limitations) notes.push(def.limitations)
+  if (fx?.debuff) notes.push(`${ammo!.name}: target gains ${findDebuff(fx.debuff)?.name ?? fx.debuff} on ${fx.debuffOn === 'amazing' ? 'an Amazing Success' : 'a hit'}`)
 
   return {
     skill: s,
@@ -104,6 +117,8 @@ export function attackCalc(c: Character, s: CharSkill, d: Derived = derive(c)): 
     toHit: { total: toHitTotal, parts: toHitParts },
     baseDice,
     rankDice,
+    ammoDice,
+    ammo,
     damageStat,
     damageFlat: { total: flat, parts: flatParts },
     types,
@@ -143,9 +158,10 @@ export function rollDamage(a: AttackCalc, opts: { crit?: boolean; amazing?: bool
     dice: opts.crit ? a.baseDice.map((x) => ({ ...x, count: x.count * 2 })) : a.baseDice,
     flat: 0,
   }
+  const ammoFlat = a.ammo?.ammo?.dice ? parseDice(a.ammo.ammo.dice)?.flat ?? 0 : 0
   const pool: DicePool = {
-    dice: [...base.dice, ...a.rankDice.dice],
-    flat: a.damageFlat.total + a.rankDice.flat + (opts.amazing ? a.amazingBonus : 0) + (opts.extraFlat ?? 0),
+    dice: [...base.dice, ...a.rankDice.dice, ...a.ammoDice],
+    flat: a.damageFlat.total + a.rankDice.flat + ammoFlat + (opts.amazing ? a.amazingBonus : 0) + (opts.extraFlat ?? 0),
   }
   const faces: number[] = []
   let total = pool.flat

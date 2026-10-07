@@ -41,6 +41,10 @@ export interface CharSkill {
   notes: string
   /** weapon currently in hand: its Evade upgrades apply */
   wielded?: boolean
+  /** ranged weapons: the special ammo loaded (Inventory uid); none = basic ammo */
+  ammoUid?: string
+  /** ranged weapons: also count basic ammo (off by default) */
+  trackBasicAmmo?: boolean
   /** custom attack details */
   customDamage?: string
   customDamageType?: string
@@ -94,9 +98,22 @@ export interface HotlistEntry {
 /**
  * What an Inventory item does (Core p.99): a weapon used with an Attack Skill,
  * a Spell Scroll (cast once at its Rank, no Mana), a Spellbook (read to learn
- * the Spell at its Rank), a Potion of +N Skill, or wearable gear.
+ * the Spell at its Rank), a Potion of +N Skill, wearable gear, or ammunition.
  */
-export type ItemKind = 'weapon' | 'scroll' | 'book' | 'skillPotion' | 'gear'
+
+/** What a special arrow/bolt/round adds to each attack (GM-made: the book has no ammo table). */
+export interface AmmoEffect {
+  /** extra damage dice, e.g. "1d6"; not doubled on a Critical Hit */
+  dice?: string
+  /** damage type of the extra dice, e.g. "Fire" */
+  dtype?: string
+  toHit?: number
+  damage?: number
+  /** Debuff id the target gains */
+  debuff?: string
+  debuffOn?: 'hit' | 'amazing'
+}
+export type ItemKind = 'weapon' | 'scroll' | 'book' | 'skillPotion' | 'gear' | 'ammo'
 
 export interface InventoryItem {
   uid: string
@@ -104,13 +121,15 @@ export interface InventoryItem {
   qty: number
   notes: string
   kind?: ItemKind
-  /** weapon: Attack Skill id; scroll/book: Spell id */
+  /** weapon/ammo: Attack Skill id; scroll/book: Spell id */
   skillId?: string
   /** scroll/book: the Spell's Rank; skillPotion: Ranks gained */
   rank?: number
   /** gear/weapons: where it goes and what it gives when equipped */
   slot?: GearSlot
   mods?: Modifier[]
+  /** ammo: what it adds (none: basic ammo) */
+  ammo?: AmmoEffect
 }
 
 export interface Trait {

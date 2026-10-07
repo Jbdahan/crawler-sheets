@@ -8,6 +8,7 @@ import { PageRef, Seg, Sheet, Stepper } from '../components/ui'
 import { SpellText } from '../components/SpellText'
 import { swapSlots, useSlotDrag } from '../components/useSlotDrag'
 import { attackLine, hotlistAttack, triggerHotlist } from './hotlistUse'
+import { AMMO_NOUN, basicCount, loadedAmmo, usesAmmo } from '../engine/ammo'
 import type { Ctx } from './ctx'
 
 export function Hotlist(ctx: Ctx) {
@@ -43,6 +44,10 @@ export function Hotlist(ctx: Ctx) {
                 <div className="n">{h.name}</div>
                 {h.kind === 'spell' ? <div className="tiny muted">{spellNote(ctx, h)}</div> : null}
                 {atk && <div className="small num" style={{ fontWeight: 800, color: 'var(--accent)' }}>{attackLine(ctx, atk)}</div>}
+                {atk && usesAmmo(atk) && (() => {
+                  const l = loadedAmmo(c, atk)
+                  return <div className="tiny muted">{l ? `${l.name} ×${l.qty}` : `Basic ${AMMO_NOUN[atk.skillId!].toLowerCase()}${atk.trackBasicAmmo ? ` ×${basicCount(c, atk.skillId)}` : ''}`}</div>
+                })()}
               </button>
               {h.kind === 'spell'
                 ? spellNotes(ctx, h) && <SpellText text={spellNotes(ctx, h)} lines={2} />

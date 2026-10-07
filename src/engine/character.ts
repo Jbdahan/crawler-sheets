@@ -2,7 +2,7 @@ import { findSkill } from '../data'
 import { newSkill, uid } from './advancement'
 import { HOTLIST_SIZE, type Character } from './types'
 import { linkHotlistItems } from './inventory'
-import { inferItems } from './items'
+import { inferItems, syncGearSkills } from './items'
 
 export const SCHEMA_VERSION = 1
 
@@ -53,5 +53,5 @@ export function migrate(raw: unknown): Character {
   const c = { ...blankCharacter(), ...(raw as Partial<Character>) }
   const hot = Array.isArray(c.hotlist) ? c.hotlist.slice(0, HOTLIST_SIZE) : []
   while (hot.length < HOTLIST_SIZE) hot.push(null)
-  return linkHotlistItems(inferItems({ ...c, hotlist: hot, version: SCHEMA_VERSION }))
+  return syncGearSkills(linkHotlistItems(inferItems({ ...c, hotlist: hot, version: SCHEMA_VERSION })))
 }

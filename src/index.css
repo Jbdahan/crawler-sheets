@@ -373,3 +373,5 @@ html.slot-drag-active, html.slot-drag-active body { overscroll-behavior: none; }
 .hg-tile.hg-two .hg-name { -webkit-line-clamp: 1; display: block; white-space: nowrap; text-overflow: ellipsis; }
 @media (min-width: 760px) { .hg-cost { font-size: 0.7rem; } }
 .hg-meta > .hg-cost:first-child { margin-left: 0; }
+.ammo-bar { margin-top: 8px; padding: 8px 10px; border: 1px dashed var(--border); border-radius: var(--radius-sm); display: grid; gap: 6px; }
+.ammo-bar select { padding: 4px 8px; min-height: 32px; font-size: 0.85rem; }

@@ -3,6 +3,7 @@ import { SPELLS, STAT_KEYS, STAT_NAMES, findSkill, normName, type StatKey } from
 import { LOOT, LOOT_GROUPS, type LootDef, type LootGroup } from '../data/loot'
 import { describeMod } from '../sheets/ModEditor'
 import { lootItem } from '../engine/items'
+import { AMMO_NOUN, AMMO_WEAPONS } from '../engine/ammo'
 import { rollDie } from '../engine/dice'
 import { GEAR_SLOTS, type Character, type InventoryItem } from '../engine/types'
 import { Sheet, Stepper } from '../components/ui'
@@ -62,7 +63,9 @@ function LootDetail({ c, def, onBack, onClose, onAdd }: {
   const [spellId, setSpellId] = useState('')
   const [rank, setRank] = useState(def.kind === 'scroll' ? 1 : Math.max(1, rollDie(6) - 1))
   const [stat, setStat] = useState<StatKey>('str')
-  const item = lootItem(def, { qty, spellId, rank, stat })
+  // ammo: default to a ranged weapon this crawler uses
+  const [weapon, setWeapon] = useState(() => AMMO_WEAPONS.find((w) => c.skills.some((s) => s.skillId === w)) ?? 'crossbow')
+  const item = lootItem(def, { qty, spellId, rank, stat, weapon })
   const ready = def.pick !== 'spell' || !!spellId
   const own = def.skillId ? c.skills.find((s) => s.skillId === def.skillId) : undefined
   const known = spellId ? c.skills.find((s) => s.skillId === spellId) : undefined
@@ -89,6 +92,14 @@ function LootDetail({ c, def, onBack, onClose, onAdd }: {
             {def.kind === 'book' && known && <div className="infobox small">You know {known.name} at Rank {known.rank}. Reading it raises it to Rank {rank} if that's higher.</div>}
           </>
         )}
+        {def.pick === 'ammoWeapon' && (
+          <label><span className="label">For</span>
+            <select value={weapon} onChange={(e) => setWeapon(e.target.value)}>
+              {AMMO_WEAPONS.map((w) => <option key={w} value={w}>{findSkill(w)?.name} ({AMMO_NOUN[w].toLowerCase()})</option>)}
+            </select>
+          </label>
+        )}
+        {def.kind === 'ammo' && <p className="small faint" style={{ margin: 0 }}>Load it on the {findSkill(weapon)?.name} attack card. Each Attack fires one.</p>}
         {def.pick === 'stat' && (
           <label><span className="label">Stat (+{def.statBonus})</span>
             <select value={stat} onChange={(e) => setStat(e.target.value as StatKey)}>

@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { create } from 'zustand'
 import { attackCalc, rollDamage, type DamageRoll } from '../engine/attacks'
-import { checkBonus, derive, type Part } from '../engine/derived'
+import { spendAmmo, usesAmmo } from '../engine/ammo'
+import { checkBonus, derive, effectiveRank, type Part } from '../engine/derived'
 import { DEGREE_LABEL, degreeOf, isSuccess, netMode, parseDice, rollD20, rollDie, rollPool, type D20Roll } from '../engine/dice'
 import { findSkill } from '../data'
 import type { CharSkill } from '../engine/types'
@@ -55,7 +56,19 @@ function CheckRoll({ req, onClose }: { req: Exclude<RollRequest, { kind: 'dice' 
   const c = req.charId ? store.characters[req.charId] : undefined
   const d = useMemo(() => (c ? derive(c) : undefined), [c])
   const skill = req.kind === 'skill' && c ? req.skill ?? c.skills.find((s) => s.uid === req.skillUid) : undefined
-  const atk = req.kind === 'skill' && req.attack && c && skill && d ? attackCalc(c, skill, d) : undefined
+  // a ranged Attack fires one round of ammo when the roll opens (Core p.181); work out which now
+  const [shot] = useState(() => (req.kind === 'skill' && req.attack && c && skill && !req.skill && usesAmmo(skill) ? spendAmmo(c, skill) : null))
+  const spent = useRef(false)
+  useEffect(() => {
+    if (!shot || !c || !skill || spent.current) return
+    spent.current = true
+    store.update(c.id, (x) => {
+      const s = x.skills.find((k) => k.uid === skill.uid)
+      return s ? spendAmmo(x, s).c : x
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+  const atk = req.kind === 'skill' && req.attack && c && skill && d ? attackCalc(c, skill, d, shot ? { ammo: shot.fired ?? null } : {}) : undefined
 
   const label = req.kind === 'skill' ? `${skill?.name ?? 'Skill'} ${atk ? 'attack' : 'check'}` : req.label
   const parts: Part[] = req.kind === 'custom' ? req.parts : atk ? atk.toHit.parts : c && skill && d ? checkBonus(c, skill, d).parts : []
@@ -64,7 +77,7 @@ function CheckRoll({ req, onClose }: { req: Exclude<RollRequest, { kind: 'dice' 
     req.kind === 'custom'
       ? req.mode ?? (d?.flags.disAll || d?.flags.disNext ? 'disadvantage' : 'normal')
       : atk ? atk.mode
-      : skill && skill.rank <= 0 ? 'disadvantage'
+      : skill && c && d && effectiveRank(c, skill, d) <= 0 ? 'disadvantage'
       : d?.flags.disAll || d?.flags.disNext ? 'disadvantage' : 'normal'
 
   const [mode, setMode] = useState<D20Roll['mode']>(initialMode)
@@ -174,6 +187,8 @@ function CheckRoll({ req, onClose }: { req: Exclude<RollRequest, { kind: 'dice' 
             </div>
           )}
           {!canHit && roll.kept === 1 && <div className="small muted">A Natural 1 always misses.</div>}
+          {shot?.note && <div className="small" style={{ marginTop: 6 }}>{shot.note}</div>}
+          {atk.ammo?.ammo?.debuff && <div className="small" style={{ color: 'var(--accent)' }}>{atk.notes[atk.notes.length - 1]}</div>}
         </div>
       )}
 
