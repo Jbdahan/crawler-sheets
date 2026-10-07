@@ -9,7 +9,7 @@ import { SpellText } from '../components/SpellText'
 import { swapSlots, useSlotDrag } from '../components/useSlotDrag'
 import { attackLine, hotlistAttack, hotlistWeapon, triggerHotlist } from './hotlistUse'
 import { effectiveRank } from '../engine/derived'
-import { AMMO_NOUN, basicCount, loadedAmmo, usesAmmo } from '../engine/ammo'
+import { ammoKey, ammoNoun, basicCount, loadedAmmo } from '../engine/ammo'
 import type { Ctx } from './ctx'
 
 export function Hotlist(ctx: Ctx) {
@@ -45,9 +45,11 @@ export function Hotlist(ctx: Ctx) {
                 <div className="n">{h.name}</div>
                 {h.kind === 'spell' ? <div className="tiny muted">{spellNote(ctx, h)}</div> : null}
                 {atk && <div className="small num" style={{ fontWeight: 800, color: 'var(--accent)' }}>{attackLine(ctx, atk, hotlistWeapon(ctx, h))}</div>}
-                {atk && usesAmmo(atk) && (() => {
-                  const l = loadedAmmo(c, atk)
-                  return <div className="tiny muted">{l ? `${l.name} ×${l.qty}` : `Basic ${AMMO_NOUN[atk.skillId!].toLowerCase()}${atk.trackBasicAmmo ? ` ×${basicCount(c, atk.skillId)}` : ''}`}</div>
+                {atk && (() => {
+                  const key = ammoKey(c, atk, hotlistWeapon(ctx, h))
+                  if (!key) return null
+                  const l = loadedAmmo(c, atk, key)
+                  return <div className="tiny muted">{l ? `${l.name} ×${l.qty}` : `Basic ${ammoNoun(key).toLowerCase()}${atk.trackBasicAmmo ? ` ×${basicCount(c, key)}` : ''}`}</div>
                 })()}
               </button>
               {h.kind === 'spell'

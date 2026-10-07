@@ -3,7 +3,8 @@ import { SPELLS, STAT_KEYS, STAT_NAMES, findSkill, normName, type StatKey } from
 import { LOOT, LOOT_GROUPS, type LootDef, type LootGroup } from '../data/loot'
 import { describeMod } from '../sheets/ModEditor'
 import { lootItem } from '../engine/items'
-import { AMMO_NOUN, AMMO_WEAPONS } from '../engine/ammo'
+import { AMMO_WEAPONS, ammoKeys, ammoNoun } from '../engine/ammo'
+import { AmmoSelect } from '../components/AmmoSelect'
 import { rollDie } from '../engine/dice'
 import { GEAR_SLOTS, type Character, type InventoryItem } from '../engine/types'
 import { Sheet, Stepper } from '../components/ui'
@@ -93,13 +94,9 @@ function LootDetail({ c, def, onBack, onClose, onAdd }: {
           </>
         )}
         {def.pick === 'ammoWeapon' && (
-          <label><span className="label">For</span>
-            <select value={weapon} onChange={(e) => setWeapon(e.target.value)}>
-              {AMMO_WEAPONS.map((w) => <option key={w} value={w}>{findSkill(w)?.name} ({AMMO_NOUN[w].toLowerCase()})</option>)}
-            </select>
-          </label>
+          <AmmoSelect label="Ammo type" value={weapon} custom={ammoKeys(c)} onChange={(k) => setWeapon(k ?? '')} />
         )}
-        {def.kind === 'ammo' && <p className="small faint" style={{ margin: 0 }}>Load it on the {findSkill(weapon)?.name} attack card. Each Attack fires one.</p>}
+        {def.kind === 'ammo' && <p className="small faint" style={{ margin: 0 }}>Load it on the attack card of a weapon that fires {ammoNoun(weapon).toLowerCase()} ({findSkill(weapon)?.name ?? 'a custom weapon'}). Each Attack fires one.</p>}
         {def.pick === 'stat' && (
           <label><span className="label">Stat (+{def.statBonus})</span>
             <select value={stat} onChange={(e) => setStat(e.target.value as StatKey)}>

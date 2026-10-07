@@ -1,11 +1,11 @@
 import { findDebuff, findSkill, STAT_ABBR, type Dice, type SkillDef, type StatKey } from '../data'
 import { addDice, formatDice, parseDice, rankDamageDice, rollDie, type DicePool } from './dice'
 import { checkBonus, derive, type Derived, type Part } from './derived'
-import { firing } from './ammo'
-import type { Character, CharSkill, InventoryItem, WeaponStats } from './types'
-import { hasWeaponStats } from './weapon'
+import { ammoKey, firing } from './ammo'
+import type { Character, CharSkill, InventoryItem } from './types'
+import { hasWeaponStats, heldWeapon, type WeaponRef } from './weapon'
 
-export { describeWeapon, hasWeaponStats } from './weapon'
+export { describeWeapon, hasWeaponStats, heldWeapon, type WeaponRef } from './weapon'
 
 export interface AttackCalc {
   skill: CharSkill
@@ -38,17 +38,6 @@ export interface AttackCalc {
   weapon?: string
 }
 
-/** A weapon item with its own stats: an equipped Gear item or one from Inventory/the Hotlist. */
-export interface WeaponRef { name: string; stats: WeaponStats }
-
-/** The weapon held in hand for this Attack Skill that has its own stats, if any. */
-export function heldWeapon(c: Character, s: CharSkill): WeaponRef | undefined {
-  if (!s.skillId) return undefined
-  const g = c.gear.find((x) => x.slot === 'hands' && x.skillId === s.skillId && hasWeaponStats(x.weapon))
-  return g ? { name: g.name || 'Weapon', stats: g.weapon! } : undefined
-}
-
-
 export const isAttackSkill = (s: CharSkill) => {
   if (s.customDamage) return true
   const def = findSkill(s.skillId)
@@ -60,8 +49,10 @@ export function attackCalc(c: Character, s: CharSkill, d: Derived = derive(c), o
   const def = findSkill(s.skillId)
   const bonus = d.skillBonus[s.uid] ?? []
   const rank = s.rank + bonus.reduce((a, p) => a + p.value, 0)
-  // loaded special ammo (or the round already fired, passed in by the roll)
-  const ammo = opts.ammo === undefined ? firing(c, s) : opts.ammo ?? undefined
+  // a weapon item with its own stats (default: the one held for this Skill)
+  const weapon = opts.weapon === undefined ? heldWeapon(c, s) : opts.weapon ?? undefined
+  // loaded special ammo it fires (or the round already fired, passed in by the roll)
+  const ammo = opts.ammo === undefined ? firing(c, s, ammoKey(c, s, weapon ?? null)) : opts.ammo ?? undefined
   const fx = ammo?.ammo
   const toHitParts = [...checkBonus(c, s, d).parts, ...d.toHit.parts, ...(fx?.toHit ? [{ label: ammo!.name, value: fx.toHit }] : [])]
   const toHitTotal = toHitParts.reduce((a, p) => a + p.value, 0)
@@ -89,7 +80,6 @@ export function attackCalc(c: Character, s: CharSkill, d: Derived = derive(c), o
     if (s.customDamageType) types = [s.customDamageType]
   }
   // a weapon item with its own stats replaces the Skill's base die, type and range
-  const weapon = opts.weapon === undefined ? heldWeapon(c, s) : opts.weapon ?? undefined
   const ws = hasWeaponStats(weapon?.stats) ? weapon!.stats : undefined
   if (ws?.dice?.trim()) {
     const p = parseDice(ws.dice)

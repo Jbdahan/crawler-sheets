@@ -92,6 +92,11 @@ export interface WeaponStats {
   dtype?: string
   /** e.g. "Melee 10ft" or "120 feet" */
   range?: string
+  /**
+   * fires ammunition: a ranged Weapon Skill id for its ammo ("crossbow" = Bolts) or a
+   * custom ammo name, e.g. "Plasma Cells". Blank: the Weapon Skill's own ammo, if any.
+   */
+  ammo?: string
 }
 
 export interface HotlistEntry {

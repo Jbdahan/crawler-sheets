@@ -5,7 +5,8 @@ import { addItem, drinkSkillPotion, equipItem, itemLinkLabel, readSpellbook, slo
 import { GEAR_SLOTS, type Character, type GearItem, type GearSlot, type InventoryItem, type ItemKind, type AmmoEffect, type WeaponStats } from '../engine/types'
 import { attackCalc, hasWeaponStats } from '../engine/attacks'
 import { DAMAGE_TYPES, DEBUFFS, SKILLS, SPELLS, findSkill } from '../data'
-import { AMMO_NOUN, AMMO_WEAPONS } from '../engine/ammo'
+import { AMMO_NOUN, AMMO_WEAPONS, ammoKeys, ammoNoun } from '../engine/ammo'
+import { AmmoSelect } from '../components/AmmoSelect'
 import { LootPicker } from './LootPicker'
 import { effectiveRank } from '../engine/derived'
 import { inferItem } from '../data/loot'
@@ -238,7 +239,7 @@ const ATTACK_SKILLS = SKILLS.filter((s) => s.kind === 'attack').sort((a, b) => a
 const SPELL_LIST = [...SPELLS].sort((a, b) => a.name.localeCompare(b.name))
 
 /** Ammunition: which weapon fires it and what each round adds (GM-made; Core p.181 has no ammo table). */
-function AmmoFields({ it, onChange }: { it: InventoryItem; onChange: (i: InventoryItem) => void }) {
+function AmmoFields({ c, it, onChange }: { c: Character; it: InventoryItem; onChange: (i: InventoryItem) => void }) {
   const a = it.ammo ?? {}
   const set = (patch: Partial<AmmoEffect>) => {
     const next = { ...a, ...patch }
@@ -247,11 +248,9 @@ function AmmoFields({ it, onChange }: { it: InventoryItem; onChange: (i: Invento
   }
   return (
     <>
-      <label><span className="label">Fired by</span>
-        <select value={it.skillId ?? 'crossbow'} onChange={(e) => onChange({ ...it, skillId: e.target.value })}>
-          {AMMO_WEAPONS.map((w) => <option key={w} value={w}>{findSkill(w)?.name} ({AMMO_NOUN[w].toLowerCase()})</option>)}
-        </select>
-      </label>
+      <AmmoSelect label="Ammo type (fired by)" value={it.skillId ?? 'crossbow'} custom={ammoKeys(c)}
+        onChange={(skillId) => onChange({ ...it, skillId: skillId ?? '' })} />
+      <p className="small faint" style={{ margin: 0 }}>Weapons that fire this ammo type can load it: bows, guns, or a custom weapon set to fire it.</p>
       <div className="label">Each round adds (leave empty for basic ammo)</div>
       <div className="grid2">
         <label><span className="label">Extra dice</span><input value={a.dice ?? ''} placeholder="e.g. 1d6" onChange={(e) => set({ dice: e.target.value.trim() || undefined })} /></label>
@@ -340,6 +339,14 @@ function WeaponStatsFields({ c, skillId, name, value, onChange }: {
         <input value={w.range ?? ''} placeholder={baseRange ? `${baseRange} (Skill)` : 'e.g. Melee 10ft or 120 feet'} aria-label="Range"
           onChange={(e) => set({ range: e.target.value || undefined })} />
       </label>
+      <AmmoSelect label="Fires ammo" value={w.ammo} custom={ammoKeys(c)}
+        none={skillId && skillId in AMMO_NOUN ? `Same as Skill (${AMMO_NOUN[skillId]})` : 'No ammo'}
+        onChange={(ammo) => set({ ammo })} />
+      {w.ammo?.trim() && (
+        <p className="small faint" style={{ margin: 0 }}>
+          Each attack fires one of the {ammoNoun(w.ammo.trim()).toLowerCase()}. Load special {ammoNoun(w.ammo.trim()).toLowerCase()} on the Attacks tab; its extra dice, to-hit, damage and Debuff add to this weapon's.
+        </p>
+      )}
       {a && (
         <div className="infobox small num">
           With {s!.name} {s!.rank > 0 ? `Rank ${a.rank}` : '(untrained, Disadvantage)'}: to hit <b>{a.toHit.total >= 0 ? '+' : ''}{a.toHit.total}</b> · damage <b>{a.formula}</b> {a.types.join('/')}{a.range ? ` · ${a.range}` : ''}
@@ -393,7 +400,7 @@ function InvEditor({ c, item, onSave, onDelete, onEquip, hotlistSlot, onHotlist,
           <div className="row between"><span>Spell Rank</span><Stepper value={it.rank ?? 1} min={1} max={20} onChange={(rank) => setIt({ ...it, rank })} /></div>
         </>
       )}
-      {it.kind === 'ammo' && <AmmoFields it={it} onChange={setIt} />}
+      {it.kind === 'ammo' && <AmmoFields c={c} it={it} onChange={setIt} />}
       {it.kind === 'skillPotion' && <div className="row between"><span>Ranks gained</span><Stepper value={it.rank ?? 1} min={1} max={15} onChange={(rank) => setIt({ ...it, rank })} /></div>}
       {(it.kind === 'gear' || it.kind === 'weapon') && (
         <>

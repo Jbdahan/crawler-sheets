@@ -58,14 +58,14 @@ function CheckRoll({ req, onClose }: { req: Exclude<RollRequest, { kind: 'dice' 
   const d = useMemo(() => (c ? derive(c) : undefined), [c])
   const skill = req.kind === 'skill' && c ? req.skill ?? c.skills.find((s) => s.uid === req.skillUid) : undefined
   // a ranged Attack fires one round of ammo when the roll opens (Core p.181); work out which now
-  const [shot] = useState(() => (req.kind === 'skill' && req.attack && c && skill && !req.skill && usesAmmo(skill) ? spendAmmo(c, skill) : null))
+  const [shot] = useState(() => (req.kind === 'skill' && req.attack && c && skill && !req.skill && usesAmmo(c, skill, req.weapon) ? spendAmmo(c, skill, req.weapon) : null))
   const spent = useRef(false)
   useEffect(() => {
     if (!shot || !c || !skill || spent.current) return
     spent.current = true
     store.update(c.id, (x) => {
       const s = x.skills.find((k) => k.uid === skill.uid)
-      return s ? spendAmmo(x, s).c : x
+      return s ? spendAmmo(x, s, req.kind === 'skill' ? req.weapon : undefined).c : x
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

@@ -3,7 +3,7 @@ import { STAT_ABBR, findSkill, normName } from '../data'
 import { castSpell } from '../engine/actions'
 import { effectiveRank } from '../engine/derived'
 import { attackCalc, isAttackSkill } from '../engine/attacks'
-import { AMMO_NOUN, basicCount, describeAmmo, loadedAmmo, specialAmmo, usesAmmo } from '../engine/ammo'
+import { ammoKey, ammoNoun, basicCount, describeAmmo, loadedAmmo, specialAmmo, usesAmmo } from '../engine/ammo'
 import type { CharSkill } from '../engine/types'
 import { openRoll } from '../components/Roller'
 import { Breakdown, PageRef, Sheet, signed, toast } from '../components/ui'
@@ -94,7 +94,7 @@ export function Attacks(ctx: Ctx) {
                   ))}
                   <button className="btn small ghost" onClick={() => setInfo(s)}>Details</button>
                 </div>
-                {usesAmmo(s) && <AmmoBar {...ctx} s={s} />}
+                {usesAmmo(c, s) && <AmmoBar {...ctx} s={s} />}
                 {a.unlocked.length > 0 && (
                   <ul className="upgrades">
                     {a.unlocked.map((u) => <li key={u.rank}><span className="r">R{u.rank}</span><span>{u.text}</span></li>)}
@@ -197,11 +197,13 @@ function AttackInfo({ c, d, s, onClose }: Ctx & { s: CharSkill; onClose: () => v
 
 /** Which ammo the next Attack fires; one round is spent per Attack. Basic ammo is only counted when tracked. */
 function AmmoBar({ c, up, s }: Ctx & { s: CharSkill }) {
-  const noun = AMMO_NOUN[s.skillId!]
-  const special = specialAmmo(c, s.skillId)
-  const loaded = loadedAmmo(c, s)
+  // the ammo the held weapon fires (a custom weapon can fire any ammo), else the Skill's own
+  const key = ammoKey(c, s)!
+  const noun = ammoNoun(key)
+  const special = specialAmmo(c, key)
+  const loaded = loadedAmmo(c, s, key)
   const set = (patch: Partial<CharSkill>) => up((x) => ({ ...x, skills: x.skills.map((k) => (k.uid === s.uid ? { ...k, ...patch } : k)) }))
-  const basic = basicCount(c, s.skillId)
+  const basic = basicCount(c, key)
   return (
     <div className="ammo-bar">
       <label className="row small" style={{ gap: 6 }}>

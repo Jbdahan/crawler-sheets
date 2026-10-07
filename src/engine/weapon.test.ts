@@ -3,6 +3,7 @@ import { findSkill } from '../data'
 import { newSkill } from './advancement'
 import { attackCalc, describeWeapon, heldWeapon } from './attacks'
 import { blankCharacter } from './character'
+import { ammoKey, ammoKeys, ammoSummary, spendAmmo, usesAmmo } from './ammo'
 import { equipItem, unequipGear } from './items'
 import { formatLootRow } from './lootbox'
 import { applyClaim, planClaim } from './lootclaim'
@@ -82,5 +83,51 @@ describe('weapons from a loot box', () => {
     expect(equipped.gear[0]).toMatchObject({ name: 'Flameblade', slot: 'hands', skillId: 'longsword', weapon: flameblade })
     const stored = applyClaim(c, claim, changes, { 0: { accept: true, choice: 'inventory' } })
     expect(stored.inventory[0]).toMatchObject({ name: 'Flameblade', kind: 'weapon', skillId: 'longsword', weapon: flameblade, slot: 'hands' })
+  })
+})
+
+describe('custom weapons that fire ammo', () => {
+  const plasma = { name: 'Plasma Cells', qty: 10, notes: '', kind: 'ammo' as const, skillId: 'Plasma Cells', ammo: { dice: '1d6', dtype: 'Electric', toHit: 1 } }
+  function gunner(ammo: string): Character {
+    const c = swordsman(1, { dice: '2d6', dtype: 'Force', range: '60 feet', ammo })
+    c.inventory = [{ uid: 'cells', ...plasma }, { uid: 'bolts', name: 'Fire Bolts', qty: 3, notes: '', kind: 'ammo', skillId: 'crossbow', ammo: { dice: '1d4', dtype: 'Fire' } }]
+    c.skills = c.skills.map((s) => (s.skillId === 'longsword' ? { ...s, ammoUid: ammo === 'crossbow' ? 'bolts' : 'cells' } : s))
+    return c
+  }
+
+  it('a weapon on a non-ranged Skill can fire custom ammo; the loaded round adds its effect', () => {
+    const c = gunner('Plasma Cells')
+    const s = longsword(c)
+    expect(ammoKey(c, s)).toBe('Plasma Cells')
+    expect(usesAmmo(c, s)).toBe(true)
+    expect(ammoKey(c, s, null)).toBeUndefined() // no weapon item: a Longsword fires nothing
+    const a = attackCalc(c, s)
+    expect(a.ammo?.name).toBe('Plasma Cells')
+    expect(a.ammoDice).toEqual([{ count: 1, sides: 6 }])
+    expect(a.types).toEqual(['Force', 'Electric'])
+    expect(a.toHit.parts).toContainEqual({ label: 'Plasma Cells', value: 1 })
+    expect(ammoKeys(c)).toContain('Plasma Cells')
+    expect(ammoSummary(c, s)).toContain('Plasma Cells ×10 (loaded)')
+  })
+
+  it('spends one round per attack', () => {
+    const c = gunner('Plasma Cells')
+    const shot = spendAmmo(c, longsword(c))
+    expect(shot.fired?.name).toBe('Plasma Cells')
+    expect(shot.c.inventory.find((i) => i.uid === 'cells')?.qty).toBe(9)
+  })
+
+  it('can fire standard ammo too (a custom weapon that shoots Bolts uses Crossbow bolts)', () => {
+    const c = gunner('crossbow')
+    const a = attackCalc(c, longsword(c))
+    expect(a.ammo?.name).toBe('Fire Bolts')
+    // ammo loaded for a different ammo type isn't fired
+    const wrong = { ...c, skills: c.skills.map((s) => (s.skillId === 'longsword' ? { ...s, ammoUid: 'cells' } : s)) }
+    expect(attackCalc(wrong, longsword(wrong)).ammo).toBeUndefined()
+  })
+
+  it('describes the ammo it fires', () => {
+    expect(describeWeapon({ dice: '2d6', ammo: 'crossbow' })).toBe('2d6 · fires Bolts')
+    expect(describeWeapon({ ammo: 'Plasma Cells' })).toBe('fires Plasma Cells')
   })
 })

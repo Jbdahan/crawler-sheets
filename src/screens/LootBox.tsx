@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { DAMAGE_TYPES, DEBUFFS, ITEMS, SKILLS, SPELLS, STAT_KEYS, STAT_NAMES, findSkill } from '../data'
 import { LOOT } from '../data/loot'
-import { AMMO_NOUN, AMMO_WEAPONS } from '../engine/ammo'
+import { AMMO_NOUN, ammoNoun } from '../engine/ammo'
+import { AmmoSelect } from '../components/AmmoSelect'
 import QRCode from 'qrcode'
 import { uid } from '../engine/advancement'
 import { claimUrl } from '../engine/lootclaim'
@@ -339,7 +340,7 @@ function LootWeaponFields({ row: r, onChange }: { row: Extract<LootRow, { type: 
   const w = r.weapon ?? {}
   const set = (patch: Partial<NonNullable<typeof r.weapon>>) => {
     const next = { ...w, ...patch }
-    const has = !!next.dice?.trim() || !!next.bonus || !!next.dtype || !!next.range?.trim()
+    const has = !!next.dice?.trim() || !!next.bonus || !!next.dtype || !!next.range?.trim() || !!next.ammo?.trim()
     onChange({ ...r, weapon: has ? next : undefined })
   }
   const baseDie = def?.damage ? `${def.damage.count}d${def.damage.sides}` : ''
@@ -370,6 +371,8 @@ function LootWeaponFields({ row: r, onChange }: { row: Extract<LootRow, { type: 
             </Field>
             <Field label="Range"><input aria-label="Range" placeholder={baseRange || 'e.g. Melee 10ft'} value={w.range ?? ''} onChange={(e) => set({ range: e.target.value || undefined })} /></Field>
           </div>
+          <AmmoSelect label="Fires ammo" value={w.ammo} none={r.skillId && r.skillId in AMMO_NOUN ? `Same as Skill (${AMMO_NOUN[r.skillId]})` : 'No ammo'}
+            onChange={(ammo) => set({ ammo })} />
         </>
       )}
     </>
@@ -549,12 +552,10 @@ function RowFields({ row: r, onChange }: { row: LootRow; onChange: (r: LootRow) 
               {AMMO_TEMPLATES.map((t) => <option key={t.id} value={t.id}>{t.ammoPrefix || 'Basic'}</option>)}
               {!tpl && <option value="__custom">Custom</option>}
             </select>
-            <select className="grow" aria-label="Weapon" value={r.weapon} onChange={(e) => set({ weapon: e.target.value })}>
-              {AMMO_WEAPONS.map((w) => <option key={w} value={w}>{findSkill(w)?.name} ({AMMO_NOUN[w].toLowerCase()})</option>)}
-            </select>
             <NumInput label="How many" value={r.qty} onChange={(qty) => set({ qty })} />
           </div>
-          <Field label={`Name (before “${AMMO_NOUN[r.weapon] ?? 'Ammo'}”)`}>
+          <AmmoSelect label="Ammo type (fired by)" value={r.weapon} onChange={(weapon) => set({ weapon: weapon ?? '' })} />
+          <Field label={`Name (before “${ammoNoun(r.weapon)}”)`}>
             <input value={r.prefix} onChange={(e) => set({ prefix: e.target.value })} placeholder="e.g. Exploding Goblin" aria-label="Ammo name" />
           </Field>
           <div className="row">
