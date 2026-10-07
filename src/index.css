@@ -53,7 +53,7 @@ input, select, textarea {
 }
 textarea { min-height: 80px; resize: vertical; }
 input:focus, select:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: 0; border-color: transparent; }
-input[type='checkbox'] { width: 20px; height: 20px; min-height: 0; accent-color: var(--accent); }
+input[type='checkbox'], input[type='radio'] { width: 20px; height: 20px; min-height: 0; flex: 0 0 auto; padding: 0; accent-color: var(--accent); }
 
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem;

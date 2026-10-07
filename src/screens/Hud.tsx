@@ -4,7 +4,8 @@ import { difficulty } from '../engine/attacks'
 import type { Part, Total } from '../engine/derived'
 import { HB_SLOTS, REST_LABEL, heal, rest, setLost, setMana, tickDying, type RestKind } from '../engine/health'
 import { HOTLIST_SIZE, type ActiveEffect, type HotlistEntry } from '../engine/types'
-import { attackLine, hotlistAttack, hotlistSkill, hotlistWeapon, triggerHotlist } from './hotlistUse'
+import { attackLine, hotlistAttack, hotlistSkill, hotlistWeapon } from './hotlistUse'
+import { HotlistUseSheet } from './HotlistUseSheet'
 import { findSkill } from '../data'
 import { openRoll } from '../components/Roller'
 import { swapSlots, useSlotDrag } from '../components/useSlotDrag'
@@ -225,9 +226,11 @@ export function Hud(ctx: Ctx) {
   )
 }
 
-/** Compact, use-only view of the Hotlist; editing stays on the Hotlist tab. */
+/** Compact view of the Hotlist: tapping a slot opens a confirm sheet; editing stays on the Hotlist tab. */
 function HotlistStrip(ctx: Ctx) {
   const { c, d, up } = ctx
+  const [using, setUsing] = useState<number | null>(null)
+  const usingEntry = using !== null ? c.hotlist[using] : null
   const { slotProps, ghost } = useSlotDrag((from, to) => up((x) => ({ ...x, hotlist: swapSlots(x.hotlist, from, to) })))
   const entries = c.hotlist.map((h, i) => ({ h, i })).filter((x): x is { h: HotlistEntry; i: number } => !!x.h)
   return (
@@ -268,7 +271,7 @@ function HotlistStrip(ctx: Ctx) {
           const sp = slotProps(i, h.name)
           return (
             <button key={h.uid} {...sp} className={`hg-tile hg-${atk ? 'attack' : h.kind}${h.kind === 'spell' ? ' hg-two' : ''}${blocked ? ' is-blocked' : ''}${sp.className}`} aria-disabled={blocked}
-              onClick={() => { if (!blocked) triggerHotlist(ctx, h) }} aria-label={`${verb} ${h.name}, slot ${i + 1}`} title={`${verb} ${h.name}`}>
+              onClick={() => setUsing(i)} aria-label={`${verb} ${h.name}, slot ${i + 1}`} title={`${verb} ${h.name}`}>
               <span className="hg-name">{h.name}</span>
               <span className="hg-meta num">{meta}</span>
             </button>
@@ -276,6 +279,7 @@ function HotlistStrip(ctx: Ctx) {
         })}
       </div>
       {ghost}
+      {usingEntry && using !== null && <HotlistUseSheet {...ctx} h={usingEntry} slot={using} onClose={() => setUsing(null)} />}
     </section>
   )
 }
