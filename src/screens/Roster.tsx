@@ -1,24 +1,27 @@
-import { useRef } from 'react'
 import { blankCharacter } from '../engine/character'
 import { HB_SLOTS } from '../engine/health'
 import { Icon, toast } from '../components/ui'
 import { useStore } from '../store/characters'
 import { go } from '../router'
+import { decodeImport } from '../sheets/Share'
 
 export function Roster() {
   const { characters, order, importCharacter, duplicate, add, lastBackup } = useStore()
-  const fileRef = useRef<HTMLInputElement>(null)
   const list = order.map((id) => characters[id]).filter(Boolean)
   const stale = list.length > 0 && Date.now() - lastBackup > 14 * 86400000
 
-  const onFile = async (f?: File) => {
+  const onFile = async (input: HTMLInputElement) => {
+    // no accept filter on the input: iPhone greys out .json files it saved from Messages/AirDrop as another type
+    const f = input.files?.[0]
+    // clear it so picking the same file again still fires
+    input.value = ''
     if (!f) return
     try {
-      const id = importCharacter(JSON.parse(await f.text()))
+      const id = importCharacter(readExport(await f.text()))
       toast('Crawler imported')
       go(`/c/${id}`)
     } catch {
-      toast("That file isn't a crawler export")
+      toast(`Couldn't read ${f.name} as a crawler export`)
     }
   }
 
@@ -61,11 +64,14 @@ export function Roster() {
         <button className="btn primary" onClick={() => go('/new')}><Icon name="plus" size={18} /> New Level 1 crawler</button>
         <div className="grid2">
           <button className="btn" onClick={() => { const c = blankCharacter(); c.name = 'New Crawler'; add(c); go(`/c/${c.id}/more`) }}>Blank sheet</button>
-          <button className="btn" onClick={() => fileRef.current?.click()}>Import file</button>
+          {/* a label opens the file picker natively: more reliable than a scripted click on iPhone/iPad home-screen apps */}
+          <label className="btn" role="button">
+            Import file
+            <input type="file" className="visually-hidden" onChange={(e) => onFile(e.currentTarget)} />
+          </label>
         </div>
         <button className="btn ghost" onClick={() => go('/rolls')}><Icon name="dice" size={18} /> Roll log</button>
         <button className="btn ghost" onClick={() => go('/loot')}><Icon name="bag" size={18} /> GM: Loot Box Maker</button>
-        <input ref={fileRef} type="file" accept=".json,application/json" hidden onChange={(e) => onFile(e.target.files?.[0])} />
       </div>
       <p className="small faint center" style={{ marginTop: 24 }}>
         Unofficial fan tool. Rules summaries cite the Dungeon Crawler Carl RPG Core Rulebook (Renegade Game Studios); use your book for full text.
@@ -75,4 +81,13 @@ export function Roster() {
       </p>
     </div>
   )
+}
+
+/** A crawler export: the .dcc.json file, or text holding a share link (#import=…). */
+function readExport(text: string): unknown {
+  const t = text.replace(/^\uFEFF/, '').trim()
+  const link = t.match(/#import=([A-Za-z0-9+\-$_]+)/)
+  const raw = link ? decodeImport(link[1]) : JSON.parse(t)
+  if (!raw || typeof raw !== 'object' || !('skills' in raw)) throw new Error('not a crawler')
+  return raw
 }

@@ -375,3 +375,4 @@ html.slot-drag-active, html.slot-drag-active body { overscroll-behavior: none; }
 .hg-meta > .hg-cost:first-child { margin-left: 0; }
 .ammo-bar { margin-top: 8px; padding: 8px 10px; border: 1px dashed var(--border); border-radius: var(--radius-sm); display: grid; gap: 6px; }
 .ammo-bar select { padding: 4px 8px; min-height: 32px; font-size: 0.85rem; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
