@@ -1,6 +1,7 @@
+import { useEffect, useState } from 'react'
 import { blankCharacter } from '../engine/character'
 import { HB_SLOTS } from '../engine/health'
-import { Icon, toast } from '../components/ui'
+import { Icon, Sheet, toast } from '../components/ui'
 import { useStore } from '../store/characters'
 import { go } from '../router'
 import { decodeImport } from '../sheets/Share'
@@ -10,20 +11,58 @@ export function Roster() {
   const list = order.map((id) => characters[id]).filter(Boolean)
   const stale = list.length > 0 && Date.now() - lastBackup > 14 * 86400000
 
-  const onFile = async (input: HTMLInputElement) => {
+  const [paste, setPaste] = useState(false)
+  const [dragging, setDragging] = useState(false)
+
+  /** Import crawler files (from the picker or dropped on the page). */
+  const importFiles = async (files: File[]) => {
+    let lastId = ''
+    for (const f of files) {
+      try {
+        lastId = importCharacter(readExport(await f.text()))
+      } catch {
+        toast(`Couldn't read ${f.name} as a crawler export`)
+      }
+    }
+    if (!lastId) return
+    toast(files.length > 1 ? 'Crawlers imported' : 'Crawler imported')
+    go(files.length > 1 ? '/' : `/c/${lastId}`)
+  }
+
+  const onFile = (input: HTMLInputElement) => {
     // no accept filter on the input: iPhone greys out .json files it saved from Messages/AirDrop as another type
-    const f = input.files?.[0]
+    const files = [...(input.files ?? [])]
     // clear it so picking the same file again still fires
     input.value = ''
-    if (!f) return
-    try {
-      const id = importCharacter(readExport(await f.text()))
-      toast('Crawler imported')
-      go(`/c/${id}`)
-    } catch {
-      toast(`Couldn't read ${f.name} as a crawler export`)
-    }
+    void importFiles(files)
   }
+
+  // drop a .dcc.json anywhere on the home screen (for browsers that won't open a file picker)
+  useEffect(() => {
+    let depth = 0
+    const hasFiles = (e: DragEvent) => !!e.dataTransfer && [...e.dataTransfer.types].includes('Files')
+    const enter = (e: DragEvent) => { if (hasFiles(e)) { depth++; setDragging(true) } }
+    const leave = (e: DragEvent) => { if (hasFiles(e) && --depth <= 0) { depth = 0; setDragging(false) } }
+    const over = (e: DragEvent) => { if (hasFiles(e)) e.preventDefault() }
+    const drop = (e: DragEvent) => {
+      if (!hasFiles(e)) return
+      e.preventDefault()
+      depth = 0
+      setDragging(false)
+      void importFiles([...(e.dataTransfer?.files ?? [])])
+    }
+    window.addEventListener('dragenter', enter)
+    window.addEventListener('dragleave', leave)
+    window.addEventListener('dragover', over)
+    window.addEventListener('drop', drop)
+    return () => {
+      window.removeEventListener('dragenter', enter)
+      window.removeEventListener('dragleave', leave)
+      window.removeEventListener('dragover', over)
+      window.removeEventListener('drop', drop)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <div className="app">
@@ -67,9 +106,11 @@ export function Roster() {
           {/* a label opens the file picker natively: more reliable than a scripted click on iPhone/iPad home-screen apps */}
           <label className="btn" role="button">
             Import file
-            <input type="file" className="visually-hidden" onChange={(e) => onFile(e.currentTarget)} />
+            <input type="file" multiple className="visually-hidden" onChange={(e) => onFile(e.currentTarget)} />
           </label>
         </div>
+        <button className="btn ghost" onClick={() => setPaste(true)}>Paste an import link</button>
+        <p className="small faint center" style={{ margin: 0 }}>On a computer you can also drag a <b>.dcc.json</b> file onto this page.</p>
         <button className="btn ghost" onClick={() => go('/rolls')}><Icon name="dice" size={18} /> Roll log</button>
         <button className="btn ghost" onClick={() => go('/loot')}><Icon name="bag" size={18} /> GM: Loot Box Maker</button>
       </div>
@@ -79,6 +120,17 @@ export function Roster() {
       <p className="small faint center" style={{ marginTop: 6 }}>
         Version {__APP_VERSION__.version} · {__APP_VERSION__.built}{__APP_VERSION__.sha ? ` · ${__APP_VERSION__.sha}` : ''}
       </p>
+      {dragging && <div className="drop-overlay"><div>Drop a crawler file to import it</div></div>}
+      {paste && <PasteImport onClose={() => setPaste(false)} onImport={(raw) => {
+        try {
+          const id = importCharacter(raw)
+          toast('Crawler imported')
+          setPaste(false)
+          go(`/c/${id}`)
+        } catch {
+          toast("That isn't a crawler")
+        }
+      }} />}
     </div>
   )
 }
@@ -90,4 +142,38 @@ function readExport(text: string): unknown {
   const raw = link ? decodeImport(link[1]) : JSON.parse(t)
   if (!raw || typeof raw !== 'object' || !('skills' in raw)) throw new Error('not a crawler')
   return raw
+}
+
+/**
+ * Paste a crawler's import link (More → Share → Copy import link), a GM's loot claim link,
+ * or the text of a .dcc.json file.
+ */
+function PasteImport({ onClose, onImport }: { onClose: () => void; onImport: (raw: unknown) => void }) {
+  const [text, setText] = useState('')
+  const t = text.trim()
+  const loot = t.match(/#loot=\S+/)
+  const submit = () => {
+    if (loot) {
+      onClose()
+      location.hash = loot[0]
+      return
+    }
+    try {
+      onImport(readExport(t))
+    } catch {
+      toast("Couldn't read that. Paste the whole import link or file text")
+    }
+  }
+  return (
+    <Sheet title="Paste an import link" onClose={onClose}>
+      <div className="stack">
+        <p className="small muted" style={{ margin: 0 }}>
+          On the other device, open the crawler, then <b>More → Share → Copy import link</b>, and paste it here.
+          The text of a <b>.dcc.json</b> file or a GM's loot claim link works too.
+        </p>
+        <textarea autoFocus rows={5} value={text} onChange={(e) => setText(e.target.value)} placeholder="https://…#import=…" style={{ minHeight: 120 }} />
+        <button className="btn primary" disabled={!t} onClick={submit}>{loot ? 'Open loot claim' : 'Import crawler'}</button>
+      </div>
+    </Sheet>
+  )
 }
