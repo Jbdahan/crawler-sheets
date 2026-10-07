@@ -8,6 +8,7 @@ import { PageRef, Seg, Sheet, Stepper } from '../components/ui'
 import { SpellText } from '../components/SpellText'
 import { swapSlots, useSlotDrag } from '../components/useSlotDrag'
 import { attackLine, hotlistAttack, triggerHotlist } from './hotlistUse'
+import { effectiveRank } from '../engine/derived'
 import { AMMO_NOUN, basicCount, loadedAmmo, usesAmmo } from '../engine/ammo'
 import type { Ctx } from './ctx'
 
@@ -153,7 +154,7 @@ function HotlistEditor(ctx: Ctx & { index: number; onClose: () => void }) {
             {!spells.length && <div className="empty">This crawler has no Spells yet.</div>}
             {spells.map((s) => (
               <div className="li" key={s.uid}>
-                <div className="main"><div className="name">{s.name}</div><div className="meta">Rank {s.rank} · {findSkill(s.skillId)?.manaText ?? s.customMana ?? '?'} Mana</div></div>
+                <div className="main"><div className="name">{s.name}</div><div className="meta">Rank {effectiveRank(c, s)} · {findSkill(s.skillId)?.manaText ?? s.customMana ?? '?'} Mana</div></div>
                 <button className="btn small mana" onClick={() => save({ uid: uid(), name: s.name, qty: 1, kind: 'spell', skillUid: s.uid, notes: '' })}>Put here</button>
               </div>
             ))}
@@ -164,7 +165,7 @@ function HotlistEditor(ctx: Ctx & { index: number; onClose: () => void }) {
             {!weapons.length && <div className="empty">No attack Skills yet. Add one on the Skills tab.</div>}
             {weapons.map((s) => (
               <div className="li" key={s.uid}>
-                <div className="main"><div className="name">{s.name}</div><div className="meta num">Rank {s.rank} · {attackLine(ctx, s)}</div></div>
+                <div className="main"><div className="name">{s.name}</div><div className="meta num">Rank {effectiveRank(c, s)} · {attackLine(ctx, s)}</div></div>
                 <button className="btn small primary" onClick={() => save({ uid: uid(), name: s.name, qty: 1, kind: 'weapon', skillUid: s.uid, notes: '', consumable: false })}>Put here</button>
               </div>
             ))}

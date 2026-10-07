@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { STAT_ABBR, findSkill, normName } from '../data'
 import { castSpell } from '../engine/actions'
+import { effectiveRank } from '../engine/derived'
 import { attackCalc, isAttackSkill } from '../engine/attacks'
 import { AMMO_NOUN, basicCount, describeAmmo, loadedAmmo, specialAmmo, usesAmmo } from '../engine/ammo'
 import type { CharSkill } from '../engine/types'
@@ -133,7 +134,7 @@ export function Attacks(ctx: Ctx) {
                   return (
                     <div key={s.uid} className="li">
                       <div className="main">
-                        <div className="name">{s.name} <span className="pill">R{s.rank}</span></div>
+                        <div className="name">{s.name} <span className="pill">R{effectiveRank(c, s, d)}</span></div>
                         {def?.summary && <div className="meta">{def.summary}</div>}
                         <div className="meta faint">{[def?.range, def?.duration, def?.cooldown && `Cooldown ${def.cooldown}`].filter(Boolean).join(' · ')}</div>
                         {!def && s.notes && <SpellText text={s.notes} lines={2} />}
@@ -183,7 +184,7 @@ function AttackInfo({ c, d, s, onClose }: Ctx & { s: CharSkill; onClose: () => v
         {!a && def?.upgrades && (
           <ul className="upgrades">
             {Object.entries(def.upgrades).map(([r, u]) => (
-              <li key={r} className={Number(r) > s.rank ? 'locked' : ''}><span className="r">R{r}</span><span>{u.text}</span></li>
+              <li key={r} className={Number(r) > effectiveRank(c, s, d) ? 'locked' : ''}><span className="r">R{r}</span><span>{u.text}</span></li>
             ))}
           </ul>
         )}

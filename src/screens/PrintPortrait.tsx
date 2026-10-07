@@ -1,6 +1,6 @@
 import { STAT_ABBR, STAT_NAMES, SIZES, findDeity, findSkill, type StatKey } from '../data'
 import { attackCalc, isAttackSkill } from '../engine/attacks'
-import { checkBonus, derive, skillStat } from '../engine/derived'
+import { checkBonus, derive, skillStat, effectiveRank, rankText } from '../engine/derived'
 import { HB_SLOTS } from '../engine/health'
 import { GEAR_SLOTS, HOTLIST_SIZE, type Character } from '../engine/types'
 import { signed } from '../components/ui'
@@ -177,11 +177,11 @@ export function PortraitPages({ c }: { c: Character }) {
                 if (!s) return <tr key={i}><td /><td /><td /><td /><td /><td /></tr>
                 const def = findSkill(s.skillId)
                 const stat = skillStat(s)
-                const ups = Object.keys(def?.upgrades ?? {}).filter((r) => Number(r) <= s.rank).map((r) => `R${r}`)
+                const ups = Object.keys(def?.upgrades ?? {}).filter((r) => Number(r) <= effectiveRank(c, s, d)).map((r) => `R${r}`)
                 return (
                   <tr key={s.uid}>
                     <td><b>{s.name}</b></td>
-                    <td className="c">{s.rank}</td>
+                    <td className="c">{rankText(c, s, d)}</td>
                     <td>{stat ? `${STAT_ABBR[stat]} ${signed(d.mod[stat])}` : 'None'} <span className="tiny">(d20 {signed(checkBonus(c, s, d).total)})</span></td>
                     <td>{def?.checkType ?? (stat ? '' : 'Passive')}</td>
                     <td className="tiny">{[ups.length ? `Upgrades ${ups.join(', ')}` : '', s.notes.slice(0, 90), def ? `p.${def.page}` : ''].filter(Boolean).join(' · ')}</td>

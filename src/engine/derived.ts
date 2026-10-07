@@ -147,6 +147,12 @@ export function effectiveRank(c: Character, s: CharSkill, d?: Derived): number {
   return s.rank + sum(bonus)
 }
 
+/** "3 (1 + 2)" when gear, Buffs or traits add Ranks; otherwise just the Rank. */
+export function rankText(c: Character, s: CharSkill, d?: Derived): string {
+  const bonus = sum((d ?? derive(c)).skillBonus[s.uid] ?? [])
+  return bonus ? `${s.rank + bonus} (${s.rank} ${bonus > 0 ? '+' : '−'} ${Math.abs(bonus)})` : `${s.rank}`
+}
+
 export function derive(c: Character): Derived {
   const sources = modSources(c)
   const statParts = {} as Record<StatKey, Part[]>

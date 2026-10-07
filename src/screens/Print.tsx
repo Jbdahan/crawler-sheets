@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { STAT_ABBR, STAT_KEYS, STAT_NAMES, SIZES, findSkill } from '../data'
 import { attackCalc, isAttackSkill } from '../engine/attacks'
-import { checkBonus, derive, skillStat } from '../engine/derived'
+import { checkBonus, derive, skillStat, effectiveRank, rankText } from '../engine/derived'
 import { HB_SLOTS } from '../engine/health'
 import { GEAR_SLOTS, HOTLIST_SIZE, type Character } from '../engine/types'
 import { signed } from '../components/ui'
@@ -177,11 +177,11 @@ function PrintPages({ c }: { c: Character }) {
                 if (!s) return <tr key={i}><td /><td /><td /><td /><td /><td /></tr>
                 const def = findSkill(s.skillId)
                 const stat = skillStat(s)
-                const unlocked = Object.entries(def?.upgrades ?? {}).filter(([r]) => Number(r) <= s.rank).map(([r]) => `R${r}`)
+                const unlocked = Object.entries(def?.upgrades ?? {}).filter(([r]) => Number(r) <= effectiveRank(c, s, d)).map(([r]) => `R${r}`)
                 return (
                   <tr key={s.uid}>
                     <td><b>{s.name}</b></td>
-                    <td className="center">{s.rank}{s.max === 20 ? '/20' : ''}</td>
+                    <td className="center">{rankText(c, s, d)}{s.max === 20 ? '/20' : ''}</td>
                     <td>{stat ? `${STAT_ABBR[stat]} ${signed(d.mod[stat])}` : 'None'} <span className="small">(d20 {signed(checkBonus(c, s, d).total)})</span></td>
                     <td>{def?.checkType ?? (stat ? '' : 'Passive')}</td>
                     <td className="small">{[s.notes, unlocked.length ? `Upgrades ${unlocked.join(', ')}` : '', def ? `p.${def.page}` : '', s.grindHours ? `${s.grindHours}h ground` : ''].filter(Boolean).join(' · ')}</td>

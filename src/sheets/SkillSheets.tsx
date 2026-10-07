@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { ALL_SKILLS, STAT_ABBR, STAT_KEYS, findSkill, type SkillDef, type SkillKind, type StatKey } from '../data'
 import { newSkill } from '../engine/advancement'
-import { checkBonus, skillStat } from '../engine/derived'
+import { checkBonus, effectiveRank, skillStat } from '../engine/derived'
 import type { CharSkill } from '../engine/types'
 import { openRoll } from '../components/Roller'
 import { PageRef, Seg, Sheet, Stepper, signed, toast } from '../components/ui'
@@ -139,7 +139,7 @@ export function SkillDetail({ c, d, up, s, onClose }: Ctx & { s: CharSkill; onCl
           {def ? KIND_LABEL[def.kind] : 'Custom'} · {def?.checkType ?? (stat ? 'Check' : 'Passive')}{def?.keywords?.length ? ` · ${def.keywords.join(', ')}` : ''} <PageRef page={def?.page} />
         </div>
         <div className="grid2">
-          <label><span className="label">Rank</span><div><Stepper value={cur.rank} min={0} max={cur.max} onChange={(v) => set({ rank: v })} /></div></label>
+          <label><span className="label">Your Rank</span><div><Stepper value={cur.rank} min={0} max={cur.max} onChange={(v) => set({ rank: v })} /></div></label>
           <label><span className="label">Rank cap</span>
             <select value={cur.max} onChange={(e) => set({ max: Number(e.target.value) })}>
               {cur.max === 1 && <option value={1}>1 (max)</option>}
@@ -148,7 +148,13 @@ export function SkillDetail({ c, d, up, s, onClose }: Ctx & { s: CharSkill; onCl
             </select>
           </label>
         </div>
-        {cur.rank >= 16 && c.floor < 6 && <div className="warnbox">Rank 16+ benefits don't come online until the Sixth Floor (Core p.57).</div>}
+        {(d.skillBonus[cur.uid] ?? []).length > 0 && (
+          <div className="infobox small">
+            <b>Rank {effectiveRank(c, cur, d)}</b> with bonuses: {cur.rank} yours{(d.skillBonus[cur.uid] ?? []).map((p) => ` ${p.value >= 0 ? '+' : '−'} ${Math.abs(p.value)} ${p.label}`).join('')}.
+            {cur.source === 'Equipped gear' && cur.rank === 0 && ' You have this Skill only while that gear is equipped; using it can train it.'}
+          </div>
+        )}
+        {effectiveRank(c, cur, d) >= 16 && c.floor < 6 && <div className="warnbox">Rank 16+ benefits don't come online until the Sixth Floor (Core p.57).</div>}
         {stat && (
           <div className="row between">
             <div className="small">Check: d20 {signed(bonus.total)} <span className="muted">({bonus.parts.map((p) => `${p.label} ${signed(p.value)}`).join(', ')})</span></div>
@@ -162,7 +168,7 @@ export function SkillDetail({ c, d, up, s, onClose }: Ctx & { s: CharSkill; onCl
         {def?.upgrades && (
           <ul className="upgrades">
             {Object.entries(def.upgrades).map(([r, u]) => (
-              <li key={r} className={Number(r) > cur.rank ? 'locked' : ''}><span className="r">R{r}</span><span>{u.text}</span></li>
+              <li key={r} className={Number(r) > effectiveRank(c, cur, d) ? 'locked' : ''}><span className="r">R{r}</span><span>{u.text}</span></li>
             ))}
           </ul>
         )}

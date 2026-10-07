@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { STAT_ABBR, findSkill } from '../data'
-import { checkBonus, skillStat } from '../engine/derived'
+import { checkBonus, skillStat, rankText } from '../engine/derived'
 import type { CharSkill } from '../engine/types'
 import { openRoll } from '../components/Roller'
 import { Seg, signed } from '../components/ui'
@@ -41,7 +41,7 @@ export function Skills(ctx: Ctx) {
         <button className="main" style={{ background: 'none', border: 0, textAlign: 'left', padding: 0 }} onClick={() => setDetail(s)}>
           <div className="name">{s.name} {s.max === 20 && <span className="pill accent">20</span>}</div>
           <div className="meta">
-            Rank {s.rank}{d.skillBonus[s.uid] ? ` (+${d.skillBonus[s.uid].reduce((a, p) => a + p.value, 0)})` : ''}
+            Rank {rankText(c, s, d)}
             {stat ? ` · ${STAT_ABBR[stat]} ${signed(d.mod[stat])}` : ''}
             {' · '}{def?.checkType ?? (passive ? 'Passive' : 'Check')}
             {s.grindHours ? ` · ${s.grindHours}h ground` : ''}
