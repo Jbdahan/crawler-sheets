@@ -56,13 +56,23 @@ export const ITEMS: ItemDef[] = [
   { id: 'healing-potion', name: 'Healing Potion', page: 116, summary: 'Heal 5 Health Bar slots (Interrupt).', heal: { slots: 5 }, consumable: true },
   { id: 'good-healing-potion', name: 'Good Healing Potion', page: 116, summary: 'Heal 6 Health Bar slots.', heal: { slots: 6 }, consumable: true },
   { id: 'gold-healing-potion', name: 'Gold Standard Healing Potion', page: 117, summary: 'Heal 7 slots and mend one Minor Injury.', heal: { slots: 7 }, removesDebuff: 'minor-injury', consumable: true },
+  { id: 'supreme-healing-potion', name: 'Supreme Healing Potion', page: 217, summary: 'Heal 8 slots and mend one Minor or Major Injury; or 8d8 Holy damage to an undead Mob.', heal: { slots: 8 }, removesDebuff: 'major-injury', consumable: true },
+  { id: 'heal-severe-injury-potion', name: 'Heal Severe Injury Potion', page: 218, summary: 'Heal 9 slots and mend all Injuries.', heal: { slots: 9 }, removesDebuff: 'major-injury', consumable: true },
+  { id: 'heal-pet-potion', name: 'Heal Pet Potion', page: 216, summary: 'Heals a pet 5 Health Bar slots.', consumable: true },
   { id: 'mana-potion', name: 'Standard Mana Potion', page: 108, summary: 'Fully restore Mana.', restoreMana: 'full', consumable: true },
+  { id: 'mana-potion-2', name: 'Mana Potion', page: 216, summary: 'Fully restore Mana.', restoreMana: 'full', consumable: true },
+  { id: 'good-mana-refill', name: 'Good Mana Refill Potion', page: 217, summary: 'Restores 15 Mana per round for 10 rounds.', restoreMana: 15, consumable: true },
+  { id: 'iron-skin-potion', name: 'Iron Skin Potion', page: 95, summary: 'Doubles DR for 30 minutes.', consumable: true },
   { id: 'bandage', name: 'Bandage', page: 116, summary: 'Spend an Action to remove Blood Trail.', removesDebuff: 'blood-trail', consumable: true },
   { id: 'antidote', name: 'Poison Antidote', page: 116, summary: 'Cures the Poisoned Debuff.', removesDebuff: 'poisoned', consumable: true },
   { id: 'torch', name: 'Torch', page: 116, summary: '20ft bright + 20ft dim light for about an hour.', consumable: true },
   { id: 'dynamite', name: 'Dynamite', page: 116, summary: '1d6 Bludgeoning, 0ft Blast +5ft Splash. Thrown.', consumable: true },
   { id: 'goblin-dynamite', name: 'Good Goblin Dynamite', page: 116, summary: '2d6 Bludgeoning, 5ft Blast +5ft Splash. Thrown.', consumable: true },
   { id: 'snack-bar', name: 'Snack Bar', page: 115, summary: 'Food.', consumable: true },
+  { id: 'crawler-biscuit', name: 'Crawler Biscuits', page: 216, summary: 'Food. Keeps crawlers fed.', consumable: true },
+  { id: 'magic-paper', name: 'Magic Paper', page: 216, summary: 'For writing Scrolls (Calligraphy).', consumable: true },
+  { id: 'medicine-or-lube', name: 'Medicine or Lube? Scratcher', page: 218, summary: 'Action, roll 1d2: 1 = a target within 20ft is Staggered; 2 = target gets a Level 15 Heal Other. Cooldown 30 min.', consumable: false },
+  { id: 'nebular-roulette', name: 'Nebular Roulette Scratcher', page: 218, summary: 'Action, roll 1d6: 1 = you take 2d12+F Electric; 2–6 = the target does. Cooldown 30 min.', consumable: false },
 ]
 
 /** Level 1 starting weapons (Core p.108) mapped to their Attack Skill ids. */

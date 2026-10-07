@@ -50,6 +50,14 @@ export function Attacks(ctx: Ctx) {
                       {a.range ? ` · ${a.range}` : def?.attackType === 'melee' ? ' · Melee 5ft' : ''}
                       {a.area ? ` · ${a.area}` : ''}
                     </div>
+                    {s.skillId && (() => {
+                      // weapons in Gear or Inventory that use this Skill
+                      const held = c.gear.filter((g) => g.skillId === s.skillId).map((g) => g.name)
+                      const carried = c.inventory.filter((i) => i.kind === 'weapon' && i.skillId === s.skillId && i.qty > 0).map((i) => i.name)
+                      return held.length || carried.length
+                        ? <div className="small">{held.length > 0 && <>Equipped: <b>{held.join(', ')}</b></>}{held.length > 0 && carried.length > 0 && ' · '}{carried.length > 0 && <span className="muted">In Inventory: {carried.join(', ')}</span>}</div>
+                        : null
+                    })()}
                   </div>
                   {def && <PageRef page={def.page} />}
                 </div>

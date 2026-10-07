@@ -7,6 +7,7 @@ import { addSkillRanks, log, newSkill, uid } from './advancement'
 import { derive } from './derived'
 import { describeLootMod, detailText, formatLootRow, spellDetails, type LootMod, type LootRow } from './lootbox'
 import { addToHotlist, hotlistSlotFor } from './inventory'
+import { inferItem } from '../data/loot'
 import { GEAR_SLOTS, type Character, type GearSlot, type Modifier } from './types'
 
 /** What travels in a claim link (no picture: it would make the link too long). */
@@ -83,7 +84,7 @@ function addTraitMods(c: Character, source: string, mods: Modifier[]): Character
 function addInventory(c: Character, name: string, qty: number, notes: string): Character {
   const same = c.inventory.find((i) => normName(i.name) === normName(name) && i.notes === notes)
   if (same) return { ...c, inventory: c.inventory.map((i) => (i === same ? { ...i, qty: i.qty + qty } : i)) }
-  return { ...c, inventory: [...c.inventory, { uid: uid(), name, qty, notes }] }
+  return { ...c, inventory: [...c.inventory, inferItem({ uid: uid(), name, qty, notes })] }
 }
 
 /**

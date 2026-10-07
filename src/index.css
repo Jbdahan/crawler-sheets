@@ -186,6 +186,7 @@ input[type='checkbox'] { width: 20px; height: 20px; min-height: 0; accent-color:
 }
 .chip.debuff { border-color: color-mix(in srgb, var(--danger) 55%, var(--border)); background: color-mix(in srgb, var(--danger) 14%, var(--surface-2)); }
 .chip.buff { border-color: color-mix(in srgb, var(--buff) 55%, var(--border)); background: color-mix(in srgb, var(--buff) 14%, var(--surface-2)); }
+.chip.on { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 18%, var(--surface-2)); color: var(--accent); }
 .chip.off { opacity: 0.5; text-decoration: line-through; }
 .chip button { background: none; border: 0; padding: 0 2px; color: var(--muted); font-size: 0.9rem; }
 .pill { display: inline-block; padding: 1px 7px; border-radius: 99px; font-size: 0.7rem; font-weight: 700; background: var(--surface-3); color: var(--muted); }

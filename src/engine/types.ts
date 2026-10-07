@@ -68,6 +68,8 @@ export interface GearItem {
   name: string
   mods: Modifier[]
   notes: string
+  /** weapons: the Attack Skill (catalog id) this item is used with, e.g. 'dagger' */
+  skillId?: string
 }
 
 export interface HotlistEntry {
@@ -89,11 +91,26 @@ export interface HotlistEntry {
   consumable?: boolean
 }
 
+/**
+ * What an Inventory item does (Core p.99): a weapon used with an Attack Skill,
+ * a Spell Scroll (cast once at its Rank, no Mana), a Spellbook (read to learn
+ * the Spell at its Rank), a Potion of +N Skill, or wearable gear.
+ */
+export type ItemKind = 'weapon' | 'scroll' | 'book' | 'skillPotion' | 'gear'
+
 export interface InventoryItem {
   uid: string
   name: string
   qty: number
   notes: string
+  kind?: ItemKind
+  /** weapon: Attack Skill id; scroll/book: Spell id */
+  skillId?: string
+  /** scroll/book: the Spell's Rank; skillPotion: Ranks gained */
+  rank?: number
+  /** gear/weapons: where it goes and what it gives when equipped */
+  slot?: GearSlot
+  mods?: Modifier[]
 }
 
 export interface Trait {

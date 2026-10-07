@@ -4,11 +4,12 @@ import { attackCalc, rollDamage, type DamageRoll } from '../engine/attacks'
 import { checkBonus, derive, type Part } from '../engine/derived'
 import { DEGREE_LABEL, degreeOf, isSuccess, netMode, parseDice, rollD20, rollDie, rollPool, type D20Roll } from '../engine/dice'
 import { findSkill } from '../data'
+import type { CharSkill } from '../engine/types'
 import { useStore } from '../store/characters'
 import { Breakdown, Seg, Sheet, signed } from './ui'
 
 export type RollRequest =
-  | { kind: 'skill'; charId: string; skillUid: string; attack?: boolean }
+  | { kind: 'skill'; charId: string; skillUid: string; attack?: boolean; /** a Skill not on the sheet: an untrained weapon or a scroll's Spell */ skill?: CharSkill }
   | { kind: 'custom'; charId?: string; label: string; parts: Part[]; mode?: D20Roll['mode']; note?: string }
   | { kind: 'dice'; charId?: string; label: string; expr: string }
 
@@ -53,7 +54,7 @@ function CheckRoll({ req, onClose }: { req: Exclude<RollRequest, { kind: 'dice' 
   const store = useStore()
   const c = req.charId ? store.characters[req.charId] : undefined
   const d = useMemo(() => (c ? derive(c) : undefined), [c])
-  const skill = req.kind === 'skill' && c ? c.skills.find((s) => s.uid === req.skillUid) : undefined
+  const skill = req.kind === 'skill' && c ? req.skill ?? c.skills.find((s) => s.uid === req.skillUid) : undefined
   const atk = req.kind === 'skill' && req.attack && c && skill && d ? attackCalc(c, skill, d) : undefined
 
   const label = req.kind === 'skill' ? `${skill?.name ?? 'Skill'} ${atk ? 'attack' : 'check'}` : req.label

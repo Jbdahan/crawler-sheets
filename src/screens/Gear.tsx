@@ -1,7 +1,12 @@
 import { useState } from 'react'
 import { uid } from '../engine/advancement'
-import { addInventoryItems, hotlistItem, hotlistSlotOfGear, hotlistSlotOfInventory, linkGearToHotlist, linkHotlistItems, linkInventoryToHotlist, parseItemLines, removeFromHotlist, type ParsedItem } from '../engine/inventory'
-import { GEAR_SLOTS, type GearItem, type GearSlot, type InventoryItem } from '../engine/types'
+import { addInventoryItems, hotlistSlotOfGear, hotlistSlotOfInventory, linkGearToHotlist, linkHotlistItems, linkInventoryToHotlist, parseItemLines, removeFromHotlist, type ParsedItem } from '../engine/inventory'
+import { addItem, drinkSkillPotion, equipItem, itemLinkLabel, readSpellbook, slotFree, unequipGear, weaponSkill } from '../engine/items'
+import { GEAR_SLOTS, type Character, type GearItem, type GearSlot, type InventoryItem, type ItemKind } from '../engine/types'
+import { SKILLS, SPELLS, findSkill } from '../data'
+import { LootPicker } from './LootPicker'
+import { inferItem } from '../data/loot'
+import { attackLine, castScroll } from './hotlistUse'
 import { Icon, Sheet, Stepper, toast } from '../components/ui'
 import { ModEditor, describeMod } from '../sheets/ModEditor'
 import type { Ctx } from './ctx'
@@ -11,21 +16,19 @@ export function Gear(ctx: Ctx) {
   const [edit, setEdit] = useState<GearItem | null>(null)
   const [inv, setInv] = useState<InventoryItem | null>(null)
   const [bulk, setBulk] = useState(false)
+  const [loot, setLoot] = useState(false)
 
   const addGear = (slot: GearSlot) => setEdit({ uid: uid(), slot, name: '', mods: [], notes: '' })
   const saveGear = (g: GearItem) =>
     up((x) => ({ ...x, gear: x.gear.some((y) => y.uid === g.uid) ? x.gear.map((y) => (y.uid === g.uid ? g : y)) : [...x.gear, g] }))
-  /** unequip into Inventory; a Hotlist slot showing it follows it to Inventory */
-  const unequip = (g: GearItem) =>
-    up((x) => {
-      const item = { uid: uid(), name: g.name, qty: 1, notes: [g.notes, ...g.mods.map(describeMod)].filter(Boolean).join(' · ') }
-      return {
-        ...x,
-        gear: x.gear.filter((y) => y.uid !== g.uid),
-        inventory: [...x.inventory, item],
-        hotlist: x.hotlist.map((h) => (h?.gearUid === g.uid ? hotlistItem(item.name, item.notes, { invUid: item.uid }) : h)),
-      }
-    })
+  /** unequip into Inventory (bonuses and weapon link kept); a Hotlist slot showing it follows it */
+  const unequip = (g: GearItem) => up((x) => unequipGear(x, g.uid))
+  /** "Dagger Rank 3 · +5 · 1d4+3", or untrained */
+  const weaponLine = (skillId?: string) => {
+    if (!skillId) return ''
+    const s = weaponSkill(c, skillId)
+    return `${s.rank > 0 ? `${s.name} Rank ${s.rank}` : `${s.name}: untrained, Disadvantage`} · ${attackLine(ctx, s)}`
+  }
   /** Hotlist on/off for an Inventory item: it always stays in Inventory */
   const toggleInvHotlist = (it: InventoryItem) => {
     const at = hotlistSlotOfInventory(c, it.uid)
@@ -54,8 +57,10 @@ export function Gear(ctx: Ctx) {
   }
   /** equipped Accessories also list in Inventory (same item, not a copy) */
   const accessories = c.gear.filter((g) => g.slot === 'accessory')
-  const saveInv = (it: InventoryItem) =>
+  const saveInv = (raw: InventoryItem) => {
+    const it = c.inventory.some((y) => y.uid === raw.uid) ? raw : inferItem(raw)
     up((x) => ({ ...x, inventory: x.inventory.some((y) => y.uid === it.uid) ? x.inventory.map((y) => (y.uid === it.uid ? it : y)) : [...x.inventory, it] }))
+  }
 
   return (
     <div className="cols2">
@@ -74,7 +79,7 @@ export function Gear(ctx: Ctx) {
                   <button key={g.uid} className="option" style={{ marginTop: 4 }} onClick={() => setEdit(g)}>
                     <div className="grow">
                       <div className="t">{g.name || 'Unnamed'} {hotlistSlotOfGear(c, g.uid) >= 0 && <span className="pill accent">Hotlist #{hotlistSlotOfGear(c, g.uid) + 1}</span>}</div>
-                      <div className="small muted">{[...g.mods.map(describeMod), g.notes].filter(Boolean).join(' · ') || 'No bonuses'}</div>
+                      <div className="small muted">{[weaponLine(g.skillId), ...g.mods.map(describeMod), g.notes].filter(Boolean).join(' · ') || 'No bonuses'}</div>
                     </div>
                   </button>
                 ))}
@@ -95,6 +100,7 @@ export function Gear(ctx: Ctx) {
         <section className="card">
           <div className="card-head">
             <h2>Inventory</h2>
+            <button className="btn small primary" onClick={() => setLoot(true)}>+ Loot</button>
             <button className="btn small" onClick={() => setBulk(true)}>+ Add a list</button>
             <button className="btn small" onClick={() => setInv({ uid: uid(), name: '', qty: 1, notes: '' })}>+ Add</button>
           </div>
@@ -112,7 +118,7 @@ export function Gear(ctx: Ctx) {
               <div key={it.uid} className="li">
                 <button className="main" style={{ background: 'none', border: 0, textAlign: 'left', padding: 0 }} onClick={() => setInv(it)}>
                   <div className="name">{it.name} {hotlistSlotOfInventory(c, it.uid) >= 0 && <span className="pill accent">Hotlist #{hotlistSlotOfInventory(c, it.uid) + 1}</span>}</div>
-                  {it.notes && <div className="meta">{it.notes}</div>}
+                  {(it.kind || it.notes) && <div className="meta">{[it.kind === 'weapon' ? weaponLine(it.skillId) : itemLinkLabel(it), ...(it.mods ?? []).map(describeMod), it.notes].filter(Boolean).join(' · ')}</div>}
                 </button>
                 <Stepper value={it.qty} min={0} max={99999} onChange={(v) => saveInv({ ...it, qty: v })} />
                 <button className={`btn small icon ${hotlistSlotOfInventory(c, it.uid) >= 0 ? 'primary' : 'ghost'}`}
@@ -126,6 +132,19 @@ export function Gear(ctx: Ctx) {
         </section>
       </div>
 
+      {loot && (
+        <LootPicker c={c} onClose={() => setLoot(false)} onAdd={(item, equip) => {
+          const added = addItem(c, item)
+          if (equip && item.slot && !slotFree(c, item.slot)) {
+            up(() => added.c)
+            toast(`${GEAR_SLOTS.find((x) => x.key === item.slot)?.label} is full: ${item.name} added to Inventory`)
+          } else {
+            up(() => (equip && item.slot ? equipItem(added.c, added.invUid, item.slot) : added.c))
+            toast(equip ? `Equipped ${item.name}` : `Added ${item.name}${item.qty > 1 ? ` ×${item.qty}` : ''} to Inventory`)
+          }
+          setLoot(false)
+        }} />
+      )}
       {bulk && (
         <BulkAdd onClose={() => setBulk(false)} onAdd={(items) => {
           up((x) => addInventoryItems(x, items))
@@ -147,23 +166,19 @@ export function Gear(ctx: Ctx) {
       )}
       {inv && (
         <Sheet title={inv.name || 'Inventory item'} onClose={() => setInv(null)}>
-          <InvEditor item={c.inventory.find((i) => i.uid === inv.uid) ?? inv}
+          <InvEditor c={c} item={c.inventory.find((i) => i.uid === inv.uid) ?? inv}
             hotlistSlot={c.inventory.some((i) => i.uid === inv.uid) ? hotlistSlotOfInventory(c, inv.uid) : undefined}
             onHotlist={() => { const cur = c.inventory.find((i) => i.uid === inv.uid); if (cur) toggleInvHotlist(cur) }}
             onSave={(it) => { saveInv(it); setInv(null) }}
             onDelete={() => { up((x) => linkHotlistItems({ ...x, inventory: x.inventory.filter((y) => y.uid !== inv.uid) })); setInv(null) }}
             onEquip={(slot) => {
-              up((x) => {
-                const g = { uid: uid(), slot, name: inv.name, mods: [], notes: inv.notes }
-                return {
-                  ...x,
-                  inventory: x.inventory.filter((y) => y.uid !== inv.uid),
-                  gear: [...x.gear, g],
-                  hotlist: x.hotlist.map((h) => (h?.invUid === inv.uid ? hotlistItem(g.name, g.notes, { gearUid: g.uid }) : h)),
-                }
-              })
+              if (!slotFree(c, slot)) { toast(`${GEAR_SLOTS.find((x) => x.key === slot)?.label} is full. Unequip something first`); return }
+              up((x) => equipItem(x, inv.uid, slot))
               setInv(null)
             }}
+            onRead={() => { const r = readSpellbook(c, inv.uid); up(() => r.c); toast(r.message); setInv(null) }}
+            onDrink={(skillUid) => { const r = drinkSkillPotion(c, inv.uid, skillUid); up(() => r.c); toast(r.message); setInv(null) }}
+            onCast={() => { const cur = c.inventory.find((i) => i.uid === inv.uid); if (cur) castScroll(ctx, cur); setInv(null) }}
           />
         </Sheet>
       )}
@@ -189,6 +204,7 @@ function GearEditor({ item, onSave, onUnequip, onDelete, hotlistSlot, onHotlist 
           {GEAR_SLOTS.map((s) => <option key={s.key} value={s.key}>{s.label}</option>)}
         </select>
       </label>
+      {g.slot === 'hands' && <WeaponSelect value={g.skillId} onChange={(skillId) => setG({ ...g, skillId })} />}
       <div className="label">Bonuses (apply while equipped)</div>
       <ModEditor mods={g.mods} onChange={(mods) => setG({ ...g, mods })} />
       <label><span className="label">Notes (Buffs, charges, effects)</span><input value={g.notes} onChange={(e) => setG({ ...g, notes: e.target.value })} /></label>
@@ -200,7 +216,31 @@ function GearEditor({ item, onSave, onUnequip, onDelete, hotlistSlot, onHotlist 
   )
 }
 
-function InvEditor({ item, onSave, onDelete, onEquip, hotlistSlot, onHotlist }: {
+const KIND_OPTIONS: { value: ItemKind | ''; label: string }[] = [
+  { value: '', label: 'Item' },
+  { value: 'weapon', label: 'Weapon' },
+  { value: 'gear', label: 'Armor / gear' },
+  { value: 'scroll', label: 'Spell Scroll' },
+  { value: 'book', label: 'Spellbook' },
+  { value: 'skillPotion', label: 'Potion of +N Skill' },
+]
+const ATTACK_SKILLS = SKILLS.filter((s) => s.kind === 'attack').sort((a, b) => a.name.localeCompare(b.name))
+const SPELL_LIST = [...SPELLS].sort((a, b) => a.name.localeCompare(b.name))
+
+/** Which Attack Skill a weapon uses (its attacks use that Rank, your Stats and the Floor). */
+function WeaponSelect({ value, onChange }: { value?: string; onChange: (id: string | undefined) => void }) {
+  return (
+    <label><span className="label">Weapon Skill (attacks use it)</span>
+      <select value={value ?? ''} onChange={(e) => onChange(e.target.value || undefined)}>
+        <option value="">Not a weapon</option>
+        {ATTACK_SKILLS.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
+      </select>
+    </label>
+  )
+}
+
+function InvEditor({ c, item, onSave, onDelete, onEquip, hotlistSlot, onHotlist, onRead, onDrink, onCast }: {
+  c: Character
   item: InventoryItem
   onSave: (i: InventoryItem) => void
   onDelete: () => void
@@ -208,23 +248,76 @@ function InvEditor({ item, onSave, onDelete, onEquip, hotlistSlot, onHotlist }: 
   /** the Hotlist slot showing this item (-1: not on it); undefined until the item is saved */
   hotlistSlot?: number
   onHotlist: () => void
+  onRead: () => void
+  onDrink: (skillUid: string) => void
+  onCast: () => void
 }) {
   const [it, setIt] = useState(item)
-  const [slot, setSlot] = useState<GearSlot>('accessory')
+  const [slot, setSlot] = useState<GearSlot>(item.slot ?? (item.kind === 'weapon' ? 'hands' : 'accessory'))
+  const [potionSkill, setPotionSkill] = useState('')
+  const saved = c.inventory.some((i) => i.uid === item.uid)
+  // actions use the saved item; save edits first
+  const dirty = JSON.stringify(it) !== JSON.stringify(item)
+  const spell = findSkill(it.skillId)
+  const setKind = (kind: ItemKind | '') =>
+    setIt({ ...it, kind: kind || undefined, ...(kind === 'weapon' ? { slot: 'hands' as GearSlot } : {}), ...(kind === 'scroll' || kind === 'book' || kind === 'skillPotion' ? { rank: it.rank ?? 1 } : {}), ...(kind === 'weapon' || kind === 'scroll' || kind === 'book' ? {} : { skillId: undefined }) })
   return (
     <div className="stack">
       <label><span className="label">Name</span><input value={it.name} onChange={(e) => setIt({ ...it, name: e.target.value })} /></label>
       <div className="row between"><span>Quantity</span><Stepper value={it.qty} min={0} max={99999} editable onChange={(qty) => setIt({ ...it, qty })} /></div>
+      <label><span className="label">Type</span>
+        <select value={it.kind ?? ''} onChange={(e) => setKind(e.target.value as ItemKind | '')}>
+          {KIND_OPTIONS.map((k) => <option key={k.value} value={k.value}>{k.label}</option>)}
+        </select>
+      </label>
+      {it.kind === 'weapon' && <WeaponSelect value={it.skillId} onChange={(skillId) => setIt({ ...it, skillId })} />}
+      {(it.kind === 'scroll' || it.kind === 'book') && (
+        <>
+          <label><span className="label">Spell</span>
+            <select value={it.skillId ?? ''} onChange={(e) => setIt({ ...it, skillId: e.target.value || undefined })}>
+              <option value="">Choose a Spell…</option>
+              {SPELL_LIST.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
+            </select>
+          </label>
+          <div className="row between"><span>Spell Rank</span><Stepper value={it.rank ?? 1} min={1} max={20} onChange={(rank) => setIt({ ...it, rank })} /></div>
+        </>
+      )}
+      {it.kind === 'skillPotion' && <div className="row between"><span>Ranks gained</span><Stepper value={it.rank ?? 1} min={1} max={15} onChange={(rank) => setIt({ ...it, rank })} /></div>}
+      {(it.kind === 'gear' || it.kind === 'weapon') && (
+        <>
+          <div className="label">Bonuses (apply while equipped)</div>
+          <ModEditor mods={it.mods ?? []} onChange={(mods) => setIt({ ...it, mods })} />
+        </>
+      )}
       <label><span className="label">Notes</span><input value={it.notes} onChange={(e) => setIt({ ...it, notes: e.target.value })} /></label>
       <button className="btn primary" disabled={!it.name.trim()} onClick={() => onSave(it)}>Save</button>
-      <div className="row">
-        <select value={slot} onChange={(e) => setSlot(e.target.value as GearSlot)} style={{ flex: 1 }}>
-          {GEAR_SLOTS.map((s) => <option key={s.key} value={s.key}>{s.label}</option>)}
-        </select>
-        <button className="btn" onClick={() => onEquip(slot)}>Equip</button>
-      </div>
+
+      {saved && !dirty && it.kind === 'scroll' && (
+        <button className="btn mana" disabled={!spell || it.qty <= 0} onClick={onCast}>Cast {spell?.name ?? 'scroll'} (Rank {it.rank ?? 1}, no Mana)</button>
+      )}
+      {saved && !dirty && it.kind === 'book' && (
+        <button className="btn good" disabled={!spell || it.qty <= 0} onClick={onRead}>Read: learn {spell?.name ?? 'the Spell'} at Rank {it.rank ?? 1}</button>
+      )}
+      {saved && !dirty && it.kind === 'skillPotion' && (
+        <div className="row">
+          <select value={potionSkill} onChange={(e) => setPotionSkill(e.target.value)} style={{ flex: 1 }}>
+            <option value="">Choose a Skill…</option>
+            {c.skills.map((s) => <option key={s.uid} value={s.uid}>{s.name} (Rank {s.rank})</option>)}
+          </select>
+          <button className="btn good" disabled={!potionSkill || it.qty <= 0} onClick={() => onDrink(potionSkill)}>Drink +{it.rank ?? 1}</button>
+        </div>
+      )}
+      {saved && dirty && it.kind && it.kind !== 'gear' && it.kind !== 'weapon' && <p className="small faint" style={{ margin: 0 }}>Save your changes to use it.</p>}
+      {saved && it.kind !== 'scroll' && it.kind !== 'book' && it.kind !== 'skillPotion' && (
+        <div className="row">
+          <select value={slot} onChange={(e) => setSlot(e.target.value as GearSlot)} style={{ flex: 1 }}>
+            {GEAR_SLOTS.map((s) => <option key={s.key} value={s.key}>{s.label}</option>)}
+          </select>
+          <button className="btn" disabled={dirty} onClick={() => onEquip(slot)}>Equip</button>
+        </div>
+      )}
       {hotlistSlot !== undefined && <HotlistToggle slot={hotlistSlot} onToggle={onHotlist} where="Inventory" />}
-      <button className="btn danger" onClick={onDelete}>Delete</button>
+      {saved && <button className="btn danger" onClick={onDelete}>Delete</button>}
     </div>
   )
 }

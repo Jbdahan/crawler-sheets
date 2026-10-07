@@ -1,22 +1,25 @@
 // The Hotlist and Inventory/Gear: an item on the Hotlist stays in Inventory (or in its Gear slot).
 // The Hotlist slot just points at it (invUid / gearUid) and the count lives on the Inventory item.
 import { ITEMS, normName } from '../data'
+import { inferItem } from '../data/loot'
 import { uid } from './advancement'
-import { HOTLIST_SIZE, type Character, type HotlistEntry, type InventoryItem } from './types'
+import { HOTLIST_SIZE, type Character, type HotlistEntry, type InventoryItem, type ItemKind } from './types'
 
 /** Up to 999 of one item per Hotlist slot (Core p.98). */
 export const HOTLIST_STACK = 999
 
 /** A Hotlist entry that points at an Inventory item; catalog items (potions, bandages…) keep their effects. */
-export function hotlistItem(name: string, notes: string, link: { invUid?: string; gearUid?: string }): HotlistEntry {
+export function hotlistItem(name: string, notes: string, link: { invUid?: string; gearUid?: string }, kind?: ItemKind): HotlistEntry {
   const def = ITEMS.find((i) => normName(i.name) === normName(name))
+  // weapons and gear aren't used up; scrolls are
+  const reusable = !!link.gearUid || kind === 'weapon' || kind === 'gear'
   return {
     uid: uid(),
     name,
     qty: 0, // the count lives on the linked Inventory item
     kind: 'item',
     notes: notes || def?.summary || '',
-    consumable: link.gearUid ? false : def ? def.consumable : true,
+    consumable: reusable ? false : def ? def.consumable : true,
     ...link,
     ...(def?.heal ? { heal: def.heal } : {}),
     ...(def?.restoreMana ? { restoreMana: def.restoreMana } : {}),
@@ -56,7 +59,7 @@ export function linkInventoryToHotlist(c: Character, invUid: string, slot?: numb
   if (target < 0 || target >= HOTLIST_SIZE) return null
   const cur = c.hotlist[target]
   if (cur && cur.invUid !== invUid) return null
-  const hotlist = c.hotlist.map((h, i) => (i === target ? hotlistItem(it.name, it.notes, { invUid }) : i === already ? null : h))
+  const hotlist = c.hotlist.map((h, i) => (i === target ? hotlistItem(it.name, it.notes, { invUid }, it.kind) : i === already ? null : h))
   return { ...c, hotlist }
 }
 
@@ -67,14 +70,14 @@ export function linkGearToHotlist(c: Character, gearUid: string, slot?: number):
   if (hotlistSlotOfGear(c, gearUid) >= 0) return c
   const target = slot ?? c.hotlist.slice(0, HOTLIST_SIZE).findIndex((h) => !h)
   if (target < 0 || target >= HOTLIST_SIZE || c.hotlist[target]) return null
-  return { ...c, hotlist: c.hotlist.map((h, i) => (i === target ? hotlistItem(g.name, g.notes, { gearUid }) : h)) }
+  return { ...c, hotlist: c.hotlist.map((h, i) => (i === target ? hotlistItem(g.name, g.notes, { gearUid }, g.skillId ? 'weapon' : 'gear') : h)) }
 }
 
 /** Add items to Inventory (stacking by name and notes); returns the character and the item's uid. */
 export function addInventory(c: Character, name: string, qty: number, notes: string): { c: Character; invUid: string } {
   const same = c.inventory.find((i) => normName(i.name) === normName(name) && i.notes === notes)
   if (same) return { c: { ...c, inventory: c.inventory.map((i) => (i === same ? { ...i, qty: i.qty + qty } : i)) }, invUid: same.uid }
-  const item: InventoryItem = { uid: uid(), name, qty, notes }
+  const item: InventoryItem = inferItem({ uid: uid(), name, qty, notes })
   return { c: { ...c, inventory: [...c.inventory, item] }, invUid: item.uid }
 }
 
@@ -172,7 +175,7 @@ export function addInventoryItems(c: Character, items: ParsedItem[]): Character 
     const same = inventory.find((i) => normName(i.name) === normName(it.name) && i.notes === it.notes)
     inventory = same
       ? inventory.map((i) => (i === same ? { ...i, qty: i.qty + it.qty } : i))
-      : [...inventory, { uid: uid(), name: it.name, qty: it.qty, notes: it.notes }]
+      : [...inventory, inferItem({ uid: uid(), name: it.name, qty: it.qty, notes: it.notes })]
   }
   return { ...c, inventory }
 }
