@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { create } from 'zustand'
 import { attackCalc, rollDamage, type DamageRoll } from '../engine/attacks'
 import { spendAmmo, usesAmmo } from '../engine/ammo'
+import { canAdvance } from '../engine/advancement'
 import { checkBonus, derive, effectiveRank, type Part } from '../engine/derived'
 import { DEGREE_LABEL, degreeOf, isSuccess, netMode, parseDice, rollD20, rollDie, rollPool, type D20Roll } from '../engine/dice'
 import { findSkill } from '../data'
@@ -95,7 +96,7 @@ function CheckRoll({ req, onClose }: { req: Exclude<RollRequest, { kind: 'dice' 
   // mark the Skill for advancement when it's rolled (Passive Skills never mark; Core p.169)
   useEffect(() => {
     if (!c || !skill) return
-    if (skill.marked || skill.rank <= 0) return
+    if (skill.marked || !canAdvance(skill)) return
     if (skill.kind === 'damageEffect' || findSkill(skill.skillId)?.passive) return
     store.update(c.id, (x) => ({ ...x, skills: x.skills.map((s) => (s.uid === skill.uid ? { ...s, marked: true } : s)) }))
     // eslint-disable-next-line react-hooks/exhaustive-deps

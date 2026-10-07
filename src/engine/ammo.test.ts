@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { findSkill } from '../data'
 import { findLoot, inferItem } from '../data/loot'
-import { newSkill } from './advancement'
+import { eligibleForAdvancement, newSkill, resolveAdvancement } from './advancement'
 import { spendAmmo } from './ammo'
 import { attackCalc, rollDamage } from './attacks'
 import { blankCharacter } from './character'
@@ -67,6 +67,11 @@ describe('Ammunition', () => {
     const a = attackCalc(c, s)
     expect(a.rank).toBe(3)
     expect(a.mode).toBe('normal')
+    // using it marks it; the advancement check (d20 ≥ Rank 0) makes Rank 1 its own
+    const marked = { ...c, skills: c.skills.map((k) => (k.uid === s.uid ? { ...k, marked: true } : k)) }
+    expect(eligibleForAdvancement(marked, 'twoHours').map((k) => k.uid)).toEqual([s.uid])
+    const trained = resolveAdvancement(marked, [{ uid: s.uid, roll: 1 }])
+    expect(syncGearSkills({ ...trained, gear: [] }).skills.find((k) => k.skillId === 'crossbow')?.rank).toBe(1)
     // unequipped: the gear-only Skill goes away
     expect(syncGearSkills({ ...c, gear: [] }).skills.some((k) => k.skillId === 'crossbow')).toBe(false)
   })

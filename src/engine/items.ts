@@ -2,7 +2,7 @@
 // Rank with no Mana, Spellbooks teach their Spell, Potions of +N Skill add Ranks (Core p.99, 215–218).
 import { findSkill, type StatKey } from '../data'
 import { inferItem, statPickName, weaponSkillFor, type LootDef } from '../data/loot'
-import { log, newSkill, uid } from './advancement'
+import { GEAR_SKILL_SOURCE, log, newSkill, uid } from './advancement'
 import { ammoName, describeAmmo } from './ammo'
 import { hotlistItem, linkHotlistItems } from './inventory'
 import { GEAR_SLOTS, type Character, type CharSkill, type GearItem, type GearSlot, type InventoryItem } from './types'
@@ -156,8 +156,6 @@ export function addItem(c: Character, item: InventoryItem): { c: Character; invU
 export const slotFree = (c: Character, slot: GearSlot) =>
   c.gear.filter((g) => g.slot === slot).length < (GEAR_SLOTS.find((s) => s.key === slot)?.max ?? 1)
 
-/** Source label on a Skill that only exists because equipped gear grants Ranks in it. */
-export const GEAR_SKILL_SOURCE = 'Equipped gear'
 
 /**
  * Equipped gear that grants Ranks in a Skill you don't have gives you that Skill while you

@@ -48,10 +48,19 @@ export function crawlerKillLevels(roll: number, myLevel: number, victimLevel: nu
 
 export type AdvanceWindow = 'twoHours' | 'endOfFloor'
 
+/** Source label on a Skill that only exists because equipped gear grants Ranks in it. */
+export const GEAR_SKILL_SOURCE = 'Equipped gear'
+
+/**
+ * Skills that can be marked and advanced: any with Ranks, plus a Skill held only through
+ * gear (Rank 0 + the gear's bonus): using it trains it, and its first Rank is then its own.
+ */
+export const canAdvance = (s: CharSkill) => (s.rank > 0 || s.source === GEAR_SKILL_SOURCE) && s.rank < s.max
+
 /** Marked Skills eligible for an Advancement Check (Core p.169). */
 export function eligibleForAdvancement(c: Character, when: AdvanceWindow): CharSkill[] {
   return c.skills.filter((s) => {
-    if (!s.marked || s.rank <= 0 || s.rank >= s.max) return false
+    if (!s.marked || !canAdvance(s)) return false
     return when === 'twoHours' ? s.rank <= 4 : s.rank >= 5
   })
 }

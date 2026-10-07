@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { BOSS_TIERS } from '../data/extras'
 import { STAT_KEYS, STAT_NAMES } from '../data'
 import {
-  addGrind, allocateStats, canAllocateStats, changeFloor, crawlerKillLevels, eligibleForAdvancement,
+  addGrind, allocateStats, canAdvance, canAllocateStats, changeFloor, crawlerKillLevels, eligibleForAdvancement,
   levelUp, resolveAdvancement, resolveGrindCheck, MAX_LEVEL, type AdvanceWindow,
 } from '../engine/advancement'
 import { derive, statMod } from '../engine/derived'
@@ -188,7 +188,7 @@ export function GrindSheet({ c, up, onClose }: Ctx & { onClose: () => void }) {
   const [results, setResults] = useState<Record<string, number>>({})
   const credited = hours + (hours >= 5 ? (map === 'map' ? 1 : map === 'guide' ? 2 : 0) : 0)
   const assigned = Object.values(perSkill).reduce((a, b) => a + b, 0)
-  const skills = c.skills.filter((s) => s.rank > 0 && s.rank < s.max)
+  const skills = c.skills.filter(canAdvance)
 
   const apply = () => {
     const r = addGrind(c, Object.entries(perSkill).filter(([, h]) => h > 0).map(([uid, h]) => ({ uid, hours: h })), credited)
