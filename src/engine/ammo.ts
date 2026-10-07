@@ -77,3 +77,16 @@ export function describeAmmo(a?: AmmoEffect): string {
 /** "Explosive Bolts" for a Crossbow */
 export const ammoName = (prefix: string, skillId: string) => `${prefix} ${AMMO_NOUN[skillId] ?? 'Ammo'}`.trim()
 export const ammoWeaponName = (skillId?: string) => findSkill(skillId)?.name ?? 'weapon'
+
+/**
+ * For the printed sheet: the weapon's special ammo with counts and effects, the loaded one first,
+ * e.g. "Fire Bolts ×10 (loaded): +1d6 Fire, Burned on Amazing Success; Frost Bolts ×4: …".
+ */
+export function ammoSummary(c: Character, s: CharSkill): string {
+  if (!usesAmmo(s)) return ''
+  const loaded = loadedAmmo(c, s)
+  const special = specialAmmo(c, s.skillId).sort((a, b) => Number(b.uid === loaded?.uid) - Number(a.uid === loaded?.uid))
+  const bits = special.map((i) => `${i.name} ×${i.qty}${i.uid === loaded?.uid ? ' (loaded)' : ''}: ${describeAmmo(i.ammo).replace(/ · /g, ', ')}`)
+  if (s.trackBasicAmmo) bits.push(`Basic ${AMMO_NOUN[s.skillId!].toLowerCase()} ×${basicCount(c, s.skillId)}`)
+  return bits.length ? `Ammo: ${bits.join('; ')}` : ''
+}

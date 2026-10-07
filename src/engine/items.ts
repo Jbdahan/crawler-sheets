@@ -171,3 +171,4 @@ export function syncGearSkills(c: Character): Character {
   const skills = [...c.skills.filter((s) => !stale(s)), ...add.map((id) => ({ ...newSkill(findSkill(id), id, 0, GEAR_SKILL_SOURCE), wielded: c.gear.some((g) => g.slot === 'hands' && g.skillId === id) }))]
   return { ...c, skills }
 }
+

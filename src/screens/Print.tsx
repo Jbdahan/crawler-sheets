@@ -6,6 +6,8 @@ import { HB_SLOTS } from '../engine/health'
 import { GEAR_SLOTS, HOTLIST_SIZE, type Character } from '../engine/types'
 import { signed } from '../components/ui'
 import { entryQty } from '../engine/inventory'
+import { ammoSummary } from '../engine/ammo'
+import { invNotes } from '../sheets/ModEditor'
 import { describeMod } from '../sheets/ModEditor'
 import { useCharacter } from '../store/characters'
 import { go } from '../router'
@@ -114,14 +116,15 @@ function PrintPages({ c }: { c: Character }) {
             {Array.from({ length: Math.max(5, attacks.length) }, (_, i) => {
               const s = attacks[i]
               if (!s) return <tr key={i}><td /><td /><td /><td /></tr>
-              const a = attackCalc(c, s, d)
+              // paper shows the weapon's own damage; special ammo is listed in Effects
+              const a = attackCalc(c, s, d, { ammo: null })
               const stat = skillStat(s)
               return (
                 <tr key={s.uid}>
                   <td><b>{s.name}</b>{a.mana !== undefined ? ` (${a.mana} Mana)` : ''}</td>
                   <td>{a.rank} + {stat ? `${STAT_ABBR[stat]} ${signed(stat === 'dex' && d.flags.noDexAttackEvade ? 0 : d.mod[stat])}` : '0'} = <b>{signed(a.toHit.total)}</b></td>
                   <td><b>{a.formula}</b> {a.types.join('/')}</td>
-                  <td className="small">{[a.range, a.area, ...a.unlocked.map((u) => `R${u.rank}: ${u.text}`), `AS: +${c.floor} dmg`].filter(Boolean).join(' · ')}</td>
+                  <td className="small">{[a.range, a.area, ...a.unlocked.map((u) => `R${u.rank}: ${u.text}`), `AS: +${c.floor} dmg`, ammoSummary(c, s)].filter(Boolean).join(' · ')}</td>
                 </tr>
               )
             })}
@@ -199,7 +202,7 @@ function PrintPages({ c }: { c: Character }) {
             <tbody>
               {Array.from({ length: 20 }, (_, i) => {
                 const it = inv[p * 20 + i]
-                return <tr key={i}><td>{it?.name}</td><td className="center">{it?.qty}</td><td className="small">{it?.notes}</td></tr>
+                return <tr key={i}><td>{it?.name}</td><td className="center">{it?.qty}</td><td className="small">{it && invNotes(it)}</td></tr>
               })}
             </tbody>
           </table>

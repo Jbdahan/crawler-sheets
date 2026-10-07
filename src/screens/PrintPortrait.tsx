@@ -5,6 +5,8 @@ import { HB_SLOTS } from '../engine/health'
 import { GEAR_SLOTS, HOTLIST_SIZE, type Character } from '../engine/types'
 import { signed } from '../components/ui'
 import { entryQty } from '../engine/inventory'
+import { ammoSummary } from '../engine/ammo'
+import { invNotes } from '../sheets/ModEditor'
 import { describeMod } from '../sheets/ModEditor'
 import './print-portrait.css'
 
@@ -88,7 +90,8 @@ export function PortraitPages({ c }: { c: Character }) {
             {Array.from({ length: 5 }, (_, i) => {
               const s = attacks[i]
               if (!s) return <tr key={i}><td /><td className="c">+</td><td className="c">+</td><td /></tr>
-              const a = attackCalc(c, s, d)
+              // paper shows the weapon's own damage; special ammo is listed in Effects
+              const a = attackCalc(c, s, d, { ammo: null })
               const stat = skillStat(s)
               const statMod = stat ? (stat === 'dex' && d.flags.noDexAttackEvade ? 0 : d.mod[stat]) : 0
               return (
@@ -96,7 +99,7 @@ export function PortraitPages({ c }: { c: Character }) {
                   <td><b>{s.name}</b>{a.mana !== undefined ? ` (${a.mana} Mana)` : ''}</td>
                   <td className="c">{a.rank} + {signed(statMod)} = <b>{signed(a.toHit.total)}</b></td>
                   <td className="c"><b>{a.formula}</b> {a.types.join('/')}</td>
-                  <td className="tiny">{[a.range, ...a.unlocked.map((u) => `R${u.rank}: ${u.text}`), `AS +${c.floor}`].filter(Boolean).join(' · ')}</td>
+                  <td className="tiny">{[a.range, ...a.unlocked.map((u) => `R${u.rank}: ${u.text}`), `AS +${c.floor}`, ammoSummary(c, s)].filter(Boolean).join(' · ')}</td>
                 </tr>
               )
             })}
@@ -148,12 +151,12 @@ export function PortraitPages({ c }: { c: Character }) {
             <thead><tr><th>Name</th><th>To hit</th><th>Damage</th><th>Effects</th></tr></thead>
             <tbody>
               {attacks.slice(5).map((s) => {
-                const a = attackCalc(c, s, d)
+                const a = attackCalc(c, s, d, { ammo: null })
                 return (
                   <tr key={s.uid}>
                     <td><b>{s.name}</b></td><td className="c"><b>{signed(a.toHit.total)}</b></td>
                     <td className="c"><b>{a.formula}</b> {a.types.join('/')}</td>
-                    <td className="tiny">{a.unlocked.map((u) => `R${u.rank}: ${u.text}`).join(' · ')}</td>
+                    <td className="tiny">{[...a.unlocked.map((u) => `R${u.rank}: ${u.text}`), ammoSummary(c, s)].filter(Boolean).join(' · ')}</td>
                   </tr>
                 )
               })}
@@ -194,7 +197,7 @@ export function PortraitPages({ c }: { c: Character }) {
             <tbody>
               {Array.from({ length: INV_ROWS }, (_, i) => {
                 const it = c.inventory[p * INV_ROWS + i]
-                return <tr key={i}><td>{it?.name}</td><td className="c">{it?.qty}</td><td className="tiny">{it?.notes}</td></tr>
+                return <tr key={i}><td>{it?.name}</td><td className="c">{it?.qty}</td><td className="tiny">{it && invNotes(it)}</td></tr>
               })}
             </tbody>
           </table>

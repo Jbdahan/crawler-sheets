@@ -1,5 +1,6 @@
 import { ALL_SKILLS, DAMAGE_TYPES, STAT_KEYS, STAT_NAMES, findSkill } from '../data'
-import type { Modifier } from '../engine/types'
+import type { InventoryItem, Modifier } from '../engine/types'
+import { itemLinkLabel } from '../engine/items'
 import { signed } from '../components/ui'
 
 const TARGETS: { value: string; label: string }[] = [
@@ -17,6 +18,11 @@ const TARGETS: { value: string; label: string }[] = [
   { value: 'immune', label: 'Immunity to…' },
   { value: 'vuln', label: 'Vulnerability to…' },
 ]
+
+/** Notes for the printed Inventory: what the item is (ammo effect, scroll Rank…), its bonuses, then its notes. */
+export function invNotes(it: InventoryItem): string {
+  return [it.kind === 'weapon' || it.kind === 'gear' ? '' : itemLinkLabel(it), ...(it.mods ?? []).map(describeMod), it.notes].filter(Boolean).join(' · ')
+}
 
 export function describeMod(m: Modifier): string {
   const [kind, arg] = m.target.split(':')
