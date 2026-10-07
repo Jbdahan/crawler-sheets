@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
-import { DAMAGE_TYPES, DEBUFFS, ITEMS, SKILLS, SPELLS, STAT_KEYS, STAT_NAMES, findSkill } from '../data'
+import { DAMAGE_TYPES, ITEMS, SKILLS, SPELLS, STAT_KEYS, STAT_NAMES, findSkill } from '../data'
 import { LOOT } from '../data/loot'
 import { AMMO_NOUN, ammoNoun } from '../engine/ammo'
 import { AmmoSelect } from '../components/AmmoSelect'
+import { AmmoDebuffFields } from '../components/AmmoDebuffFields'
 import QRCode from 'qrcode'
 import { uid } from '../engine/advancement'
 import { claimUrl } from '../engine/lootclaim'
@@ -571,16 +572,7 @@ function RowFields({ row: r, onChange }: { row: LootRow; onChange: (r: LootRow) 
             <Field label="To hit bonus"><NumInput label="To hit bonus" value={r.toHit ?? 0} onChange={(v) => set({ toHit: v || undefined })} /></Field>
             <Field label="Damage bonus"><NumInput label="Damage bonus" value={r.damage ?? 0} onChange={(v) => set({ damage: v || undefined })} /></Field>
           </div>
-          <div className="row">
-            <select className="grow" aria-label="Debuff" value={r.debuff ?? ''} onChange={(e) => set({ debuff: e.target.value || undefined, debuffOn: r.debuffOn ?? 'hit' })}>
-              <option value="">No Debuff</option>
-              {DEBUFFS.map((d) => <option key={d.id} value={d.id}>{d.name}</option>)}
-            </select>
-            <select className="grow" aria-label="When" value={r.debuffOn ?? 'hit'} disabled={!r.debuff} onChange={(e) => set({ debuffOn: e.target.value as 'hit' | 'amazing' })}>
-              <option value="hit">On a hit</option>
-              <option value="amazing">On an Amazing Success</option>
-            </select>
-          </div>
+          <AmmoDebuffFields value={r} onChange={set} />
           <p className="small faint" style={{ margin: 0 }}>The book has no ammo table (Core p.181), so these are house rules. Claimed ammo loads on the weapon's attack card; each Attack fires one.</p>
         </>
       )

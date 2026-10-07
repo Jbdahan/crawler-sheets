@@ -6,7 +6,7 @@
 // Ammo is matched by an "ammo key": a ranged Weapon Skill id for its standard ammo
 // ("crossbow" = Bolts) or a custom name ("Plasma Cells"). A custom weapon can fire any
 // ammo (WeaponStats.ammo); otherwise the Attack Skill's own ammo is used.
-import { findDebuff, findSkill } from '../data'
+import { STAT_ABBR, findDebuff, findSkill } from '../data'
 import type { AmmoEffect, Character, CharSkill, InventoryItem } from './types'
 import { AMMO_NOUN, ammoNoun, heldWeapon, type WeaponRef } from './weapon'
 
@@ -37,7 +37,7 @@ export function ammoKeys(c: Character): string[] {
   return [...AMMO_WEAPONS, ...[...custom].sort()]
 }
 
-const hasEffect = (a?: AmmoEffect) => !!a && !!(a.dice || a.toHit || a.damage || a.debuff)
+const hasEffect = (a?: AmmoEffect) => !!a && !!(a.dice || a.toHit || a.damage || a.debuff || a.extra?.trim())
 
 /** Ammo stacks in Inventory of this ammo key (stored in the item's skillId); special first. */
 export function ammoStacks(c: Character, key?: string): InventoryItem[] {
@@ -84,6 +84,29 @@ export function spendAmmo(c: Character, s: CharSkill, weapon?: WeaponRef | null)
   return { c: next, note: [out, `Basic ${noun}: ${basicCount(c, key) - 1} left`].filter(Boolean).join(' · ') }
 }
 
+/** "on hit", "on Amazing Success", or "on a failed Int Check" */
+export function debuffWhen(a: Pick<AmmoEffect, 'debuffOn' | 'checkStat'>): string {
+  if (a.debuffOn === 'check') return `on a failed ${a.checkStat ? STAT_ABBR[a.checkStat] : 'Stat'} Check`
+  return a.debuffOn === 'amazing' ? 'on Amazing Success' : 'on hit'
+}
+
+/**
+ * What special ammo does to the target, for the attack card and roll, e.g.
+ * "Flash Bolts: target makes an Int Check (Difficulty 14); on a failure it gains Blinded · everyone within a 10 ft radius".
+ */
+export function ammoEffectNote(name: string, a: AmmoEffect | undefined, floor: number): string {
+  if (!a) return ''
+  const bits: string[] = []
+  if (a.debuff) {
+    const debuff = findDebuff(a.debuff)?.name ?? a.debuff
+    bits.push(a.debuffOn === 'check'
+      ? `target makes ${a.checkStat ? `${a.checkStat === 'int' ? 'an' : 'a'} ${STAT_ABBR[a.checkStat]}` : 'a Stat'} Check (Difficulty ${10 + floor}); on a failure it gains ${debuff}`
+      : `target gains ${debuff} on ${a.debuffOn === 'amazing' ? 'an Amazing Success' : 'a hit'}`)
+  }
+  if (a.extra?.trim()) bits.push(a.extra.trim())
+  return bits.length ? `${name}: ${bits.join(' · ')}` : ''
+}
+
 /** "+1d6 Fire · +1 to hit · Burned on hit" */
 export function describeAmmo(a?: AmmoEffect): string {
   if (!hasEffect(a)) return 'Basic ammo'
@@ -91,7 +114,8 @@ export function describeAmmo(a?: AmmoEffect): string {
   if (a!.dice) bits.push(`+${a!.dice}${a!.dtype ? ` ${a!.dtype}` : ''}`)
   if (a!.toHit) bits.push(`${a!.toHit > 0 ? '+' : ''}${a!.toHit} to hit`)
   if (a!.damage) bits.push(`${a!.damage > 0 ? '+' : ''}${a!.damage} damage`)
-  if (a!.debuff) bits.push(`${findDebuff(a!.debuff)?.name ?? a!.debuff} on ${a!.debuffOn === 'amazing' ? 'Amazing Success' : 'hit'}`)
+  if (a!.debuff) bits.push(`${findDebuff(a!.debuff)?.name ?? a!.debuff} ${debuffWhen(a!)}`)
+  if (a!.extra?.trim()) bits.push(a!.extra.trim())
   return bits.join(' · ')
 }
 

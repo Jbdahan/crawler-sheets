@@ -250,7 +250,8 @@ export function planClaim(c: Character, claim: LootClaim): LootChange[] {
           ...(r.dice ? { dice: r.dice, ...(r.dtype ? { dtype: r.dtype } : {}) } : {}),
           ...(r.toHit ? { toHit: r.toHit } : {}),
           ...(r.damage ? { damage: r.damage } : {}),
-          ...(r.debuff ? { debuff: r.debuff, debuffOn: r.debuffOn ?? 'hit' } : {}),
+          ...(r.debuff ? { debuff: r.debuff, debuffOn: r.debuffOn ?? 'hit', ...(r.debuffOn === 'check' && r.checkStat ? { checkStat: r.checkStat } : {}) } : {}),
+          ...(r.extra?.trim() ? { extra: r.extra.trim() } : {}),
         }
         const special = Object.keys(effect).length > 0
         const have = c.inventory.find((i) => i.kind === 'ammo' && i.name === name && i.skillId === r.weapon)

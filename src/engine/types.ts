@@ -134,7 +134,12 @@ export interface AmmoEffect {
   damage?: number
   /** Debuff id the target gains */
   debuff?: string
-  debuffOn?: 'hit' | 'amazing'
+  /** when: on a hit, on an Amazing Success, or when the target fails a Stat Check */
+  debuffOn?: 'hit' | 'amazing' | 'check'
+  /** for debuffOn 'check': the Stat the target checks (Difficulty 10 + Floor, Core p.59) */
+  checkStat?: StatKey
+  /** any additional effect, e.g. "everyone within a 10 ft radius" */
+  extra?: string
 }
 export type ItemKind = 'weapon' | 'scroll' | 'book' | 'skillPotion' | 'gear' | 'ammo'
 

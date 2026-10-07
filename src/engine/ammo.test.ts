@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { findSkill } from '../data'
 import { findLoot, inferItem } from '../data/loot'
 import { eligibleForAdvancement, newSkill, resolveAdvancement } from './advancement'
-import { spendAmmo } from './ammo'
+import { ammoEffectNote, debuffWhen, describeAmmo, spendAmmo } from './ammo'
 import { attackCalc, rollDamage } from './attacks'
 import { blankCharacter } from './character'
 import { addItem, lootItem, syncGearSkills } from './items'
@@ -74,5 +74,28 @@ describe('Ammunition', () => {
     expect(syncGearSkills({ ...trained, gear: [] }).skills.find((k) => k.skillId === 'crossbow')?.rank).toBe(1)
     // unequipped: the gear-only Skill goes away
     expect(syncGearSkills({ ...c, gear: [] }).skills.some((k) => k.skillId === 'crossbow')).toBe(false)
+  })
+})
+
+describe('ammo Debuffs on a failed Stat Check, with an additional effect', () => {
+  const flash = { debuff: 'blinded', debuffOn: 'check' as const, checkStat: 'int' as const, extra: 'everyone within a 10 ft radius' }
+
+  it('describes and notes the check with the Floor Difficulty', () => {
+    expect(debuffWhen(flash)).toBe('on a failed Int Check')
+    expect(describeAmmo(flash)).toBe('Blinded on a failed Int Check · everyone within a 10 ft radius')
+    expect(ammoEffectNote('Flash Bolts', flash, 4)).toBe('Flash Bolts: target makes an Int Check (Difficulty 14); on a failure it gains Blinded · everyone within a 10 ft radius')
+    expect(ammoEffectNote('Dex Darts', { debuff: 'stunned', debuffOn: 'check', checkStat: 'dex' }, 1)).toContain('makes a Dex Check (Difficulty 11)')
+    expect(describeAmmo({ extra: 'knocks the target prone' })).toBe('knocks the target prone')
+  })
+
+  it('the Flash ammo template fires with that note on the attack', () => {
+    const c = blankCharacter()
+    c.skills = [...c.skills, newSkill(findSkill('crossbow'), 'Crossbow', 2)]
+    const item = lootItem(findLoot('ammo-flash')!, { weapon: 'crossbow' })
+    const { c: withAmmo, invUid } = addItem(c, item)
+    const loaded = { ...withAmmo, skills: withAmmo.skills.map((s) => (s.skillId === 'crossbow' ? { ...s, ammoUid: invUid } : s)) }
+    const a = attackCalc(loaded, loaded.skills.find((s) => s.skillId === 'crossbow')!)
+    expect(a.ammo?.name).toBe('Flash Bolts')
+    expect(a.notes).toContain(`Flash Bolts: target makes an Int Check (Difficulty ${10 + loaded.floor}); on a failure it gains Blinded · everyone within a 10 ft radius`)
   })
 })

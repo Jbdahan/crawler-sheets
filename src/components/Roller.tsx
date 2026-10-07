@@ -189,7 +189,7 @@ function CheckRoll({ req, onClose }: { req: Exclude<RollRequest, { kind: 'dice' 
           )}
           {!canHit && roll.kept === 1 && <div className="small muted">A Natural 1 always misses.</div>}
           {shot?.note && <div className="small" style={{ marginTop: 6 }}>{shot.note}</div>}
-          {atk.ammo?.ammo?.debuff && <div className="small" style={{ color: 'var(--accent)' }}>{atk.notes[atk.notes.length - 1]}</div>}
+          {(atk.ammo?.ammo?.debuff || atk.ammo?.ammo?.extra?.trim()) && <div className="small" style={{ color: 'var(--accent)' }}>{atk.notes[atk.notes.length - 1]}</div>}
         </div>
       )}
 

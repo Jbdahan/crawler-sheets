@@ -4,9 +4,10 @@ import { addInventoryItems, hotlistSlotOfGear, hotlistSlotOfInventory, linkGearT
 import { addItem, drinkSkillPotion, equipItem, itemLinkLabel, readSpellbook, slotFree, unequipGear, weaponSkill } from '../engine/items'
 import { GEAR_SLOTS, type Character, type GearItem, type GearSlot, type InventoryItem, type ItemKind, type AmmoEffect, type WeaponStats } from '../engine/types'
 import { attackCalc, hasWeaponStats } from '../engine/attacks'
-import { DAMAGE_TYPES, DEBUFFS, SKILLS, SPELLS, findSkill } from '../data'
+import { DAMAGE_TYPES, SKILLS, SPELLS, findSkill } from '../data'
 import { AMMO_NOUN, AMMO_WEAPONS, ammoKeys, ammoNoun } from '../engine/ammo'
 import { AmmoSelect } from '../components/AmmoSelect'
+import { AmmoDebuffFields } from '../components/AmmoDebuffFields'
 import { LootPicker } from './LootPicker'
 import { effectiveRank } from '../engine/derived'
 import { inferItem } from '../data/loot'
@@ -243,7 +244,7 @@ function AmmoFields({ c, it, onChange }: { c: Character; it: InventoryItem; onCh
   const a = it.ammo ?? {}
   const set = (patch: Partial<AmmoEffect>) => {
     const next = { ...a, ...patch }
-    const empty = !next.dice && !next.toHit && !next.damage && !next.debuff
+    const empty = !next.dice && !next.toHit && !next.damage && !next.debuff && !next.extra?.trim()
     onChange({ ...it, ammo: empty ? undefined : next })
   }
   return (
@@ -263,20 +264,7 @@ function AmmoFields({ c, it, onChange }: { c: Character; it: InventoryItem; onCh
       </div>
       <div className="row between"><span>To hit</span><Stepper value={a.toHit ?? 0} min={-10} max={20} onChange={(v) => set({ toHit: v || undefined })} /></div>
       <div className="row between"><span>Damage</span><Stepper value={a.damage ?? 0} min={-10} max={50} onChange={(v) => set({ damage: v || undefined })} /></div>
-      <div className="grid2">
-        <label><span className="label">Debuff</span>
-          <select value={a.debuff ?? ''} onChange={(e) => set({ debuff: e.target.value || undefined, debuffOn: a.debuffOn ?? 'hit' })}>
-            <option value="">None</option>
-            {DEBUFFS.map((d) => <option key={d.id} value={d.id}>{d.name}</option>)}
-          </select>
-        </label>
-        <label><span className="label">When</span>
-          <select value={a.debuffOn ?? 'hit'} disabled={!a.debuff} onChange={(e) => set({ debuffOn: e.target.value as AmmoEffect['debuffOn'] })}>
-            <option value="hit">On a hit</option>
-            <option value="amazing">On an Amazing Success</option>
-          </select>
-        </label>
-      </div>
+      <AmmoDebuffFields value={a} floor={c.floor} onChange={set} />
     </>
   )
 }

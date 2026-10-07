@@ -1,7 +1,7 @@
-import { findDebuff, findSkill, STAT_ABBR, type Dice, type SkillDef, type StatKey } from '../data'
+import { findSkill, STAT_ABBR, type Dice, type SkillDef, type StatKey } from '../data'
 import { addDice, formatDice, parseDice, rankDamageDice, rollDie, type DicePool } from './dice'
 import { checkBonus, derive, type Derived, type Part } from './derived'
-import { ammoKey, firing } from './ammo'
+import { ammoEffectNote, ammoKey, firing } from './ammo'
 import type { Character, CharSkill, InventoryItem } from './types'
 import { hasWeaponStats, heldWeapon, type WeaponRef } from './weapon'
 
@@ -128,7 +128,8 @@ export function attackCalc(c: Character, s: CharSkill, d: Derived = derive(c), o
   if (def?.attackType === 'ranged' || def?.kind === 'spell') notes.push('Ranged/Spell attacks within melee reach of a foe have Disadvantage.')
   if (def?.aiFavor) notes.push(`AI Favor: ${def.aiFavor}`)
   if (def?.limitations) notes.push(def.limitations)
-  if (fx?.debuff) notes.push(`${ammo!.name}: target gains ${findDebuff(fx.debuff)?.name ?? fx.debuff} on ${fx.debuffOn === 'amazing' ? 'an Amazing Success' : 'a hit'}`)
+  const fxNote = ammo ? ammoEffectNote(ammo.name, fx, c.floor) : ''
+  if (fxNote) notes.push(fxNote)
 
   return {
     skill: s,

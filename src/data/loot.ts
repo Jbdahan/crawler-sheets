@@ -102,6 +102,7 @@ const ammunition: LootDef[] = [
   ammoDef('explosive', 'Explosive', '+1d8 Bludgeoning; Staggered on an Amazing Success.', { dice: '1d8', dtype: 'Bludgeoning', debuff: 'staggered', debuffOn: 'amazing' }),
   ammoDef('poison', 'Poison', 'Target gains Poisoned on a hit.', { debuff: 'poisoned', debuffOn: 'hit' }),
   ammoDef('barbed', 'Barbed', 'Target gains Blood Trail on a hit.', { debuff: 'blood-trail', debuffOn: 'hit' }),
+  ammoDef('flash', 'Flash', 'Everyone within a 10 ft radius makes an Int Check or gains Blinded.', { debuff: 'blinded', debuffOn: 'check', checkStat: 'int', extra: 'everyone within a 10 ft radius' }),
   ammoDef('precision', 'Precision', '+2 to hit.', { toHit: 2 }),
   ammoDef('heavy', 'Heavy', '+2 damage.', { damage: 2 }),
 ]
