@@ -74,6 +74,24 @@ export interface GearItem {
   notes: string
   /** weapons: the Attack Skill (catalog id) this item is used with, e.g. 'dagger' */
   skillId?: string
+  /** weapons: this item's own damage and range (instead of the Attack Skill's) */
+  weapon?: WeaponStats
+}
+
+/**
+ * A weapon item's own damage and range. Its Attack Skill still sets the to-hit
+ * (Rank, Stats, Floor) and adds its Rank upgrade dice; these replace the Skill's
+ * base damage die, damage type and range. Every field is optional.
+ */
+export interface WeaponStats {
+  /** base damage dice, e.g. "1d10" or "2d6" (a flat part like "1d8+1" also works) */
+  dice?: string
+  /** flat damage modifier, e.g. +2 for a +2 sword */
+  bonus?: number
+  /** damage type, e.g. "Fire" */
+  dtype?: string
+  /** e.g. "Melee 10ft" or "120 feet" */
+  range?: string
 }
 
 export interface HotlistEntry {
@@ -130,6 +148,8 @@ export interface InventoryItem {
   mods?: Modifier[]
   /** ammo: what it adds (none: basic ammo) */
   ammo?: AmmoEffect
+  /** weapons: this item's own damage and range (instead of the Attack Skill's) */
+  weapon?: WeaponStats
 }
 
 export interface Trait {

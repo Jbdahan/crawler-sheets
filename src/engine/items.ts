@@ -120,7 +120,7 @@ export function equipItem(c: Character, invUid: string, slot: GearSlot): Charact
   const it = c.inventory.find((i) => i.uid === invUid)
   if (!it) return c
   const one = it.qty > 1
-  const g: GearItem = { uid: uid(), slot, name: it.name, mods: it.mods ?? [], notes: it.notes, ...(it.skillId && it.kind === 'weapon' ? { skillId: it.skillId } : {}) }
+  const g: GearItem = { uid: uid(), slot, name: it.name, mods: it.mods ?? [], notes: it.notes, ...(it.skillId && it.kind === 'weapon' ? { skillId: it.skillId } : {}), ...(it.weapon ? { weapon: it.weapon } : {}) }
   const inventory = one ? c.inventory.map((i) => (i.uid === invUid ? { ...i, qty: i.qty - 1 } : i)) : c.inventory.filter((i) => i.uid !== invUid)
   const hotlist = one ? c.hotlist : c.hotlist.map((h) => (h?.invUid === invUid ? hotlistItem(g.name, g.notes, { gearUid: g.uid }, it.kind) : h))
   const skills = g.skillId && c.skills.some((s) => s.skillId === g.skillId)
@@ -134,7 +134,7 @@ export function unequipGear(c: Character, gearUid: string): Character {
   const g = c.gear.find((x) => x.uid === gearUid)
   if (!g) return c
   const kind = g.skillId ? 'weapon' : 'gear'
-  const item: InventoryItem = { uid: uid(), name: g.name, qty: 1, notes: g.notes, kind, slot: g.slot, mods: g.mods, ...(g.skillId ? { skillId: g.skillId } : {}) }
+  const item: InventoryItem = { uid: uid(), name: g.name, qty: 1, notes: g.notes, kind, slot: g.slot, mods: g.mods, ...(g.skillId ? { skillId: g.skillId } : {}), ...(g.weapon ? { weapon: g.weapon } : {}) }
   const skills = g.skillId ? c.skills.map((s) => (s.skillId === g.skillId ? { ...s, wielded: false } : s)) : c.skills
   return {
     ...c,
@@ -147,7 +147,7 @@ export function unequipGear(c: Character, gearUid: string): Character {
 
 /** Add a catalog item to Inventory, stacking onto the same item (same name and link). */
 export function addItem(c: Character, item: InventoryItem): { c: Character; invUid: string } {
-  const same = c.inventory.find((i) => i.name === item.name && i.kind === item.kind && i.skillId === item.skillId && i.rank === item.rank && !item.mods?.length && !i.mods?.length)
+  const same = c.inventory.find((i) => i.name === item.name && i.kind === item.kind && i.skillId === item.skillId && i.rank === item.rank && !item.mods?.length && !i.mods?.length && JSON.stringify(i.weapon ?? null) === JSON.stringify(item.weapon ?? null))
   if (same) return { c: { ...c, inventory: c.inventory.map((i) => (i === same ? { ...i, qty: i.qty + item.qty } : i)) }, invUid: same.uid }
   return { c: { ...c, inventory: [...c.inventory, item] }, invUid: item.uid }
 }

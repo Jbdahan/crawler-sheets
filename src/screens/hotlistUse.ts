@@ -1,7 +1,7 @@
 import { signed, toast } from '../components/ui'
 import { openRoll } from '../components/Roller'
 import { activateHotlist, castSpell } from '../engine/actions'
-import { attackCalc, isAttackSkill } from '../engine/attacks'
+import { attackCalc, hasWeaponStats, isAttackSkill, type WeaponRef } from '../engine/attacks'
 import { entryQty } from '../engine/inventory'
 import { isVirtualSkill, scrollSkill, weaponSkill } from '../engine/items'
 import type { CharSkill, HotlistEntry, InventoryItem } from '../engine/types'
@@ -39,9 +39,16 @@ export function hotlistAttack(ctx: Pick<Ctx, 'c'>, h: HotlistEntry): CharSkill |
   return s && isAttackSkill(s) ? s : undefined
 }
 
-/** "+13 · 2d10+5" for an attack slot */
-export function attackLine({ c, d }: Pick<Ctx, 'c' | 'd'>, s: CharSkill): string {
-  const a = attackCalc(c, s, d)
+/** A weapon item slot's own damage/range, if it has any. */
+export function hotlistWeapon(ctx: Pick<Ctx, 'c'>, h: HotlistEntry): WeaponRef | undefined {
+  if (h.kind !== 'item') return undefined
+  const src = h.gearUid ? ctx.c.gear.find((g) => g.uid === h.gearUid) : linkedInventory(ctx, h)
+  return src && hasWeaponStats(src.weapon) ? { name: src.name, stats: src.weapon! } : undefined
+}
+
+/** "+13 · 2d10+5" for an attack slot (a weapon item slot uses that weapon's own stats) */
+export function attackLine({ c, d }: Pick<Ctx, 'c' | 'd'>, s: CharSkill, weapon?: WeaponRef): string {
+  const a = attackCalc(c, s, d, weapon ? { weapon } : {})
   return `${signed(a.toHit.total)} · ${a.formula}`
 }
 
@@ -82,7 +89,8 @@ export function triggerHotlist(ctx: Ctx, h: HotlistEntry) {
       up((x) => ({ ...x, skills: x.skills.map((k) => (k.kind === 'attack' ? { ...k, wielded: k.uid === atk.uid } : k)) }))
     }
     if (virtual) toast(`Untrained with ${atk.name}: Disadvantage`)
-    openRoll({ kind: 'skill', charId: c.id, skillUid: atk.uid, attack: true, ...(virtual ? { skill: atk } : {}) })
+    const weapon = hotlistWeapon(ctx, h)
+    openRoll({ kind: 'skill', charId: c.id, skillUid: atk.uid, attack: true, ...(virtual ? { skill: atk } : {}), ...(weapon ? { weapon } : {}) })
     return
   }
   if (atk && atk.kind === 'spell') {

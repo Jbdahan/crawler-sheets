@@ -4,7 +4,7 @@ import { difficulty } from '../engine/attacks'
 import type { Part, Total } from '../engine/derived'
 import { HB_SLOTS, REST_LABEL, heal, rest, setLost, setMana, tickDying, type RestKind } from '../engine/health'
 import { HOTLIST_SIZE, type ActiveEffect, type HotlistEntry } from '../engine/types'
-import { attackLine, hotlistAttack, hotlistSkill, triggerHotlist } from './hotlistUse'
+import { attackLine, hotlistAttack, hotlistSkill, hotlistWeapon, triggerHotlist } from './hotlistUse'
 import { findSkill } from '../data'
 import { openRoll } from '../components/Roller'
 import { swapSlots, useSlotDrag } from '../components/useSlotDrag'
@@ -254,7 +254,7 @@ function HotlistStrip(ctx: Ctx) {
           const out = h.kind === 'item' && h.consumable && qty <= 0
           const noMana = h.kind === 'spell' && (d.flags.cantCast || c.mana < (cost ?? 0))
           const verb = atk ? 'Attack' : h.kind === 'spell' ? 'Cast' : 'Use'
-          const [toHit, dmg] = atk ? attackLine(ctx, atk).split(' · ') : []
+          const [toHit, dmg] = atk ? attackLine(ctx, atk, hotlistWeapon(ctx, h)).split(' · ') : []
           const costTag = h.kind === 'spell' && cost !== undefined
             ? <span className="hg-cost inline" aria-label={`${cost} Mana`}>{cost}M</span>
             : null

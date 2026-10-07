@@ -331,6 +331,51 @@ export function LootBox() {
   )
 }
 
+const ATTACK_SKILLS = SKILLS.filter((s) => s.kind === 'attack').sort((a, b) => a.name.localeCompare(b.name))
+
+/** A loot weapon: the Attack Skill it uses, plus its own damage die, modifier, type and range. */
+function LootWeaponFields({ row: r, onChange }: { row: Extract<LootRow, { type: 'gear' }>; onChange: (r: LootRow) => void }) {
+  const def = findSkill(r.skillId)
+  const w = r.weapon ?? {}
+  const set = (patch: Partial<NonNullable<typeof r.weapon>>) => {
+    const next = { ...w, ...patch }
+    const has = !!next.dice?.trim() || !!next.bonus || !!next.dtype || !!next.range?.trim()
+    onChange({ ...r, weapon: has ? next : undefined })
+  }
+  const baseDie = def?.damage ? `${def.damage.count}d${def.damage.sides}` : ''
+  const baseRange = def?.range ?? (def?.attackType === 'melee' ? 'Melee 5ft' : '')
+  return (
+    <>
+      <Field label="Weapon Skill (attacks use its Rank)">
+        <select value={r.skillId ?? ''} aria-label="Weapon Skill" onChange={(e) => onChange({ ...r, skillId: e.target.value || undefined, ...(e.target.value ? {} : { weapon: undefined }) })}>
+          <option value="">Not a weapon</option>
+          {ATTACK_SKILLS.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
+        </select>
+      </Field>
+      {def && (
+        <>
+          <p className="small muted" style={{ margin: 0 }}>
+            Optional: give it its own damage and range. Blank fields use the {def.name} Skill's ({[baseDie, def.damage?.types.join('/'), baseRange].filter(Boolean).join(', ')}).
+          </p>
+          <div className="grid2">
+            <Field label="Damage die"><input aria-label="Damage die" placeholder={`e.g. ${baseDie || '1d8'}`} value={w.dice ?? ''} onChange={(e) => set({ dice: e.target.value.replace(/\s+/g, '') || undefined })} /></Field>
+            <Field label="Modifier"><input aria-label="Damage modifier" inputMode="numeric" placeholder="e.g. +2" value={w.bonus ? String(w.bonus) : ''} onChange={(e) => set({ bonus: num(e.target.value) || undefined })} /></Field>
+          </div>
+          <div className="grid2">
+            <Field label="Damage type">
+              <select aria-label="Damage type" value={w.dtype ?? ''} onChange={(e) => set({ dtype: e.target.value || undefined })}>
+                <option value="">Same as Skill{def.damage?.types.length ? ` (${def.damage.types.join('/')})` : ''}</option>
+                {DAMAGE_TYPES.map((t) => <option key={t}>{t}</option>)}
+              </select>
+            </Field>
+            <Field label="Range"><input aria-label="Range" placeholder={baseRange || 'e.g. Melee 10ft'} value={w.range ?? ''} onChange={(e) => set({ range: e.target.value || undefined })} /></Field>
+          </div>
+        </>
+      )}
+    </>
+  )
+}
+
 function Field({ label, children }: { label: string; children: ReactNode }) {
   return <label><span className="label">{label}</span>{children}</label>
 }
@@ -415,10 +460,15 @@ function RowFields({ row: r, onChange }: { row: LootRow; onChange: (r: LootRow) 
           <div className="row">
             <input className="grow" value={r.name} onChange={(e) => onChange({ ...r, name: e.target.value })} placeholder="Item name, e.g. Enchanted Bigboi Boxers" aria-label="Item name" />
           </div>
-          <select value={r.slot} onChange={(e) => onChange({ ...r, slot: e.target.value })} aria-label="Slot">
+          <select value={r.slot} aria-label="Slot" onChange={(e) => {
+            const slot = e.target.value
+            // only hand-held items can be weapons
+            onChange(slot === 'Weapon' || slot === 'Hands/Holding' ? { ...r, slot } : { ...r, slot, skillId: undefined, weapon: undefined })
+          }}>
             <option value="">(no slot)</option>
             {SLOTS.map((s) => <option key={s}>{s}</option>)}
           </select>
+          {(r.slot === 'Weapon' || r.slot === 'Hands/Holding') && <LootWeaponFields row={r} onChange={onChange} />}
           {r.mods.map((m, i) => (
             <div key={i} className="row">
               <select style={{ flex: '1 1 0' }} value={m.target} aria-label="Bonus type" onChange={(e) => {

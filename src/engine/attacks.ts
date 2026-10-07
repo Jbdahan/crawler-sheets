@@ -2,7 +2,10 @@ import { findDebuff, findSkill, STAT_ABBR, type Dice, type SkillDef, type StatKe
 import { addDice, formatDice, parseDice, rankDamageDice, rollDie, type DicePool } from './dice'
 import { checkBonus, derive, type Derived, type Part } from './derived'
 import { firing } from './ammo'
-import type { Character, CharSkill, InventoryItem } from './types'
+import type { Character, CharSkill, InventoryItem, WeaponStats } from './types'
+import { hasWeaponStats } from './weapon'
+
+export { describeWeapon, hasWeaponStats } from './weapon'
 
 export interface AttackCalc {
   skill: CharSkill
@@ -31,7 +34,20 @@ export interface AttackCalc {
   range?: string
   area?: string
   notes: string[]
+  /** the weapon item whose own damage/range this attack uses */
+  weapon?: string
 }
+
+/** A weapon item with its own stats: an equipped Gear item or one from Inventory/the Hotlist. */
+export interface WeaponRef { name: string; stats: WeaponStats }
+
+/** The weapon held in hand for this Attack Skill that has its own stats, if any. */
+export function heldWeapon(c: Character, s: CharSkill): WeaponRef | undefined {
+  if (!s.skillId) return undefined
+  const g = c.gear.find((x) => x.slot === 'hands' && x.skillId === s.skillId && hasWeaponStats(x.weapon))
+  return g ? { name: g.name || 'Weapon', stats: g.weapon! } : undefined
+}
+
 
 export const isAttackSkill = (s: CharSkill) => {
   if (s.customDamage) return true
@@ -40,7 +56,7 @@ export const isAttackSkill = (s: CharSkill) => {
 }
 
 /** Attack Skill Check and damage for the current Stats, Rank and Floor (Core p.82–85, 175–176). */
-export function attackCalc(c: Character, s: CharSkill, d: Derived = derive(c), opts: { ammo?: InventoryItem | null } = {}): AttackCalc {
+export function attackCalc(c: Character, s: CharSkill, d: Derived = derive(c), opts: { ammo?: InventoryItem | null; weapon?: WeaponRef | null } = {}): AttackCalc {
   const def = findSkill(s.skillId)
   const bonus = d.skillBonus[s.uid] ?? []
   const rank = s.rank + bonus.reduce((a, p) => a + p.value, 0)
@@ -72,6 +88,20 @@ export function attackCalc(c: Character, s: CharSkill, d: Derived = derive(c), o
     damageStat = s.customDamageStat ?? damageStat
     if (s.customDamageType) types = [s.customDamageType]
   }
+  // a weapon item with its own stats replaces the Skill's base die, type and range
+  const weapon = opts.weapon === undefined ? heldWeapon(c, s) : opts.weapon ?? undefined
+  const ws = hasWeaponStats(weapon?.stats) ? weapon!.stats : undefined
+  if (ws?.dice?.trim()) {
+    const p = parseDice(ws.dice)
+    if (p) {
+      baseDice = p.dice
+      if (p.flat) flatParts.push({ label: weapon!.name, value: p.flat })
+    }
+  }
+  if (ws?.bonus) flatParts.push({ label: weapon!.name, value: ws.bonus })
+  if (ws?.dtype) types = [ws.dtype]
+  // a weapon with its own dice adds the Skill's Stat Mod like the Skill's own die would
+  if (ws?.dice?.trim() && !damageStat && def?.kind !== 'spell') damageStat = def?.stat ?? null
   for (const [lvl, up] of Object.entries(def?.upgrades ?? {})) {
     const r = Number(lvl)
     if (r <= rank) {
@@ -130,9 +160,10 @@ export function attackCalc(c: Character, s: CharSkill, d: Derived = derive(c), o
     mana: s.customMana ?? def?.mana,
     unlocked,
     locked,
-    range: def?.range,
+    range: ws?.range?.trim() || def?.range,
     area: def?.damage?.area || undefined,
     notes,
+    ...(ws ? { weapon: weapon!.name } : {}),
   }
 }
 

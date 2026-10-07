@@ -52,6 +52,7 @@ export function Attacks(ctx: Ctx) {
                       {a.range ? ` · ${a.range}` : def?.attackType === 'melee' ? ' · Melee 5ft' : ''}
                       {a.area ? ` · ${a.area}` : ''}
                     </div>
+                    {a.weapon && <div className="small">Using <b>{a.weapon}</b>'s own damage{a.range && a.range !== def?.range ? ' and range' : ''}</div>}
                     {s.skillId && (() => {
                       // weapons in Gear or Inventory that use this Skill
                       const held = c.gear.filter((g) => g.skillId === s.skillId).map((g) => g.name)

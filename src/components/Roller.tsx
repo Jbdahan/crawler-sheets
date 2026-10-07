@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { create } from 'zustand'
-import { attackCalc, rollDamage, type DamageRoll } from '../engine/attacks'
+import { attackCalc, rollDamage, type DamageRoll, type WeaponRef } from '../engine/attacks'
 import { spendAmmo, usesAmmo } from '../engine/ammo'
 import { canAdvance } from '../engine/advancement'
 import { checkBonus, derive, effectiveRank, type Part } from '../engine/derived'
@@ -11,7 +11,7 @@ import { useStore } from '../store/characters'
 import { Breakdown, Seg, Sheet, signed } from './ui'
 
 export type RollRequest =
-  | { kind: 'skill'; charId: string; skillUid: string; attack?: boolean; /** a Skill not on the sheet: an untrained weapon or a scroll's Spell */ skill?: CharSkill }
+  | { kind: 'skill'; charId: string; skillUid: string; attack?: boolean; /** a Skill not on the sheet: an untrained weapon or a scroll's Spell */ skill?: CharSkill; /** a weapon item with its own damage/range (default: the one held in hand) */ weapon?: WeaponRef }
   | { kind: 'custom'; charId?: string; label: string; parts: Part[]; mode?: D20Roll['mode']; note?: string }
   | { kind: 'dice'; charId?: string; label: string; expr: string }
 
@@ -69,7 +69,7 @@ function CheckRoll({ req, onClose }: { req: Exclude<RollRequest, { kind: 'dice' 
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-  const atk = req.kind === 'skill' && req.attack && c && skill && d ? attackCalc(c, skill, d, shot ? { ammo: shot.fired ?? null } : {}) : undefined
+  const atk = req.kind === 'skill' && req.attack && c && skill && d ? attackCalc(c, skill, d, { ...(shot ? { ammo: shot.fired ?? null } : {}), ...(req.kind === 'skill' && req.weapon ? { weapon: req.weapon } : {}) }) : undefined
 
   const label = req.kind === 'skill' ? `${skill?.name ?? 'Skill'} ${atk ? 'attack' : 'check'}` : req.label
   const parts: Part[] = req.kind === 'custom' ? req.parts : atk ? atk.toHit.parts : c && skill && d ? checkBonus(c, skill, d).parts : []

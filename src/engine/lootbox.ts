@@ -1,7 +1,9 @@
 // GM loot box maker: turns form rows into the "New Achievement!" block,
 // as HTML (pastes formatted into Google Docs/Word) and plain text (Discord).
 import { ammoName, ammoWeaponName, describeAmmo } from './ammo'
-import type { AmmoEffect } from './types'
+import { findSkill } from '../data'
+import type { AmmoEffect, WeaponStats } from './types'
+import { describeWeapon } from './weapon'
 
 export const LOOT_TIERS = ['Bronze', 'Silver', 'Gold', 'Platinum', 'Legendary', 'Celestial']
 export const LOOT_CATEGORIES = ['Adventurer', 'Boss', 'Fan', 'Benefactor', 'Mystery', 'Quest', 'Floor']
@@ -35,7 +37,11 @@ export type LootRow =
   | { type: 'stat'; stat: string; value: number }
   | { type: 'skill'; mode: 'boost' | 'learn'; skill: string; value: number }
   | { type: 'spell'; prefix: string; spell: string; mana: string }
-  | { type: 'gear'; name: string; slot: string; mods: LootMod[]; condition: string }
+  | {
+      type: 'gear'; name: string; slot: string; mods: LootMod[]; condition: string
+      /** weapons: the Attack Skill it's used with, and its own damage/range (optional) */
+      skillId?: string; weapon?: WeaponStats
+    }
   | { type: 'defense'; target: 'dr' | 'evade' | 'resist' | 'immune' | 'vuln'; value: number; dtype: string }
   | { type: 'consumable'; item: string; qty: number }
   | ({ type: 'ammo'; weapon: string; prefix: string; qty: number } & AmmoEffect)
@@ -146,7 +152,9 @@ export function formatLootRow(r: LootRow): LootLine | null {
     case 'gear': {
       if (!r.name.trim()) return null
       const mods = r.mods.map(describeLootMod).filter(Boolean).join(', ')
-      return { head: r.name.trim() + (r.slot ? ` (${r.slot})` : ''), text: detail(mods, r.condition) }
+      const skill = r.skillId ? findSkill(r.skillId)?.name : undefined
+      const weapon = skill ? [`${skill} Skill`, describeWeapon(r.weapon)].filter(Boolean).join(', ') : ''
+      return { head: r.name.trim() + (r.slot ? ` (${r.slot})` : ''), text: detail([weapon, mods].filter(Boolean).join(', '), r.condition) }
     }
     case 'defense':
       if (DEFENSE_NOUNS[r.target]) return { head: '', text: `${DEFENSE_NOUNS[r.target]} to ${r.dtype}` }

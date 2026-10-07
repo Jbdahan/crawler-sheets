@@ -2,7 +2,8 @@ import { useState } from 'react'
 import { uid } from '../engine/advancement'
 import { addInventoryItems, hotlistSlotOfGear, hotlistSlotOfInventory, linkGearToHotlist, linkHotlistItems, linkInventoryToHotlist, parseItemLines, removeFromHotlist, type ParsedItem } from '../engine/inventory'
 import { addItem, drinkSkillPotion, equipItem, itemLinkLabel, readSpellbook, slotFree, unequipGear, weaponSkill } from '../engine/items'
-import { GEAR_SLOTS, type Character, type GearItem, type GearSlot, type InventoryItem, type ItemKind, type AmmoEffect } from '../engine/types'
+import { GEAR_SLOTS, type Character, type GearItem, type GearSlot, type InventoryItem, type ItemKind, type AmmoEffect, type WeaponStats } from '../engine/types'
+import { attackCalc, hasWeaponStats } from '../engine/attacks'
 import { DAMAGE_TYPES, DEBUFFS, SKILLS, SPELLS, findSkill } from '../data'
 import { AMMO_NOUN, AMMO_WEAPONS } from '../engine/ammo'
 import { LootPicker } from './LootPicker'
@@ -25,12 +26,14 @@ export function Gear(ctx: Ctx) {
     up((x) => ({ ...x, gear: x.gear.some((y) => y.uid === g.uid) ? x.gear.map((y) => (y.uid === g.uid ? g : y)) : [...x.gear, g] }))
   /** unequip into Inventory (bonuses and weapon link kept); a Hotlist slot showing it follows it */
   const unequip = (g: GearItem) => up((x) => unequipGear(x, g.uid))
-  /** "Dagger Rank 3 · +5 · 1d4+3", or untrained */
-  const weaponLine = (skillId?: string) => {
+  /** "Dagger Rank 3 · +5 · 1d4+3", or untrained; a weapon with its own stats shows those (with type and range) */
+  const weaponLine = (skillId?: string, item?: { name: string; weapon?: WeaponStats }) => {
     if (!skillId) return ''
     const s = weaponSkill(c, skillId)
     const rank = effectiveRank(c, s, ctx.d)
-    return `${rank > 0 ? `${s.name} Rank ${rank}` : `${s.name}: untrained, Disadvantage`} · ${attackLine(ctx, s)}`
+    const own = item && hasWeaponStats(item.weapon) ? { name: item.name, stats: item.weapon! } : undefined
+    const extra = own ? [attackCalc(c, s, ctx.d, { weapon: own }).types.join('/'), own.stats.range?.trim()].filter(Boolean).join(' · ') : ''
+    return `${rank > 0 ? `${s.name} Rank ${rank}` : `${s.name}: untrained, Disadvantage`} · ${attackLine(ctx, s, own)}${extra ? ` ${extra}` : ''}`
   }
   /** Hotlist on/off for an Inventory item: it always stays in Inventory */
   const toggleInvHotlist = (it: InventoryItem) => {
@@ -82,7 +85,7 @@ export function Gear(ctx: Ctx) {
                   <button key={g.uid} className="option" style={{ marginTop: 4 }} onClick={() => setEdit(g)}>
                     <div className="grow">
                       <div className="t">{g.name || 'Unnamed'} {hotlistSlotOfGear(c, g.uid) >= 0 && <span className="pill accent">Hotlist #{hotlistSlotOfGear(c, g.uid) + 1}</span>}</div>
-                      <div className="small muted">{[weaponLine(g.skillId), ...g.mods.map(describeMod), g.notes].filter(Boolean).join(' · ') || 'No bonuses'}</div>
+                      <div className="small muted">{[weaponLine(g.skillId, g), ...g.mods.map(describeMod), g.notes].filter(Boolean).join(' · ') || 'No bonuses'}</div>
                     </div>
                   </button>
                 ))}
@@ -121,7 +124,7 @@ export function Gear(ctx: Ctx) {
               <div key={it.uid} className="li">
                 <button className="main" style={{ background: 'none', border: 0, textAlign: 'left', padding: 0 }} onClick={() => setInv(it)}>
                   <div className="name">{it.name} {hotlistSlotOfInventory(c, it.uid) >= 0 && <span className="pill accent">Hotlist #{hotlistSlotOfInventory(c, it.uid) + 1}</span>}</div>
-                  {(it.kind || it.notes) && <div className="meta">{[it.kind === 'weapon' ? weaponLine(it.skillId) : itemLinkLabel(it), ...(it.mods ?? []).map(describeMod), it.notes].filter(Boolean).join(' · ')}</div>}
+                  {(it.kind || it.notes) && <div className="meta">{[it.kind === 'weapon' ? weaponLine(it.skillId, it) : itemLinkLabel(it), ...(it.mods ?? []).map(describeMod), it.notes].filter(Boolean).join(' · ')}</div>}
                 </button>
                 <Stepper value={it.qty} min={0} max={99999} onChange={(v) => saveInv({ ...it, qty: v })} />
                 <button className={`btn small icon ${hotlistSlotOfInventory(c, it.uid) >= 0 ? 'primary' : 'ghost'}`}
@@ -158,6 +161,7 @@ export function Gear(ctx: Ctx) {
       {edit && (
         <Sheet title={edit.name || 'Equip item'} onClose={() => setEdit(null)}>
           <GearEditor
+            c={c}
             item={c.gear.find((g) => g.uid === edit.uid) ?? edit}
             onSave={(g) => { saveGear(g); setEdit(null) }}
             onUnequip={c.gear.some((g) => g.uid === edit.uid) ? (g) => { unequip(g); setEdit(null) } : undefined}
@@ -189,7 +193,8 @@ export function Gear(ctx: Ctx) {
   )
 }
 
-function GearEditor({ item, onSave, onUnequip, onDelete, hotlistSlot, onHotlist }: {
+function GearEditor({ c, item, onSave, onUnequip, onDelete, hotlistSlot, onHotlist }: {
+  c: Character
   item: GearItem
   onSave: (g: GearItem) => void
   onUnequip?: (g: GearItem) => void
@@ -208,6 +213,7 @@ function GearEditor({ item, onSave, onUnequip, onDelete, hotlistSlot, onHotlist 
         </select>
       </label>
       {g.slot === 'hands' && <WeaponSelect value={g.skillId} onChange={(skillId) => setG({ ...g, skillId })} />}
+      {g.slot === 'hands' && g.skillId && <WeaponStatsFields c={c} skillId={g.skillId} name={g.name} value={g.weapon} onChange={(weapon) => setG({ ...g, weapon })} />}
       <div className="label">Bonuses (apply while equipped)</div>
       <ModEditor mods={g.mods} onChange={(mods) => setG({ ...g, mods })} />
       <label><span className="label">Notes (Buffs, charges, effects)</span><input value={g.notes} onChange={(e) => setG({ ...g, notes: e.target.value })} /></label>
@@ -288,6 +294,61 @@ function WeaponSelect({ value, onChange }: { value?: string; onChange: (id: stri
   )
 }
 
+/**
+ * A weapon's own damage and range. Blank fields use the Weapon Skill's; the Skill
+ * still sets the to-hit and adds its Rank upgrade dice.
+ */
+function WeaponStatsFields({ c, skillId, name, value, onChange }: {
+  c: Character
+  skillId?: string
+  name: string
+  value?: WeaponStats
+  onChange: (w: WeaponStats | undefined) => void
+}) {
+  const def = findSkill(skillId)
+  const w = value ?? {}
+  const set = (patch: Partial<WeaponStats>) => {
+    const next = { ...w, ...patch }
+    onChange(hasWeaponStats(next) ? next : undefined)
+  }
+  const baseDie = def?.damage ? `${def.damage.count}d${def.damage.sides}` : '1d6'
+  const baseRange = def?.range ?? (def?.attackType === 'melee' ? 'Melee 5ft' : '')
+  // live preview with this crawler's Skill, Stats and Floor
+  const s = skillId ? weaponSkill(c, skillId) : undefined
+  const a = s ? attackCalc(c, s, undefined, { weapon: hasWeaponStats(w) ? { name: name || 'Weapon', stats: w } : null }) : undefined
+  return (
+    <div className="stack">
+      <div className="label">Weapon damage &amp; range</div>
+      <p className="small muted" style={{ margin: 0 }}>
+        Leave a field blank to use the {def?.name ?? 'Weapon Skill'}'s ({[baseDie, def?.damage?.types.join('/'), baseRange].filter(Boolean).join(', ')}).
+        The Skill still sets the to-hit and adds its Rank upgrade dice and Stat Mod.
+      </p>
+      <div className="grid2">
+        <label><span className="label">Damage die</span>
+          <input value={w.dice ?? ''} placeholder={`e.g. ${baseDie === '1d6' ? '1d8' : baseDie}`} aria-label="Damage die"
+            onChange={(e) => set({ dice: e.target.value.replace(/\s+/g, '') || undefined })} />
+        </label>
+        <label><span className="label">Damage type</span>
+          <select value={w.dtype ?? ''} aria-label="Damage type" onChange={(e) => set({ dtype: e.target.value || undefined })}>
+            <option value="">{def?.damage?.types.length ? `Same as Skill (${def.damage.types.join('/')})` : 'Same as Skill'}</option>
+            {DAMAGE_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
+          </select>
+        </label>
+      </div>
+      <div className="row between"><span>Damage modifier</span><Stepper value={w.bonus ?? 0} min={-20} max={50} onChange={(v) => set({ bonus: v || undefined })} /></div>
+      <label><span className="label">Range</span>
+        <input value={w.range ?? ''} placeholder={baseRange ? `${baseRange} (Skill)` : 'e.g. Melee 10ft or 120 feet'} aria-label="Range"
+          onChange={(e) => set({ range: e.target.value || undefined })} />
+      </label>
+      {a && (
+        <div className="infobox small num">
+          With {s!.name} {s!.rank > 0 ? `Rank ${a.rank}` : '(untrained, Disadvantage)'}: to hit <b>{a.toHit.total >= 0 ? '+' : ''}{a.toHit.total}</b> · damage <b>{a.formula}</b> {a.types.join('/')}{a.range ? ` · ${a.range}` : ''}
+        </div>
+      )}
+    </div>
+  )
+}
+
 function InvEditor({ c, item, onSave, onDelete, onEquip, hotlistSlot, onHotlist, onRead, onDrink, onCast }: {
   c: Character
   item: InventoryItem
@@ -320,6 +381,7 @@ function InvEditor({ c, item, onSave, onDelete, onEquip, hotlistSlot, onHotlist,
         </select>
       </label>
       {it.kind === 'weapon' && <WeaponSelect value={it.skillId} onChange={(skillId) => setIt({ ...it, skillId })} />}
+      {it.kind === 'weapon' && it.skillId && <WeaponStatsFields c={c} skillId={it.skillId} name={it.name} value={it.weapon} onChange={(weapon) => setIt({ ...it, weapon })} />}
       {(it.kind === 'scroll' || it.kind === 'book') && (
         <>
           <label><span className="label">Spell</span>

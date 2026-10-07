@@ -8,6 +8,8 @@ import { derive } from './derived'
 import { describeLootMod, detailText, formatLootRow, spellDetails, type LootMod, type LootRow } from './lootbox'
 import { addToHotlist, hotlistSlotFor } from './inventory'
 import { inferItem } from '../data/loot'
+import { addItem } from './items'
+import { describeWeapon } from './weapon'
 import { ammoName, ammoWeaponName } from './ammo'
 import { GEAR_SLOTS, type AmmoEffect, type Character, type GearSlot, type Modifier } from './types'
 
@@ -194,11 +196,14 @@ export function planClaim(c: Character, claim: LootClaim): LootChange[] {
       case 'gear': {
         const { mods, notes } = toModifiers(r.mods)
         const notesText = [...notes, r.condition.trim()].filter(Boolean).join(' · ')
-        const slot = SLOT_BY_LABEL[r.slot] ?? 'accessory'
+        // a weapon (linked to an Attack Skill) is held in hand
+        const weaponSkill = r.skillId && findSkill(r.skillId) ? r.skillId : undefined
+        const slot = weaponSkill ? 'hands' : SLOT_BY_LABEL[r.slot] ?? 'accessory'
         const slotDef = GEAR_SLOTS.find((s) => s.key === slot)!
         const used = c.gear.filter((g) => g.slot === slot).length
         const room = used < slotDef.max
-        const bonusText = r.mods.map(describeLootMod).filter(Boolean).join(', ')
+        const bonusText = [weaponSkill ? [`${findSkill(weaponSkill)!.name} Skill`, describeWeapon(r.weapon)].filter(Boolean).join(' ') : '', ...r.mods.map(describeLootMod)].filter(Boolean).join(', ')
+        const link = weaponSkill ? { skillId: weaponSkill, ...(r.weapon ? { weapon: r.weapon } : {}) } : {}
         changes.push({
           ...base,
           detail: room
@@ -210,8 +215,10 @@ export function planClaim(c: Character, claim: LootClaim): LootChange[] {
           apply: (x, choice) => {
             const name = r.name.trim()
             if (room && choice !== 'inventory') {
-              return { ...x, gear: [...x.gear, { uid: uid(), slot, name, mods, notes: notesText }] }
+              return { ...x, gear: [...x.gear, { uid: uid(), slot, name, mods, notes: notesText, ...link }] }
             }
+            // weapons keep their Skill link, stats and bonuses in Inventory, ready to equip
+            if (weaponSkill) return addItem(x, { uid: uid(), name, qty: 1, notes: notesText, kind: 'weapon', slot, mods, ...link }).c
             return addInventory(x, name, 1, [bonusText, r.condition.trim()].filter(Boolean).join(' · '))
           },
           summary: (choice) => `${r.name.trim()} (${room && choice !== 'inventory' ? `equipped: ${slotDef.label}` : 'to Inventory'})`,
