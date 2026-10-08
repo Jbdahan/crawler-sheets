@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { moveItem, useSlotDrag } from '../components/useSlotDrag'
 import { uid } from '../engine/advancement'
 import { addInventoryItems, hotlistSlotOfGear, hotlistSlotOfInventory, linkGearToHotlist, linkHotlistItems, linkInventoryToHotlist, parseItemLines, removeFromHotlist, type ParsedItem } from '../engine/inventory'
 import { addItem, drinkSkillPotion, equipItem, itemLinkLabel, readSpellbook, slotFree, unequipGear, weaponSkill } from '../engine/items'
@@ -22,6 +23,16 @@ export function Gear(ctx: Ctx) {
   const [inv, setInv] = useState<InventoryItem | null>(null)
   const [bulk, setBulk] = useState(false)
   const [loot, setLoot] = useState(false)
+  // press-and-hold to drag and reorder: Inventory rows are numbered 0…, equipped gear 1000+ (its place in c.gear)
+  const GEAR_BASE = 1000
+  const { slotProps, ghost } = useSlotDrag((from, to) => {
+    if (from < GEAR_BASE && to < GEAR_BASE) {
+      up((x) => ({ ...x, inventory: moveItem(x.inventory, from, to) }))
+    } else if (from >= GEAR_BASE && to >= GEAR_BASE) {
+      if (c.gear[from - GEAR_BASE]?.slot !== c.gear[to - GEAR_BASE]?.slot) { toast('Gear can be reordered within the same slot'); return }
+      up((x) => ({ ...x, gear: moveItem(x.gear, from - GEAR_BASE, to - GEAR_BASE) }))
+    }
+  })
 
   const addGear = (slot: GearSlot) => setEdit({ uid: uid(), slot, name: '', mods: [], notes: '' })
   const saveGear = (g: GearItem) =>
@@ -83,18 +94,22 @@ export function Gear(ctx: Ctx) {
                   <span className="label">{s.label}{s.max > 1 ? ` (${items.length}/${s.max})` : ''}</span>
                   {items.length < s.max && <button className="btn small ghost" onClick={() => addGear(s.key)}>+ Equip</button>}
                 </div>
-                {items.map((g) => (
-                  <button key={g.uid} className="option" style={{ marginTop: 4 }} onClick={() => setEdit(g)}>
+                {items.map((g) => {
+                  const sp = slotProps(GEAR_BASE + c.gear.indexOf(g), g.name || 'Unnamed')
+                  return (
+                  <button key={g.uid} {...sp} className={`option${sp.className}`} style={{ marginTop: 4 }} onClick={() => setEdit(g)}>
                     <div className="grow">
                       <div className="t">{g.name || 'Unnamed'} {hotlistSlotOfGear(c, g.uid) >= 0 && <span className="pill accent">Hotlist #{hotlistSlotOfGear(c, g.uid) + 1}</span>}</div>
                       <div className="small muted">{[weaponLine(g.skillId, g), ...g.mods.map(describeMod), g.notes].filter(Boolean).join(' · ') || 'No bonuses'}</div>
                     </div>
                   </button>
-                ))}
+                  )
+                })}
               </div>
             )
           })}
         </div>
+        <p className="small faint">Press and hold an item, then drag it to reorder (within the same slot).</p>
         <p className="small faint">One item per slot; up to 10 Accessories plus one belt and one cape. A Shield uses a Hands slot; Two-Handed weapons use both (Core p.98).</p>
       </section>
 
@@ -114,16 +129,21 @@ export function Gear(ctx: Ctx) {
           </div>
           {!c.inventory.length && !accessories.length && <div className="empty">Nothing yet. Items here are weightless and give no bonuses.</div>}
           <div className="list">
-            {accessories.map((g) => (
-              <div key={g.uid} className="li">
+            {accessories.map((g) => {
+              const sp = slotProps(GEAR_BASE + c.gear.indexOf(g), g.name || 'Unnamed')
+              return (
+              <div key={g.uid} {...sp} className={`li${sp.className}`}>
                 <button className="main" style={{ background: 'none', border: 0, textAlign: 'left', padding: 0 }} onClick={() => setEdit(g)}>
                   <div className="name">{g.name || 'Unnamed'} <span className="pill good">Equipped</span></div>
                   <div className="meta">{['Accessory', ...g.mods.map(describeMod), g.notes].filter(Boolean).join(' · ')}</div>
                 </button>
               </div>
-            ))}
-            {c.inventory.map((it) => (
-              <div key={it.uid} className="li">
+              )
+            })}
+            {c.inventory.map((it, i) => {
+              const sp = slotProps(i, it.name || 'Item')
+              return (
+              <div key={it.uid} {...sp} className={`li${sp.className}`}>
                 <button className="main" style={{ background: 'none', border: 0, textAlign: 'left', padding: 0 }} onClick={() => setInv(it)}>
                   <div className="name">{it.name} {hotlistSlotOfInventory(c, it.uid) >= 0 && <span className="pill accent">Hotlist #{hotlistSlotOfInventory(c, it.uid) + 1}</span>}</div>
                   {(it.kind || it.notes) && <div className="meta">{[it.kind === 'weapon' ? weaponLine(it.skillId, it) : itemLinkLabel(it), ...(it.mods ?? []).map(describeMod), it.notes].filter(Boolean).join(' · ')}</div>}
@@ -134,12 +154,15 @@ export function Gear(ctx: Ctx) {
                   aria-label={`${hotlistSlotOfInventory(c, it.uid) >= 0 ? 'Remove' : 'Show'} ${it.name} ${hotlistSlotOfInventory(c, it.uid) >= 0 ? 'from' : 'on'} Hotlist`}
                   onClick={() => toggleInvHotlist(it)}><Icon name="bolt" size={18} /></button>
               </div>
-            ))}
+              )
+            })}
           </div>
+          <p className="small faint">Press and hold an item, then drag it to reorder.</p>
           <p className="small faint">You can lift up to Strength × 15 lb to store it (Core p.98).</p>
         </section>
       </div>
 
+      {ghost}
       {loot && (
         <LootPicker c={c} onClose={() => setLoot(false)} onAdd={(item, equip) => {
           const added = addItem(c, item)

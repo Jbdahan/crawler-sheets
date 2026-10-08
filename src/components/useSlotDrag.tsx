@@ -110,6 +110,15 @@ export function useSlotDrag(onMove: (from: number, to: number) => void) {
   return { slotProps, ghost, dragging: !!drag }
 }
 
+/** Move one item of a list to another position, shifting the rest (for reordering lists). */
+export function moveItem<T>(list: T[], from: number, to: number): T[] {
+  if (from === to || from < 0 || to < 0 || from >= list.length || to >= list.length) return list
+  const next = [...list]
+  const [it] = next.splice(from, 1)
+  next.splice(to, 0, it)
+  return next
+}
+
 /** Swap two Hotlist slots (either may be empty). */
 export function swapSlots<T>(list: T[], a: number, b: number): T[] {
   const next = [...list]
