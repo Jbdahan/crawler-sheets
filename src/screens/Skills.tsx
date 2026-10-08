@@ -3,10 +3,11 @@ import { STAT_ABBR, findSkill } from '../data'
 import { checkBonus, skillStat, rankText } from '../engine/derived'
 import type { CharSkill } from '../engine/types'
 import { openRoll } from '../components/Roller'
-import { Seg, signed } from '../components/ui'
+import { Seg, signed, toast } from '../components/ui'
 import { SkillDetail, SkillPicker } from '../sheets/SkillSheets'
 import { AdvancementSheet, GrindSheet } from '../sheets/Progress'
-import { moveSkill, type AdvanceWindow } from '../engine/advancement'
+import { moveSkill, moveSkillTo, type AdvanceWindow } from '../engine/advancement'
+import { useSlotDrag } from '../components/useSlotDrag'
 import type { Ctx } from './ctx'
 
 type Group = { kind: CharSkill['kind']; label: string }
@@ -28,14 +29,23 @@ export function Skills(ctx: Ctx) {
   const [reorder, setReorder] = useState(false)
   const move = (uid: string, dir: -1 | 1 | 'top' | 'bottom') => up((x) => ({ ...x, skills: moveSkill(x.skills, uid, dir) }))
   const marked = c.skills.filter((s) => s.marked).length
+  // press-and-hold to drag a skill to a new place among skills of its type (slot = place in c.skills)
+  const { slotProps, ghost } = useSlotDrag((from, to) => {
+    const a = c.skills[from]
+    const b = c.skills[to]
+    if (!a || !b) return
+    if (a.kind !== b.kind) { toast('Skills can be reordered within their own type'); return }
+    up((x) => ({ ...x, skills: moveSkillTo(x.skills, a.uid, b.uid) }))
+  })
 
   const row = (s: CharSkill, i = 0, list: CharSkill[] = []) => {
     const def = findSkill(s.skillId)
     const stat = skillStat(s)
     const passive = def?.passive || (!stat && !def)
     const total = checkBonus(c, s, d).total
+    const sp = slotProps(c.skills.indexOf(s), sort === 'group' ? s.name : null)
     return (
-      <div className="li" key={s.uid}>
+      <div {...sp} className={`li${sp.className}`} key={s.uid}>
         <input type="checkbox" aria-label="Marked for advancement" checked={s.marked} disabled={passive}
           onChange={(e) => up((x) => ({ ...x, skills: x.skills.map((k) => (k.uid === s.uid ? { ...k, marked: e.target.checked } : k)) }))} />
         <button className="main" style={{ background: 'none', border: 0, textAlign: 'left', padding: 0 }} onClick={() => setDetail(s)}>
@@ -110,8 +120,9 @@ export function Skills(ctx: Ctx) {
         <section className="card" style={{ marginTop: 12 }}><div className="list">{sorted(c.skills).map((s) => row(s))}</div></section>
       )}
       <p className="small faint" style={{ marginTop: 10 }}>
-        ✔ marks a Skill for its next Advancement Check. It's marked automatically when you roll it. Rank ≤4 checks happen every 2 hours of play; Rank 5+ at the end of each floor (Core p.169).
+        {sort === 'group' && <>Press and hold a skill, then drag it to reorder it within its type. </>}✔ marks a Skill for its next Advancement Check. It's marked automatically when you roll it. Rank ≤4 checks happen every 2 hours of play; Rank 5+ at the end of each floor (Core p.169).
       </p>
+      {ghost}
       {picker && <SkillPicker {...ctx} onClose={() => setPicker(false)} />}
       {detail && <SkillDetail {...ctx} s={detail} onClose={() => setDetail(null)} />}
       {adv && <AdvancementSheet {...ctx} window={adv} onClose={() => setAdv(null)} />}

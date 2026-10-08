@@ -221,6 +221,18 @@ export function moveSkill(skills: CharSkill[], uid: string, dir: -1 | 1 | 'top' 
   return skills.map((k) => (k.kind === s.kind ? reordered[n++] : k))
 }
 
+/** Drop a skill into another skill's place among skills of the same type (drag and drop). */
+export function moveSkillTo(skills: CharSkill[], uid: string, targetUid: string): CharSkill[] {
+  const s = skills.find((k) => k.uid === uid)
+  const t = skills.find((k) => k.uid === targetUid)
+  if (!s || !t || s === t || s.kind !== t.kind) return skills
+  const same = skills.filter((k) => k.kind === s.kind)
+  const reordered = same.filter((k) => k !== s)
+  reordered.splice(same.indexOf(t), 0, s)
+  let n = 0
+  return skills.map((k) => (k.kind === s.kind ? reordered[n++] : k))
+}
+
 /** Remove one permanent bonus (e.g. a claimed loot Stat bonus); drops the source when it's empty. */
 export function removeTraitMod(c: Character, source: string, index: number): Character {
   const traits = c.traits

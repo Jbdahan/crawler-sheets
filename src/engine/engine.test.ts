@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { CLASSES, RACES, findSkill } from '../data'
-import { moveSkill, removeSource, removeTraitMod, addSkillRanks, applyRaceClass, crawlerKillLevels, levelUp, newSkill, addGrind, resolveAdvancement, eligibleForAdvancement } from './advancement'
+import { moveSkill, moveSkillTo, removeSource, removeTraitMod, addSkillRanks, applyRaceClass, crawlerKillLevels, levelUp, newSkill, addGrind, resolveAdvancement, eligibleForAdvancement } from './advancement'
 import { attackCalc, difficulty } from './attacks'
 import { blankCharacter } from './character'
 import { degreeOf, formatDice, netMode, parseDice, rankDamageDice } from './dice'
@@ -220,6 +220,17 @@ describe('Skill order', () => {
     const stealth = c.skills.find((s) => s.name === 'Stealth')!.uid
     expect(names(moveSkill(c.skills, stealth, 'top'))).toEqual(['Heal', 'Club', 'Stealth', 'Axe', 'Perception'])
     expect(moveSkill(c.skills, axe, 1)).toBe(c.skills)
+  })
+
+  it('drag and drop puts a skill in the place of another of its type', () => {
+    let c = crawler()
+    for (const n of ['Club', 'Perception', 'Axe', 'Stealth']) c = addSkillRanks(c, n, 1, 'test')
+    const names = (skills: typeof c.skills) => skills.map((s) => s.name)
+    const uid = (n: string) => c.skills.find((s) => s.name === n)!.uid
+    // Axe dropped on Club, Club dropped on Axe, and different types are refused
+    expect(names(moveSkillTo(c.skills, uid('Axe'), uid('Club')))).toEqual(['Heal', 'Axe', 'Perception', 'Club', 'Stealth'])
+    expect(names(moveSkillTo(c.skills, uid('Club'), uid('Axe')))).toEqual(['Heal', 'Axe', 'Perception', 'Club', 'Stealth'])
+    expect(moveSkillTo(c.skills, uid('Axe'), uid('Stealth'))).toBe(c.skills)
   })
 })
 
