@@ -1,3 +1,4 @@
+import { SpellEffect } from '../components/SpellEffect'
 import { useMemo, useState } from 'react'
 import { ALL_SKILLS, BUFFS, CLASSES, DEBUFFS, DEITIES, RACES, STAT_ABBR, STAT_KEYS, type RaceClassDef } from '../data'
 import { PageRef, Seg, signed } from '../components/ui'
@@ -61,7 +62,7 @@ export function Catalog() {
               <PageRef page={s.page} />
             </summary>
             <div className="small" style={{ marginTop: 6 }}>
-              <p>{s.summary}</p>
+              <SpellEffect def={s} />
               {s.damage && <div><b>Base damage:</b> {s.damage.count}d{s.damage.sides}{s.damage.stat ? ` + ${STAT_ABBR[s.damage.stat]}` : ''} {s.damage.types.join('/')} {s.damage.area}</div>}
               {[['Check', s.checkType], ['Range', s.range], ['Cooldown', s.cooldown], ['Duration', s.duration], ['AI Favor', s.aiFavor], ['Limitations', s.limitations], ['Favored', s.favored?.join(', ')]]
                 .filter(([, v]) => v).map(([k, v]) => <div key={k}><b>{k}:</b> {v}</div>)}

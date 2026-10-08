@@ -67,6 +67,8 @@ export interface SkillDef {
   favored?: string[]
   upgrades?: Record<string, UpgradeDef>
   summary?: string
+  /** Spells: a fuller plain-language description of what it does and how it's used */
+  effect?: string
   effects?: { evade?: number; move?: number; dr?: number }
   heal?: HealDef
   castBuff?: { dr?: number; evade?: number }

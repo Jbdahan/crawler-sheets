@@ -9,6 +9,7 @@ import { openRoll } from '../components/Roller'
 import { Breakdown, PageRef, Sheet, signed, toast } from '../components/ui'
 import { SkillPicker } from '../sheets/SkillSheets'
 import { SpellText } from '../components/SpellText'
+import { SpellEffect } from '../components/SpellEffect'
 import type { Ctx } from './ctx'
 
 export function Attacks(ctx: Ctx) {
@@ -166,7 +167,7 @@ function AttackInfo({ c, d, s, onClose }: Ctx & { s: CharSkill; onClose: () => v
   return (
     <Sheet title={s.name} onClose={onClose}>
       <div className="stack">
-        {def?.summary && <p>{def.summary}</p>}
+        {def && <SpellEffect def={def} />}
         {!def && s.notes && <SpellText text={s.notes} startOpen lines={99} />}
         {def && s.notes && <p className="small">{s.notes}</p>}
         <div className="small muted">{def?.keywords?.join(', ')} <PageRef page={def?.page} /></div>

@@ -10,7 +10,7 @@ import json
 import re
 from pathlib import Path
 
-from summaries import SUMMARIES
+from summaries import EFFECTS, SUMMARIES
 from overrides import OVERRIDES
 
 ROOT = Path(__file__).resolve().parent
@@ -403,6 +403,9 @@ def apply_overrides(kind, records):
         s = SUMMARIES.get(f"{kind}:{rid}")
         if s:
             rec["summary"] = s
+        e = EFFECTS.get(f"{kind}:{rid}")
+        if e:
+            rec["effect"] = e
     return list(by_id.values())
 
 

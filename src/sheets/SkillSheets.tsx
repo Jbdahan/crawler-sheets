@@ -6,6 +6,7 @@ import type { CharSkill } from '../engine/types'
 import { openRoll } from '../components/Roller'
 import { PageRef, Seg, Sheet, Stepper, signed, toast } from '../components/ui'
 import { SpellText } from '../components/SpellText'
+import { SpellEffect } from '../components/SpellEffect'
 import type { Ctx } from '../screens/ctx'
 
 const KIND_LABEL: Record<SkillKind, string> = { attack: 'Attack', damageEffect: 'Damage Effect', utility: 'Utility', spell: 'Spell' }
@@ -133,7 +134,7 @@ export function SkillDetail({ c, d, up, s, onClose }: Ctx & { s: CharSkill; onCl
   return (
     <Sheet title={cur.name} onClose={onClose}>
       <div className="stack">
-        {def?.summary && <p>{def.summary}</p>}
+        {def && <SpellEffect def={def} />}
         {!def && cur.notes && <div className="infobox"><SpellText text={cur.notes} startOpen lines={99} /></div>}
         <div className="small muted">
           {def ? KIND_LABEL[def.kind] : 'Custom'} · {def?.checkType ?? (stat ? 'Check' : 'Passive')}{def?.keywords?.length ? ` · ${def.keywords.join(', ')}` : ''} <PageRef page={def?.page} />

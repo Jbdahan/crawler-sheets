@@ -2,10 +2,12 @@ import { useState } from 'react'
 import { findSkill } from '../data'
 import { ammoKey, ammoNoun, basicCount, describeAmmo, loadedAmmo, specialAmmo } from '../engine/ammo'
 import { attackCalc } from '../engine/attacks'
+import { effectiveRank } from '../engine/derived'
 import { entryQty } from '../engine/inventory'
 import { isVirtualSkill, itemLinkLabel } from '../engine/items'
 import type { HotlistEntry } from '../engine/types'
 import { SpellText } from '../components/SpellText'
+import { SpellEffect } from '../components/SpellEffect'
 import { Sheet, signed } from '../components/ui'
 import { go } from '../router'
 import { hotlistAttack, hotlistScroll, hotlistSkill, hotlistWeapon, triggerHotlist } from './hotlistUse'
@@ -70,6 +72,8 @@ export function HotlistUseSheet(ctx: Ctx & { h: HotlistEntry; slot: number; onCl
           </div>
         )}
 
+        {a && atk?.kind === 'spell' && def && <SpellEffect def={def} rank={effectiveRank(c, atk)} small />}
+
         {key && (
           <div className="stack">
             <div className="label">{ammoNoun(key)} to fire</div>
@@ -99,11 +103,16 @@ export function HotlistUseSheet(ctx: Ctx & { h: HotlistEntry; slot: number; onCl
         {!a && spell && (
           <div className="infobox">
             <div>{cost !== undefined ? <><b>{cost} Mana</b> (you have {c.mana})</> : 'Spell'} · Rank {spell.rank}</div>
-            {def?.summary && <div className="small muted">{def.summary}</div>}
+            {def && <div style={{ marginTop: 6 }}><SpellEffect def={def} rank={effectiveRank(c, spell)} small /></div>}
             {!def && spell.notes && <SpellText text={spell.notes} lines={3} />}
           </div>
         )}
-        {!a && scroll && <div className="infobox small">Casts {scroll.name} at Rank {scroll.rank} with no Mana, then crumbles (Core p.99).</div>}
+        {!a && scroll && (
+          <div className="infobox small">
+            Casts {scroll.name} at Rank {scroll.rank} with no Mana, then crumbles (Core p.99).
+            {def && <div style={{ marginTop: 6 }}><SpellEffect def={def} rank={scroll.rank} small /></div>}
+          </div>
+        )}
         {!a && !spell && !scroll && (
           <div className="infobox small">
             {item ? itemLinkLabel(item) || null : null}

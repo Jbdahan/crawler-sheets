@@ -28,7 +28,8 @@
     "text": "You may choose up to five additional willing targets up to your size at touch range to bring with you."
    }
   },
-  "summary": "Launch yourself up to 10 × Int Mod away; cast twice to double jump."
+  "summary": "Launch yourself up to 10 × Int Mod away; cast twice to double jump.",
+  "effect": "Fire yourself through the air up to 10 × your Int Mod in feet. You land safely on solid ground and fall if you don't. Cast it again right away for a mid-air double jump."
  },
  {
   "id": "astral-paw",
@@ -56,7 +57,8 @@
     "text": "The caster no longer suffers Disadvantage when performing suitable Skill Checks using the paw, and the duration is 15 minutes."
    }
   },
-  "summary": "Spectral hand that manipulates things up to 30ft away."
+  "summary": "Spectral hand that manipulates things up to 30ft away.",
+  "effect": "Conjure a ghostly hand, paw or claw that reaches up to 30ft. Spend an Action to move or use objects with it. Skill Checks made through it have Disadvantage because the control is clumsy."
  },
  {
   "id": "bad-faith",
@@ -112,7 +114,8 @@
     }
    }
   },
-  "summary": "Necrotic attack on mind and soul."
+  "summary": "Necrotic attack on mind and soul.",
+  "effect": "Make a Spell Attack Check against the target's Evade (within 40ft). On a hit it takes necrotic damage from a hostile presence in its mind and body; the damage uses your Cha Mod, not Int."
  },
  {
   "id": "bang-bro",
@@ -153,7 +156,8 @@
     }
    }
   },
-  "summary": "Your held weapon deals +2 Fire/Electric damage for a while."
+  "summary": "Your held weapon deals +2 Fire/Electric damage for a while.",
+  "effect": "Enchant a weapon you're holding for 5 minutes plus 1 per Rank. Every hit with it adds a flat +2 of mixed Fire and Electric damage. Once cast it has a 15-minute cooldown."
  },
  {
   "id": "clockwork-triplicate",
@@ -182,7 +186,8 @@
     "text": "When you command your pet or minion, the clockwork versions follow suit."
    }
   },
-  "summary": "Split your pet or minion into three copies."
+  "summary": "Split your pet or minion into three copies.",
+  "effect": "Split one of your pets or minions into three full copies for 1 minute per Rank. Each copy needs its own command, and issuing one costs an Action and an Unopposed Animal Handling Check."
  },
  {
   "id": "confusing-fog",
@@ -211,7 +216,8 @@
     "text": "The fog fills a 500 × 500ft area and lasts for 15 minutes."
    }
   },
-  "summary": "Fog that Mobs attack through with Disadvantage; your party sees through it."
+  "summary": "Fog that Mobs attack through with Disadvantage; your party sees through it.",
+  "effect": "Fill a 25 × 25ft area with fog. You, your party and friendly NPCs see through it; Mobs attacking anyone standing in it have Disadvantage. Smart Mobs may try to drag the fight out of the fog. Lasts two combat rounds."
  },
  {
   "id": "dirt-clod",
@@ -263,7 +269,8 @@
     }
    }
   },
-  "summary": "Hurl a magic clod of dirt."
+  "summary": "Hurl a magic clod of dirt.",
+  "effect": "A cheap starter attack: make a Spell Attack Check against Evade within 100ft. On a hit the clod does small bludgeoning damage plus your Int Mod."
  },
  {
   "id": "drain-life",
@@ -315,7 +322,8 @@
     }
    }
   },
-  "summary": "Necrotic tether that heals you at higher Ranks."
+  "summary": "Necrotic tether that heals you at higher Ranks.",
+  "effect": "Make a Spell Attack Check against Evade within 30ft; a blood-vein lashes the target for necrotic damage. At Rank 5 and up you heal back some Health Bar slots when you hurt the target enough."
  },
  {
   "id": "earworm",
@@ -372,7 +380,8 @@
     }
    }
   },
-  "summary": "Sonic attack by singing terribly."
+  "summary": "Sonic attack by singing terribly.",
+  "effect": "Sing at a target within 30ft: a Spell Attack Check against its Evade. On a hit it takes sonic damage plus your Cha Mod. You can do this once per round, and the GM wants to hear the song."
  },
  {
   "id": "fear",
@@ -403,7 +412,8 @@
     "text": "+5ft Blast radius."
    }
   },
-  "summary": "Make a weak non-Boss Mob lose its Dex Mod, or run away."
+  "summary": "Make a weak non-Boss Mob lose its Dex Mod, or run away.",
+  "effect": "Aim at one non-Boss Mob whose level is half yours or less, within 25ft. On a Standard Success it holds its ground but loses its Dex Mod for the fight; on anything better it spends two Actions next round running away. Very scary Mobs are immune."
  },
  {
   "id": "fireball",
@@ -456,7 +466,8 @@
     }
    }
   },
-  "summary": "Slow fireball (attack with Disadvantage) with a 10ft Blast; still lands on a miss."
+  "summary": "Slow fireball (attack with Disadvantage) with a 10ft Blast; still lands on a miss.",
+  "effect": "A slow ball of fire: the attack is made with Disadvantage. Where it lands, everything in a 10ft Blast takes full damage. On a miss it veers off in a random direction (1d8), as many feet as you missed by. Usable once per scene."
  },
  {
   "id": "fire-fingers",
@@ -508,7 +519,8 @@
     }
    }
   },
-  "summary": "Melee flame touch."
+  "summary": "Melee flame touch.",
+  "effect": "A cheap melee-range fire attack: touch the target with a Spell Attack Check against Evade for fire damage plus your Int Mod."
  },
  {
   "id": "frost-scar",
@@ -560,7 +572,8 @@
     }
    }
   },
-  "summary": "Melee ice touch."
+  "summary": "Melee ice touch.",
+  "effect": "A cheap melee-range ice attack: touch the target with a Spell Attack Check against Evade for ice damage plus your Int Mod."
  },
  {
   "id": "grand-illusion",
@@ -590,7 +603,8 @@
     "text": "Those who believe also gain the Shocked Debuff or similar based on the desired response."
    }
   },
-  "summary": "Int-Opposed illusion that fools foes who see it."
+  "summary": "Int-Opposed illusion that fools foes who see it.",
+  "effect": "Create an illusion within 40ft for 2 minutes. Make one Int-Opposed Spell Check against everything that can see it; whoever you beat believes it, and your same roll is reused later. The GM may give Advantage for a simple show-off illusion and Disadvantage for a complex or sudden one."
  },
  {
   "id": "heal",
@@ -612,7 +626,8 @@
   "heal": {
    "slots": 2
   },
-  "summary": "Heal yourself 2 Health Bar slots (Interrupt). Everyone starts with it."
+  "summary": "Heal yourself 2 Health Bar slots (Interrupt). Everyone starts with it.",
+  "effect": "Heal yourself 2 Health Bar slots. It's an Interrupt (usable out of turn) and is stuck at Rank 1 for everyone."
  },
  {
   "id": "heal-critter",
@@ -645,7 +660,8 @@
   "heal": {
    "full": true
   },
-  "summary": "Fully heal a pet or critter."
+  "summary": "Fully heal a pet or critter.",
+  "effect": "Heal a pet or minion within 30ft all the way back to full Health Bar. It's an Interrupt, and works only on pets and minions."
  },
  {
   "id": "heal-others",
@@ -678,7 +694,8 @@
   "heal": {
    "dice": "1d4"
   },
-  "summary": "Heal a target 1d4 Health Bar slots (Interrupt)."
+  "summary": "Heal a target 1d4 Health Bar slots (Interrupt).",
+  "effect": "Heal another crawler within 30ft for 1d4 Health Bar slots (more with Rank). It's an Interrupt, and can't target you, pets or minions."
  },
  {
   "id": "heal-self",
@@ -711,7 +728,8 @@
   "heal": {
    "dice": "1d4"
   },
-  "summary": "Heal yourself 1d4 Health Bar slots (Interrupt)."
+  "summary": "Heal yourself 1d4 Health Bar slots (Interrupt).",
+  "effect": "Heal yourself 1d4 Health Bar slots for a very low cost. It's an Interrupt and works only on you."
  },
  {
   "id": "hole",
@@ -740,7 +758,8 @@
     "text": "The caster may end the spell with a thought (like an Interrupt, but it doesn’t cost an Action). Anything in the hole at that time is destroyed."
    }
   },
-  "summary": "Open a hole through a surface."
+  "summary": "Open a hole through a surface.",
+  "effect": "Open a 2ft-wide hole in a surface within 10ft, 1 inch deep per Rank. If it's deep enough to break through, people and things that fit can pass to the other side. Lasts to the end of the fight or 5 minutes. It won't work on saferoom doors or living things."
  },
  {
   "id": "holy-aura",
@@ -798,7 +817,8 @@
     }
    }
   },
-  "summary": "Holy burst that damages only enemies around you."
+  "summary": "Holy burst that damages only enemies around you.",
+  "effect": "Radiate your deity's power: every enemy within 5ft takes holy damage plus your Cha Mod, while friends are left alone. Usable once per round."
  },
  {
   "id": "hot-stuff-aura",
@@ -832,7 +852,8 @@
     "text": "+10ft Burst radius, with a 8 in each slot."
    }
   },
-  "summary": "Shield slots (Cha Mod count, 2 each) for you and nearby allies."
+  "summary": "Shield slots (Cha Mod count, 2 each) for you and nearby allies.",
+  "effect": "Wrap yourself and allies within 5ft in a damage shield that works against every damage type. It has a number of Health Bar slots equal to your Cha Mod, each holding 2 damage, and can't be healed. It vanishes when used up or after 2 rounds."
  },
  {
   "id": "ice-blast",
@@ -883,7 +904,8 @@
     }
    }
   },
-  "summary": "Compact blast of cold."
+  "summary": "Compact blast of cold.",
+  "effect": "Make a Spell Attack Check against Evade within 40ft. On a hit a compact blast of cold does ice damage plus your Int Mod."
  },
  {
   "id": "icicles",
@@ -934,7 +956,8 @@
     }
    }
   },
-  "summary": "Long-range ice projectiles."
+  "summary": "Long-range ice projectiles.",
+  "effect": "Make a Spell Attack Check against Evade within 60ft. On a hit a volley of icicles does a big ice damage hit plus your Int Mod."
  },
  {
   "id": "intimate-touches",
@@ -970,7 +993,8 @@
   "heal": {
    "statMod": "cha"
   },
-  "summary": "Touch heal: the target heals slots equal to your Cha Mod."
+  "summary": "Touch heal: the target heals slots equal to your Cha Mod.",
+  "effect": "Touch a target (it can be you) to heal Health Bar slots equal to your Cha Mod. Unlike other heals this is not an Interrupt, so it uses your turn."
  },
  {
   "id": "lightning-bolt",
@@ -1021,7 +1045,8 @@
     }
    }
   },
-  "summary": "Bolt of lightning."
+  "summary": "Bolt of lightning.",
+  "effect": "Make a Spell Attack Check against Evade within 100ft. On a hit a bolt of lightning does electric damage plus your Int Mod."
  },
  {
   "id": "magic-missile",
@@ -1069,7 +1094,8 @@
     "text": "This attack deals base damage ×3."
    }
   },
-  "summary": "Streak of pure force."
+  "summary": "Streak of pure force.",
+  "effect": "Make a Spell Attack Check against Evade with a target in your line of sight. On a hit it does force damage plus your Int Mod. You can pay less Mana for less damage, or more for an extra Rank damage die."
  },
  {
   "id": "mind-tickle",
@@ -1126,7 +1152,8 @@
     }
    }
   },
-  "summary": "Psychic headache attack."
+  "summary": "Psychic headache attack.",
+  "effect": "A cheap psychic attack: make a Spell Attack Check against Evade within 40ft for psychic damage plus your Cha Mod."
  },
  {
   "id": "minion-army",
@@ -1159,7 +1186,8 @@
     "text": "Add your Charisma Stat to the Burst radius. Duration is 15 minutes."
    }
   },
-  "summary": "Turn some Mobs in an area into allies."
+  "summary": "Turn some Mobs in an area into allies.",
+  "effect": "A 5-minute ritual during which you can't move. Choose a target point; on a Standard Success about 1 in 50 Mobs in the 50ft area (at least one) turn into allies for 2 minutes. Better results can convert more. Only Mobs with Int 2 or more are affected, and it can be cast once per 5 hours."
  },
  {
   "id": "natures-breath",
@@ -1195,7 +1223,8 @@
   "heal": {
    "rankDie": true
   },
-  "summary": "Heal slots equal to a roll of this Spell's Rank damage die; works on pets."
+  "summary": "Heal slots equal to a roll of this Spell's Rank damage die; works on pets.",
+  "effect": "Blow healing air on a target within 5ft (it can be you, or a pet or minion). Roll your Nature's Breath Rank die; the target heals that many Health Bar slots. It's an Interrupt."
  },
  {
   "id": "oakhide",
@@ -1234,7 +1263,8 @@
   "castBuff": {
    "dr": 2
   },
-  "summary": "+2 Damage Resistance while it lasts."
+  "summary": "+2 Damage Resistance while it lasts.",
+  "effect": "Turn your skin to wood for 2 minutes: +2 DR for the duration. You can cast it again after a 10-minute cooldown."
  },
  {
   "id": "paladins-smite",
@@ -1290,7 +1320,8 @@
     }
    }
   },
-  "summary": "Holy strike of divine wrath."
+  "summary": "Holy strike of divine wrath.",
+  "effect": "Make a Spell Attack Check against Evade within 30ft. On a hit divine wrath does holy damage plus your Cha Mod."
  },
  {
   "id": "panty-dropper",
@@ -1325,7 +1356,8 @@
     "text": "The duration is 15 minutes."
    }
   },
-  "summary": "Int-Opposed charm; a non-Boss target stops fighting."
+  "summary": "Int-Opposed charm; a non-Boss target stops fighting.",
+  "effect": "Make an Int-Opposed Spell Check against a non-Boss target within 10ft, even in the middle of combat. On a Success it becomes smitten and stops attacking or doing anything else for 2 minutes or until you're done."
  },
  {
   "id": "ping",
@@ -1354,7 +1386,8 @@
     "text": "You pay no Mana to add the Fear Spell, and you receive “entirely complete” information."
    }
   },
-  "summary": "Reveal the location of nearby non-crawlers and Mobs."
+  "summary": "Reveal the location of nearby non-crawlers and Mobs.",
+  "effect": "Send out a sonar pulse with a 1-mile radius that shows the distance and position of all non-crawler, non-red-tagged Mobs, including ones off your map. You get \"somewhat complete\" info on them. Mobs hear the ping but can't tell where it came from."
  },
  {
   "id": "protective-shell",
@@ -1385,7 +1418,8 @@
     "text": "Duration is 30 seconds or three rounds."
    }
   },
-  "summary": "Force dome that keeps Mobs out; doesn't stop magic."
+  "summary": "Force dome that keeps Mobs out; doesn't stop magic.",
+  "effect": "An emergency bubble you must have imbued on something you're wearing. It costs no Mana and has a very long cooldown. It shoves Mobs out of a 10 + Int ft radius and blocks physical attacks from reaching those inside for a few seconds; it does not stop magic."
  },
  {
   "id": "puddle-jumper",
@@ -1414,7 +1448,8 @@
     "text": "There is no delay, and the destination can be anywhere within 1 mile in any direction, even if the exact destination cannot be seen."
    }
   },
-  "summary": "Teleport yourself and up to 3 party members."
+  "summary": "Teleport yourself and up to 3 party members.",
+  "effect": "After a 10-second delay, you and up to 3 chosen party members teleport to a surface you can see. Can be used once per 5 hours."
  },
  {
   "id": "rise-dead-minion",
@@ -1457,7 +1492,8 @@
    ],
    "area": ""
   },
-  "summary": "A skeleton pops up and attacks for 1d8 + Int Necrotic."
+  "summary": "A skeleton pops up and attacks for 1d8 + Int Necrotic.",
+  "effect": "A Medium skeleton claws out of the ground within 30ft, makes one melee attack for necrotic damage plus your Int Mod, then collapses into difficult terrain."
  },
  {
   "id": "rootfoot",
@@ -1491,7 +1527,8 @@
     "text": "Can target victims up to size Colossal (7). The victim also gains the Poisoned Debuff."
    }
   },
-  "summary": "Roots leave a Medium-or-smaller victim Held."
+  "summary": "Roots leave a Medium-or-smaller victim Held.",
+  "effect": "Roots grab a victim within 30ft who is Size 4 (Medium) or smaller. On a Success it is Held for 2 rounds, and your Rank in this spell is the Difficulty it must beat to break free instead of Strength."
  },
  {
   "id": "second-chance",
@@ -1519,7 +1556,8 @@
     "text": "The Mob can be up to 15 levels higher than the caster, with a duration of 45 minutes."
    }
   },
-  "summary": "Raise a lower-level Mob as a temporary undead minion."
+  "summary": "Raise a lower-level Mob as a temporary undead minion.",
+  "effect": "Raise a dead Mob of a lower level than you as your Undead Minion for 1 minute, with half of its Health Bar slots. Spend one Action to command it; it then acts alone with a Move and one other Action until you give new orders."
  },
  {
   "id": "shield",
@@ -1548,7 +1586,8 @@
     "text": "The Shield has 15 Health Bar slots."
    }
   },
-  "summary": "Force field with 2 slots (Con Mod each) that absorbs non-magic damage first."
+  "summary": "Force field with 2 slots (Con Mod each) that absorbs non-magic damage first.",
+  "effect": "A force field that moves with you and takes non-magic damage before you do. It has 2 Health Bar slots worth your Con Mod each, can't be healed, and ends early when depleted. Lasts 5 minutes and is an Interrupt."
  },
  {
   "id": "shock-treatment",
@@ -1601,7 +1640,8 @@
     }
    }
   },
-  "summary": "Electric finger-lightning."
+  "summary": "Electric finger-lightning.",
+  "effect": "A cheap lightning attack: make a Spell Attack Check against Evade within 30ft for electric damage plus your Int Mod."
  },
  {
   "id": "solsplash",
@@ -1657,7 +1697,8 @@
     }
    }
   },
-  "summary": "Fire sunbeam that also hits those around the target."
+  "summary": "Fire sunbeam that also hits those around the target.",
+  "effect": "Make a Spell Attack Check against Evade within 30ft. On a hit beams of fake sunlight do fire damage that uses your Con Mod, and the splash also scorches those near the target."
  },
  {
   "id": "soul-collector",
@@ -1709,7 +1750,8 @@
     }
    }
   },
-  "summary": "Necrotic spirit siphon."
+  "summary": "Necrotic spirit siphon.",
+  "effect": "Make a Spell Attack Check against Evade within 50ft; on a hit it does necrotic damage plus your Int Mod as you siphon the target's spirit."
  },
  {
   "id": "thunderlash",
@@ -1760,7 +1802,8 @@
     }
    }
   },
-  "summary": "Sonic whip."
+  "summary": "Sonic whip.",
+  "effect": "Make a Spell Attack Check against Evade within 50ft. On a hit a whip of sound does sonic damage plus your Int Mod."
  },
  {
   "id": "torch",
@@ -1788,7 +1831,8 @@
     "text": "You can move the orb up to 100 feet away from you and attach it to a surface as an Action."
    }
   },
-  "summary": "Floating light orb (20ft bright + 20ft dim)."
+  "summary": "Floating light orb (20ft bright + 20ft dim).",
+  "effect": "Make a floating orb of light that follows you, lasting until you reach a saferoom or the next floor. It gives bright light for 20ft and dim light for 20ft more."
  },
  {
   "id": "tripper",
@@ -1817,7 +1861,8 @@
     "text": "+Intelligence Burst radius, and all damage taken is considered Splash (half damage)."
    }
   },
-  "summary": "Set off every movement, heat and weight trap nearby."
+  "summary": "Set off every movement, heat and weight trap nearby.",
+  "effect": "Costs no Mana and has to be imbued onto something you wear. With a snap, every movement-, heat- or weight-triggered trap within 30ft goes off at once. Traps with very specific triggers won't. Can be used once per 5 hours."
  },
  {
   "id": "turn-undead",
@@ -1856,7 +1901,8 @@
     "text": "+15ft Cone. Duration is 15 rounds. On an Amazing Success or better, the Undead Mob is destroyed."
    }
   },
-  "summary": "Cha-Opposed; undead in the area flee."
+  "summary": "Cha-Opposed; undead in the area flee.",
+  "effect": "Make one Cha-Opposed Spell Check against every Undead Mob in a 10ft cone. Each one you beat runs away for 3 rounds. Doesn't work on Bosses."
  },
  {
   "id": "twinkle-toes",
@@ -1886,7 +1932,8 @@
     "text": "The pet or minion has Move ×5 for the duration."
    }
   },
-  "summary": "Double a pet's or minion's Move."
+  "summary": "Double a pet's or minion's Move.",
+  "effect": "Give a pet or minion within 5ft double Move for a number of seconds equal to your Int."
  },
  {
   "id": "unnecessary-force",
@@ -1937,7 +1984,8 @@
     }
    }
   },
-  "summary": "Force shockwave."
+  "summary": "Force shockwave.",
+  "effect": "Make a Spell Attack Check against Evade within 40ft. On a hit a heavy shockwave does large force damage plus your Int Mod."
  },
  {
   "id": "vine-porn",
@@ -1994,7 +2042,8 @@
     }
    }
   },
-  "summary": "Piercing vines tear at the target."
+  "summary": "Piercing vines tear at the target.",
+  "effect": "Make a Spell Attack Check against Evade within 20ft. On a hit grasping vines do piercing damage using your Con Mod."
  },
  {
   "id": "wall-of-fire",
@@ -2044,7 +2093,8 @@
     }
    }
   },
-  "summary": "Create a 30ft wall of fire."
+  "summary": "Create a 30ft wall of fire.",
+  "effect": "Raise a 30 × 7 × 2ft wall of fire within 30ft for 2 rounds. Anyone passing through takes fire damage for every foot of wall and gains Burned."
  },
  {
   "id": "water-breathing",
@@ -2074,7 +2124,8 @@
     "text": "You can target any or all individuals within a 15ft Burst radius."
    }
   },
-  "summary": "The target breathes underwater."
+  "summary": "The target breathes underwater.",
+  "effect": "A target can breathe underwater for Int × 3 seconds."
  },
  {
   "id": "web",
@@ -2105,7 +2156,8 @@
     "text": "+5ft Cone. Duration is 15 rounds."
    }
   },
-  "summary": "Cone of webbing that leaves everyone it hits Held."
+  "summary": "Cone of webbing that leaves everyone it hits Held.",
+  "effect": "Shoot webbing in a 20ft cone. Make one Spell Attack Check against the Evade of everyone in it, friend or foe. Each one hit is Held for 2 rounds, and your Rank in this spell is the Difficulty to escape instead of Strength."
  },
  {
   "id": "wilburs-slow-build-fireblast",
@@ -2156,7 +2208,8 @@
     }
    }
   },
-  "summary": "Hold a fire ring on your finger and unleash it with your next attack."
+  "summary": "Hold a fire ring on your finger and unleash it with your next attack.",
+  "effect": "Cast it and hold it as a ring of fire on your finger. Your next Attack Action must be this spell, free of Mana. Anyone touching the ring to defuse it (you may oppose) takes half damage and that limb is useless for rounds equal to the damage. Only one ring at a time; the target also gains Burned."
  },
  {
   "id": "wisp-armor",
@@ -2185,6 +2238,7 @@
     "text": "The duration is 20 minutes."
    }
   },
-  "summary": "Cut magic damage to Rank 1 base damage; immune to Mind Control."
+  "summary": "Cut magic damage to Rank 1 base damage; immune to Mind Control.",
+  "effect": "A 5-minute barrier on yourself: any magic damage you take (usually from spells) is cut down to the spell's plain Rank 1 base damage, with no upgrades or other bonuses. It also makes you immune to Mind Control. 5-minute cooldown."
  }
 ]

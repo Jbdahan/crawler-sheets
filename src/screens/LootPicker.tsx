@@ -89,7 +89,7 @@ function LootDetail({ c, def, onBack, onClose, onAdd }: {
               <span>Rank {def.kind === 'book' && <button className="btn small ghost" onClick={() => setRank(Math.max(1, rollDie(6) - 1))}>Roll 1d6−1</button>}</span>
               <Stepper value={rank} min={1} max={20} onChange={setRank} />
             </div>
-            {spellId && <p className="small faint" style={{ margin: 0 }}>{findSkill(spellId)?.summary}</p>}
+            {spellId && <p className="small faint" style={{ margin: 0 }}>{findSkill(spellId)?.effect ?? findSkill(spellId)?.summary}</p>}
             {def.kind === 'book' && known && <div className="infobox small">You know {known.name} at Rank {known.rank}. Reading it raises it to Rank {rank} if that's higher.</div>}
           </>
         )}
