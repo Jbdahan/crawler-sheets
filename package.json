@@ -14,6 +14,7 @@
     "lootbox": "python3 tools/build_lootbox_data.py"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.135.0",
     "lz-string": "^1.5.0",
     "qrcode": "^1.5.4",
     "react": "^19.2.8",

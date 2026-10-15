@@ -4,6 +4,8 @@ import { LOOT } from '../data/loot'
 import { AMMO_NOUN, ammoNoun } from '../engine/ammo'
 import { AmmoSelect } from '../components/AmmoSelect'
 import { AmmoDebuffFields } from '../components/AmmoDebuffFields'
+import { SnarkHelper } from '../components/SnarkHelper'
+import type { SnarkTag } from '../engine/snark'
 import QRCode from 'qrcode'
 import { uid } from '../engine/advancement'
 import { claimUrl } from '../engine/lootclaim'
@@ -75,8 +77,11 @@ interface Draft {
   /** optional heading and description for item mode */
   itemTitle: string
   itemDescription: string
+  /** snark generator: what happened, and notes for Claude */
+  snarkTags: SnarkTag[]
+  snarkNotes: string
 }
-const empty = (): Draft => ({ name: '', description: '', tier: 'Bronze', category: 'Adventurer', customReward: '', rows: [], claimId: uid(), includeLink: true, mode: 'achievement', itemTitle: '', itemDescription: '' })
+const empty = (): Draft => ({ name: '', description: '', tier: 'Bronze', category: 'Adventurer', customReward: '', rows: [], claimId: uid(), includeLink: true, mode: 'achievement', itemTitle: '', itemDescription: '', snarkTags: [], snarkNotes: '' })
 const KEY = 'lootbox.draft'
 
 function loadDraft(): Draft {
@@ -224,6 +229,9 @@ export function LootBox() {
         <label><span className="label">What the System AI says (the snark)</span>
           <textarea value={d.description} onChange={(e) => set({ description: e.target.value })} placeholder="Congratulations, Crawler! You have…" />
         </label>
+        <SnarkHelper name={d.name} snark={d.description} tier={d.tier} category={d.category} tags={d.snarkTags} notes={d.snarkNotes}
+          onTags={(snarkTags) => set({ snarkTags })} onNotes={(snarkNotes) => set({ snarkNotes })}
+          onName={(name) => set({ name })} onSnark={(description) => set({ description })} />
         <div>
           <div className="label">Reward (type of box)</div>
           <div className="grid2" style={{ marginTop: 4 }}>
