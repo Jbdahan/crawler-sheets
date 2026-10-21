@@ -189,6 +189,10 @@ export interface Character {
   step: number
   aiFavor: number
   popularity: number
+  /** Boss kill stars (one per Boss defeated) */
+  bossKills?: number
+  /** Player killer skulls (one per crawler killed) */
+  crawlerKills?: number
   gold: number
   miscJunk: number
   /** starting scores from character creation */

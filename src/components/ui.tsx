@@ -137,13 +137,14 @@ export function useLocal<T>(initial: T) {
   return useState<T>(initial)
 }
 
-type IconName = 'hud' | 'sword' | 'bolt' | 'list' | 'bag' | 'more' | 'dice' | 'back' | 'plus' | 'share' | 'print' | 'book' | 'up' | 'stairs'
+type IconName = 'hud' | 'sword' | 'bolt' | 'list' | 'bag' | 'shield' | 'more' | 'dice' | 'back' | 'plus' | 'share' | 'print' | 'book' | 'up' | 'stairs'
 const PATHS: Record<IconName, string> = {
   hud: 'M4 13h4v7H4zM10 4h4v16h-4zM16 9h4v11h-4z',
   sword: 'M14.5 3H21v6.5L10 20.5l-2-2-2.5 2.5L3 18.5 5.5 16l-2-2zM6.5 14l3.5 3.5',
   bolt: 'M13 2 4 14h7l-1 8 9-12h-7z',
   list: 'M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01',
   bag: 'M6 7h12l1 14H5zM9 7V5a3 3 0 0 1 6 0v2',
+  shield: 'M12 3l8 3v6c0 5-3.4 8.2-8 9-4.6-.8-8-4-8-9V6z',
   more: 'M5 12h.01M12 12h.01M19 12h.01',
   dice: 'M4 4h16v16H4zM8.5 8.5h.01M15.5 15.5h.01M15.5 8.5h.01M8.5 15.5h.01M12 12h.01',
   back: 'M15 18l-6-6 6-6',

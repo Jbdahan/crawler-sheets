@@ -1,5 +1,5 @@
 import { BUFFS, STAT_KEYS, findSkill, type SkillDef, type StatKey } from '../data'
-import type { Character, CharSkill, Modifier } from './types'
+import type { ActiveEffect, Character, CharSkill, Modifier } from './types'
 
 /** Table 2/20: Stat Mods (Core p.57). */
 export function statMod(score: number): number {
@@ -300,4 +300,29 @@ export function checkBonus(c: Character, s: CharSkill, d: Derived = derive(c)): 
   }
   parts.push(...d.allChecks.parts)
   return total(parts)
+}
+
+/**
+ * What an active Debuff does to the sheet, in a few words: "−2 to all Checks", "No Dex Mod on Attack/Evade",
+ * plus its damage over time. Empty when the app doesn't apply anything automatically for it.
+ */
+export function debuffEffectText(e: ActiveEffect, floor: number): { text: string; dot?: string } {
+  const r = e.refId ? DEBUFF_RULES[e.refId] : undefined
+  if (!r) return { text: '' }
+  const stacks = Math.max(1, e.stacks)
+  const bits: string[] = []
+  if (r.allChecks) bits.push(`${r.allChecks * stacks < 0 ? '−' : '+'}${Math.abs(r.allChecks * stacks)} to all Checks`)
+  if (r.noDexAttackEvade) bits.push('No Dex Mod on Attack/Evade')
+  if (r.disAll) bits.push('Disadvantage on all Checks')
+  else if (r.disAttack) bits.push('Disadvantage on Attacks')
+  if (r.disNext) bits.push('Disadvantage on your next Check')
+  if (r.cantAct) bits.push("Can't take Actions")
+  if (r.cantCast) bits.push("Can't cast Spells")
+  if (r.cantHeal) bits.push("Can't be healed")
+  if (r.noMove) bits.push("Can't Move")
+  else if (r.halfMove) bits.push('Half Move')
+  if (r.noStep && !r.noMove) bits.push('No Step')
+  const dot = r.dot ? `${r.dot.dice}+${floor}` : undefined
+  if (r.dot) bits.push(`${dot}${r.dot.type ? ` ${r.dot.type}` : ''} end of each round (ignores DR)`)
+  return { text: bits.join(' · '), dot }
 }

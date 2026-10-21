@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { STAT_ABBR, STAT_KEYS, STAT_NAMES, SIZES, type StatKey } from '../data'
-import { difficulty } from '../engine/attacks'
-import type { Part, Total } from '../engine/derived'
+import { debuffEffectText, type Part, type Total } from '../engine/derived'
 import { HB_SLOTS, REST_LABEL, heal, rest, setLost, setMana, tickDying, type RestKind } from '../engine/health'
 import { HOTLIST_SIZE, type ActiveEffect, type HotlistEntry } from '../engine/types'
 import { attackLine, hotlistAttack, hotlistSkill, hotlistWeapon } from './hotlistUse'
@@ -11,6 +10,8 @@ import { openRoll } from '../components/Roller'
 import { swapSlots, useSlotDrag } from '../components/useSlotDrag'
 import { entryQty } from '../engine/inventory'
 import { Breakdown, Sheet, signed, toast } from '../components/ui'
+import { describeMod } from '../sheets/ModEditor'
+import { BUFFS } from '../data'
 import { DamageSheet } from '../sheets/DamageSheet'
 import { AddEffectSheet, EditEffectSheet, MAX_EXTERNAL, externalCount } from '../sheets/EffectSheets'
 import { go } from '../router'
@@ -81,6 +82,32 @@ export function Hud(ctx: Ctx) {
           <button className="btn good grow" disabled={d.flags.cantHeal || c.health.lost === 0} onClick={() => up((x) => heal(x, 1))}>Heal 1 slot</button>
           <button className="btn grow" onClick={() => setSheet('rest')}>Rest…</button>
         </div>
+        {/* Buffs & Debuffs live with Health: they change it, and DoTs tick against it */}
+        <div className="hb-effects">
+          {c.effects.length > 0 ? (
+            <div className="effect-lines">
+              {[...debuffs, ...buffs].map((e) => {
+                const fx = e.kind === 'debuff' ? debuffEffectText(e, c.floor) : { text: buffText(e) }
+                const name = `${e.external ? '★ ' : ''}${e.name}${e.stacks > 1 ? ` ×${e.stacks}` : ''}`
+                return (
+                  <div key={e.uid} className={`effect-line ${e.kind}${e.active ? '' : ' off'}`}>
+                    <button className="effect-text" onClick={() => setSheet({ effect: e })}>
+                      <b>{name}</b>{fx.text ? ` ${fx.text}` : e.notes ? ` ${e.notes}` : ''}
+                    </button>
+                    {e.active && 'dot' in fx && fx.dot && (
+                      <button className="btn small" onClick={() => openRoll({ kind: 'dice', charId: c.id, label: `${e.name} damage`, expr: fx.dot! })}>Roll</button>
+                    )}
+                  </div>
+                )
+              })}
+              {externalCount(c) > 0 && <span className="small muted">External Buffs {externalCount(c)}/{MAX_EXTERNAL}</span>}
+            </div>
+          ) : <span className="small muted effect-lines">No Buffs or Debuffs</span>}
+          <div className="effect-add">
+            <button className="chip add-debuff" onClick={() => setSheet('addDebuff')}>+ Debuff</button>
+            <button className="chip add-buff" onClick={() => setSheet('addBuff')}>+ Buff</button>
+          </div>
+        </div>
       </section>
 
       <section className="card span2 mana-card">
@@ -98,7 +125,7 @@ export function Hud(ctx: Ctx) {
 
       <HotlistStrip {...ctx} />
 
-      <section className="card">
+      <section className="card span2">
         <div className="kpis">
           <button className="kpi" onClick={evadeRoll}><div className="v">{signed(d.evade.total)}</div><div className="k">Evade 🎲</div></button>
           <button className="kpi" onClick={() => setSheet({ info: 'Damage Resistance', total: d.dr })}><div className="v">{d.dr.total}</div><div className="k">DR</div></button>
@@ -114,10 +141,10 @@ export function Hud(ctx: Ctx) {
           </div>
           <div className="kpi"><div className="v">{c.size}</div><div className="k">{SIZES[c.size] ?? 'Size'}</div></div>
         </div>
-        {d.allChecks.total !== 0 && (
-          <div className="small" style={{ marginTop: 8, color: 'var(--danger)' }}>{signed(d.allChecks.total)} to all Checks ({d.allChecks.parts.map((p) => p.label).join(', ')})</div>
-        )}
-        {d.notes.map((n) => <div key={n} className="small" style={{ color: 'var(--warn)' }}>{n}</div>)}
+        <div className="kills">
+          <KillTally label="Boss kills" glyph="★" kind="boss" value={c.bossKills ?? 0} onStep={(n) => up((x) => ({ ...x, bossKills: Math.max(0, (x.bossKills ?? 0) + n) }))} />
+          <KillTally label="Player killer" glyph="☠" kind="pk" value={c.crawlerKills ?? 0} onStep={(n) => up((x) => ({ ...x, crawlerKills: Math.max(0, (x.crawlerKills ?? 0) + n) }))} />
+        </div>
         {(d.resist.length > 0 || d.immune.length > 0 || d.vuln.length > 0) && (
           <div className="small muted" style={{ marginTop: 6 }}>
             {d.resist.length > 0 && <>Resist: {d.resist.join(', ')} </>}
@@ -127,66 +154,18 @@ export function Hud(ctx: Ctx) {
         )}
       </section>
 
-      <section className="card">
-        <div className="card-head"><h2>Stats</h2><span className="small muted">tap for details</span></div>
+      <section className="card span2">
         <div className="stat-tiles">
           {STAT_KEYS.map((k) => (
-            <button key={k} className="stat-tile" onClick={() => setSheet({ stat: k })}>
+            <button key={k} className="stat-tile" onClick={() => setSheet({ stat: k })} title={`${STAT_NAMES[k]}: tap for details`}>
               <div className="abbr">{STAT_ABBR[k].toUpperCase()}</div>
               <div className="mod">{signed(d.mod[k])}</div>
               <div className="score">{d.enhanced[k]}{d.enhanced[k] !== d.unenhanced[k] ? ` / ${d.unenhanced[k]}` : ''}</div>
             </button>
           ))}
         </div>
-        <div className="small faint" style={{ marginTop: 6 }}>Enhanced / Unenhanced score · Mod from Enhanced</div>
       </section>
 
-      <section className="card">
-        <div className="card-head">
-          <h2>Buffs &amp; Debuffs</h2>
-          <span className="small muted">External {externalCount(c)}/{MAX_EXTERNAL}</span>
-        </div>
-        <div className="chips">
-          {debuffs.map((e) => (
-            <button key={e.uid} className={`chip debuff${e.active ? '' : ' off'}`} onClick={() => setSheet({ effect: e })}>
-              {e.name}{e.stacks > 1 ? ` ×${e.stacks}` : ''}
-            </button>
-          ))}
-          {buffs.map((e) => (
-            <button key={e.uid} className={`chip buff${e.active ? '' : ' off'}`} onClick={() => setSheet({ effect: e })}>
-              {e.external ? '★ ' : ''}{e.name}
-            </button>
-          ))}
-          {!c.effects.length && <span className="small muted">None active</span>}
-        </div>
-        {d.dots.length > 0 && (
-          <div className="stack" style={{ marginTop: 10 }}>
-            {d.dots.map((dot) => {
-              const expr = `${dot.dice}+${c.floor}`
-              return (
-                <div key={dot.name} className="row between small">
-                  <span>{dot.name}{dot.stacks > 1 ? ` ×${dot.stacks}` : ''}: {expr}{dot.type ? ` ${dot.type}` : ''} end of round (ignores DR)</span>
-                  <button className="btn small" onClick={() => openRoll({ kind: 'dice', charId: c.id, label: `${dot.name} damage`, expr })}>Roll</button>
-                </div>
-              )
-            })}
-          </div>
-        )}
-        <div className="row" style={{ marginTop: 10 }}>
-          <button className="btn bad grow" onClick={() => setSheet('addDebuff')}>+ Debuff</button>
-          <button className="btn good grow" onClick={() => setSheet('addBuff')}>+ Buff</button>
-        </div>
-      </section>
-
-      <section className="card">
-        <div className="card-head"><h2>Floor {c.floor} Difficulties</h2></div>
-        <div className="grid3 center">
-          <div><div className="label">Unopposed</div><div className="num" style={{ fontWeight: 800, fontSize: '1.2rem' }}>{difficulty.unopposed(c.floor)}</div></div>
-          <div><div className="label">Stat Check</div><div className="num" style={{ fontWeight: 800, fontSize: '1.2rem' }}>{difficulty.stat(c.floor)}</div></div>
-          <div><div className="label">Mob Evade</div><div className="num" style={{ fontWeight: 800, fontSize: '1.2rem' }}>{10 + c.floor}+Dex</div></div>
-        </div>
-        <div className="small faint" style={{ marginTop: 6 }}>Opposed: 10 + foe's Mod + {c.floor}. Amazing Success on an attack: +{c.floor} damage (Core p.59, 79).</div>
-      </section>
 
       {sheet === 'damage' && <DamageSheet {...ctx} onClose={() => setSheet(null)} />}
       {sheet === 'addDebuff' && <AddEffectSheet {...ctx} initial="debuff" onClose={() => setSheet(null)} />}
@@ -307,4 +286,29 @@ function nextBand(score: number) {
   const bands = [3, 6, 10, 20, 50, 100, 150, 200, 300]
   const next = bands.find((b) => b > score)
   return next ? `${next}` : 'max'
+}
+
+/** Boss kill stars / player killer skulls: one mark per kill, with a count once there are many. */
+function KillTally({ label, glyph, kind, value, onStep }: { label: string; glyph: string; kind: 'boss' | 'pk'; value: number; onStep: (n: number) => void }) {
+  const shown = Math.min(value, 8)
+  return (
+    <div className={`kill-tally ${kind}`}>
+      <span className="kill-label">{label}</span>
+      <span className="kill-marks" aria-label={`${value} ${label}`}>
+        {value === 0 ? <span className="faint">None</span> : Array.from({ length: shown }, (_, i) => <span key={i}>{glyph}</span>)}
+        {value > shown && <b className="num">×{value}</b>}
+      </span>
+      <span className="row" style={{ gap: 2 }}>
+        <button className="btn small ghost kill-btn" onClick={() => onStep(-1)} aria-label={`Remove a ${label} mark`}>−</button>
+        <button className="btn small ghost kill-btn" onClick={() => onStep(1)} aria-label={`Add a ${label} mark`}>+</button>
+      </span>
+    </div>
+  )
+}
+
+/** A Buff's effect in a few words: its bonuses, or the catalog summary for rule-only Buffs. */
+function buffText(e: ActiveEffect): string {
+  const mods = e.mods.filter((m) => m.value || m.target.includes(':')).map(describeMod)
+  if (mods.length) return mods.join(' · ')
+  return BUFFS.find((b) => b.id === e.refId)?.summary ?? ''
 }

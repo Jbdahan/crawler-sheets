@@ -44,7 +44,7 @@
 .pt-stat .r b { font-size: 12pt; }
 .pt-killed { text-align: center; }
 .pt-killed .t { font-weight: 800; font-size: 7pt; text-transform: uppercase; }
-.pt-killed .skull { font-size: 48pt; line-height: 1.1; }
+.pt-killed .skull { font-size: 22pt; line-height: 1.1; font-weight: 800; }
 
 .pt-line { display: flex; gap: 6px; align-items: center; }
 .pt-line .big { font-weight: 800; text-transform: uppercase; font-size: 10.5pt; line-height: 1.05; width: 1in; }

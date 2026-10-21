@@ -35,8 +35,14 @@ export function LevelUpSheet({ c, up, onClose, onAdvance }: Ctx & { onClose: () 
   const newLevel = Math.min(MAX_LEVEL, c.level + levels)
 
   const apply = () => {
-    up((x) => levelUp(x, levels, label))
-    toast(`Level ${newLevel}! +${levels * 3} Stat points banked`)
+    // a Boss kill adds a star, a crawler kill a skull
+    up((x) => {
+      const y = levelUp(x, levels, label)
+      return reason === 'boss' ? { ...y, bossKills: (y.bossKills ?? 0) + 1 }
+        : reason === 'kill' ? { ...y, crawlerKills: (y.crawlerKills ?? 0) + 1 }
+        : y
+    })
+    toast(`Level ${newLevel}! +${levels * 3} Stat points banked${reason === 'boss' ? ' · ★ Boss star added' : reason === 'kill' ? ' · ☠ Player killer skull added' : ''}`)
     if (reason === 'play' && eligibleForAdvancement(c, 'twoHours').length) onAdvance('twoHours')
     else onClose()
   }

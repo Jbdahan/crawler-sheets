@@ -250,3 +250,15 @@ describe('Removing loot add-ons', () => {
     expect(all.skills.some((s) => s.name === 'Fireball')).toBe(false)
   })
 })
+
+describe('Debuff lines on the HUD', () => {
+  it('says what each Debuff does in a few words', async () => {
+    const { debuffEffectText } = await import('./derived')
+    const fx = (refId: string, stacks = 1) => debuffEffectText({ uid: 'x', kind: 'debuff', refId, name: refId, stacks, active: true, mods: [], notes: '' }, 3)
+    expect(fx('woozy').text).toBe('No Dex Mod on Attack/Evade')
+    expect(fx('minor-injury').text).toBe('−2 to all Checks')
+    expect(fx('fatigued', 2).text).toBe('−2 to all Checks · Half Move')
+    expect(fx('burned')).toEqual({ text: '1d10+3 Fire end of each round (ignores DR)', dot: '1d10+3' })
+    expect(fx('unknown').text).toBe('')
+  })
+})

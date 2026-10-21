@@ -10,7 +10,7 @@ import { Hud } from './Hud'
 import { Attacks } from './Attacks'
 import { Hotlist } from './Hotlist'
 import { Skills } from './Skills'
-import { Gear } from './Gear'
+import { Gear, Inventory } from './Gear'
 import { More } from './More'
 
 const TABS = [
@@ -18,7 +18,8 @@ const TABS = [
   { key: 'attacks', label: 'Attacks', icon: 'sword' },
   { key: 'hotlist', label: 'Hotlist', icon: 'bolt' },
   { key: 'skills', label: 'Skills', icon: 'list' },
-  { key: 'gear', label: 'Gear', icon: 'bag' },
+  { key: 'gear', label: 'Gear', icon: 'shield' },
+  { key: 'inventory', label: 'Inventory', icon: 'bag' },
   { key: 'more', label: 'More', icon: 'more' },
 ] as const
 
@@ -47,7 +48,7 @@ export function CharacterView({ id, tab, sub }: { id: string; tab: string; sub?:
           {c.portrait ? <img src={c.portrait} alt="" /> : (c.name || '?').slice(0, 1).toUpperCase()}
         </div>
         <div className="title">
-          <h1>{c.name || 'Unnamed'}</h1>
+          <h1 className="name-line"><span className="name-text">{c.name || 'Unnamed'}</span><KillMarks n={c.bossKills ?? 0} glyph="★" kind="boss" label="Boss kills" /><KillMarks n={c.crawlerKills ?? 0} glyph="☠" kind="pk" label="Player kills" /></h1>
           <div className="sub">{[c.raceName, c.className].filter(Boolean).join(' ') || (c.species === 'animal' ? c.animalType || 'Animal' : 'Human')} · #{c.crawlerNumber}</div>
         </div>
         <button className="btn small" onClick={() => setQuick('level')} title="Level up">Lvl {c.level}</button>
@@ -59,6 +60,7 @@ export function CharacterView({ id, tab, sub }: { id: string; tab: string; sub?:
       {current === 'hotlist' && <Hotlist {...ctx} />}
       {current === 'skills' && <Skills {...ctx} />}
       {current === 'gear' && <Gear {...ctx} />}
+      {current === 'inventory' && <Inventory {...ctx} />}
       {current === 'more' && <More {...ctx} sub={sub} />}
 
       <nav className="tabbar no-print">
@@ -76,5 +78,15 @@ export function CharacterView({ id, tab, sub }: { id: string; tab: string; sub?:
       {quick === 'floor' && <FloorSheet {...ctx} onClose={() => setQuick(null)} onAdvance={(w) => setQuick({ adv: w })} />}
       {quick && typeof quick === 'object' && <AdvancementSheet {...ctx} window={quick.adv} onClose={() => setQuick(null)} />}
     </div>
+  )
+}
+
+/** Boss stars / player killer skulls beside the name: a few marks, or a count when there are many. */
+function KillMarks({ n, glyph, kind, label }: { n: number; glyph: string; kind: 'boss' | 'pk'; label: string }) {
+  if (!n) return null
+  return (
+    <span className={`name-marks ${kind}`} title={`${n} ${label}`} aria-label={`${n} ${label}`}>
+      {n <= 5 ? glyph.repeat(n) : <>{glyph}<span className="num">×{n}</span></>}
+    </span>
   )
 }

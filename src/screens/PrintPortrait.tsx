@@ -62,7 +62,9 @@ export function PortraitPages({ c }: { c: Character }) {
           ))}
           <div className="pt-killed">
             <div className="t">Crawlers Killed</div>
-            <div className="skull" aria-hidden="true">☠</div>
+            <div className="skull"><span aria-hidden="true">☠</span> {c.crawlerKills || ''}</div>
+            <div className="t" style={{ marginTop: 4 }}>Boss Kills</div>
+            <div className="skull"><span aria-hidden="true">★</span> {c.bossKills || ''}</div>
           </div>
         </div>
 

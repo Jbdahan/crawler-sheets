@@ -97,7 +97,7 @@ function PrintPages({ c }: { c: Character }) {
               <span className="big">DAMAGE<br />RESISTANCE</span>
               <Box v={c.gear.reduce((a, g) => a + g.mods.filter((m) => m.target === 'dr').reduce((x, m) => x + m.value, 0), 0)} l="Armor" /> <span>+</span>
               <Box v={d.dr.total - c.gear.reduce((a, g) => a + g.mods.filter((m) => m.target === 'dr').reduce((x, m) => x + m.value, 0), 0)} l="Buffs" w /> <span>=</span>
-              <Box v={d.dr.total} l="DR Total" w /><Box v={c.aiFavor} l="AI Favor" /><Box v={`${c.size} ${SIZES[c.size] ?? ''}`} l="Size" />
+              <Box v={d.dr.total} l="DR Total" w /><Box v={c.aiFavor} l="AI Favor" /><Box v={`★ ${c.bossKills ?? 0}`} l="Boss Kills" /><Box v={`☠ ${c.crawlerKills ?? 0}`} l="Crawler Kills" /><Box v={`${c.size} ${SIZES[c.size] ?? ''}`} l="Size" />
             </div>
             <div className="pp-line">
               <Box v={`${d.maxMana.total} / ${c.mana}`} l="Max Mana / Current" w />

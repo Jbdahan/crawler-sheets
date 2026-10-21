@@ -17,12 +17,27 @@ import { Icon, Sheet, Stepper, toast } from '../components/ui'
 import { ModEditor, describeMod } from '../sheets/ModEditor'
 import type { Ctx } from './ctx'
 
+/** The Gear tab: what's equipped, on a body map, plus Accessories and what the gear adds. */
 export function Gear(ctx: Ctx) {
+  return <GearAndInventory {...ctx} view="gear" />
+}
+
+/** The Inventory tab: wealth and everything carried. Equipping moves an item to the Gear tab and back. */
+export function Inventory(ctx: Ctx) {
+  return <GearAndInventory {...ctx} view="inventory" />
+}
+
+/** Body map layout: slots down each side of the figure (Accessories get their own grid). */
+const MAP_LEFT: GearSlot[] = ['head', 'arms', 'hands', 'legs']
+const MAP_RIGHT: GearSlot[] = ['cape', 'torso', 'belt', 'feet']
+
+function GearAndInventory(ctx: Ctx & { view: 'gear' | 'inventory' }) {
   const { c, up } = ctx
   const [edit, setEdit] = useState<GearItem | null>(null)
   const [inv, setInv] = useState<InventoryItem | null>(null)
   const [bulk, setBulk] = useState(false)
   const [loot, setLoot] = useState(false)
+  const [pick, setPick] = useState<GearSlot | null>(null)
   // press-and-hold to drag and reorder: Inventory rows are numbered 0…, equipped gear 1000+ (its place in c.gear)
   const GEAR_BASE = 1000
   const { slotProps, ghost } = useSlotDrag((from, to) => {
@@ -81,39 +96,141 @@ export function Gear(ctx: Ctx) {
     up((x) => ({ ...x, inventory: x.inventory.some((y) => y.uid === it.uid) ? x.inventory.map((y) => (y.uid === it.uid ? it : y)) : [...x.inventory, it] }))
   }
 
+  const slotInfo = (k: GearSlot) => GEAR_SLOTS.find((s) => s.key === k)!
+  /** tap a slot: the item in it, or pick something from Inventory to equip */
+  const openSlot = (k: GearSlot) => {
+    const items = c.gear.filter((g) => g.slot === k)
+    if (items.length === 1 && slotInfo(k).max === 1) setEdit(items[0])
+    else if (items.length < slotInfo(k).max) setPick(k)
+    else if (items[0]) setEdit(items[0])
+  }
+  const slotTile = (k: GearSlot) => {
+    const s = slotInfo(k)
+    const items = c.gear.filter((g) => g.slot === k)
+    return (
+      <div key={k} className={`bm-slot${items.length ? ' filled' : ''}`}>
+        <div className="bm-label">{s.label}{s.max > 1 ? ` ${items.length}/${s.max}` : ''}</div>
+        {items.map((g) => {
+          const sp = slotProps(GEAR_BASE + c.gear.indexOf(g), g.name || 'Unnamed')
+          return (
+            <button key={g.uid} {...sp} className={`bm-item${sp.className}`} onClick={() => setEdit(g)}>
+              <span className="bm-name">{g.name || 'Unnamed'}</span>
+              {(g.mods.length > 0 || g.skillId) && <span className="bm-meta">{[g.skillId ? findSkill(g.skillId)?.name : '', ...g.mods.map(describeMod)].filter(Boolean).join(' · ')}</span>}
+              {hotlistSlotOfGear(c, g.uid) >= 0 && <span className="pill accent">Hotlist #{hotlistSlotOfGear(c, g.uid) + 1}</span>}
+            </button>
+          )
+        })}
+        {items.length < s.max && <button className="bm-add" onClick={() => setPick(k)}>+ Equip</button>}
+      </div>
+    )
+  }
+  /** what all equipped gear adds, summed by target: "+2 Constitution", "+2 DR", "+2 Dodge" */
+  const gearTotals = (() => {
+    const sums = new Map<string, number>()
+    for (const g of c.gear) for (const m of g.mods) sums.set(m.target, (sums.get(m.target) ?? 0) + (m.value || 0))
+    return [...sums].filter(([, v]) => v).map(([target, value]) => describeMod({ target, value }))
+  })()
+
+  if (ctx.view === 'gear') {
+    const filled = new Set(c.gear.map((g) => g.slot))
+    return (
+      <div className="cols2">
+        <section className="card">
+          <div className="card-head"><h2>Equipped</h2><span className="small muted">only equipped gear gives bonuses</span></div>
+          <div className="bodymap">
+            <div className="bm-col">{MAP_LEFT.map(slotTile)}</div>
+            <BodyFigure filled={filled} onSlot={openSlot} />
+            <div className="bm-col">{MAP_RIGHT.map(slotTile)}</div>
+          </div>
+          <p className="small faint" style={{ marginBottom: 0 }}>Tap a slot to equip from Inventory. A Shield uses a Hands slot; Two-Handed weapons use two (Core p.98).</p>
+        </section>
+        <div>
+          <section className="card">
+            <div className="card-head"><h2>Accessories</h2><span className="small muted">{c.gear.filter((g) => g.slot === 'accessory').length} / 10</span></div>
+            <div className="acc-grid">
+              {Array.from({ length: 10 }, (_, i) => {
+                const g = accessories[i]
+                if (!g) return <button key={`a${i}`} className="acc-slot empty" onClick={() => setPick('accessory')}><span className="acc-n">{i + 1}</span>+ Equip</button>
+                const sp = slotProps(GEAR_BASE + c.gear.indexOf(g), g.name || 'Unnamed')
+                return (
+                  <button key={g.uid} {...sp} className={`acc-slot${sp.className}`} onClick={() => setEdit(g)}>
+                    <span className="acc-n">{i + 1}</span>
+                    <span className="bm-name">{g.name || 'Unnamed'}</span>
+                    {g.mods.length > 0 && <span className="bm-meta">{g.mods.map(describeMod).join(' · ')}</span>}
+                  </button>
+                )
+              })}
+            </div>
+          </section>
+          <section className="card">
+            <div className="card-head"><h2>Gear bonuses</h2></div>
+            {gearTotals.length ? <div className="chips">{gearTotals.map((t) => <span key={t} className="chip buff">{t}</span>)}</div> : <div className="empty">Nothing equipped gives a bonus yet.</div>}
+            <p className="small faint" style={{ marginBottom: 0 }}>Press and hold an item to drag it to another spot in the same slot.</p>
+          </section>
+        </div>
+      {ghost}
+      {pick && (
+        <EquipPicker c={c} slot={pick} onClose={() => setPick(null)}
+          onEquip={(invUid) => { up((x) => equipItem(x, invUid, pick)); setPick(null) }}
+          onNew={() => { setPick(null); addGear(pick) }} />
+      )}
+      {loot && (
+        <LootPicker c={c} onClose={() => setLoot(false)} onAdd={(item, equip) => {
+          const added = addItem(c, item)
+          if (equip && item.slot && !slotFree(c, item.slot)) {
+            up(() => added.c)
+            toast(`${GEAR_SLOTS.find((x) => x.key === item.slot)?.label} is full: ${item.name} added to Inventory`)
+          } else {
+            up(() => (equip && item.slot ? equipItem(added.c, added.invUid, item.slot) : added.c))
+            toast(equip ? `Equipped ${item.name}` : `Added ${item.name}${item.qty > 1 ? ` ×${item.qty}` : ''} to Inventory`)
+          }
+          setLoot(false)
+        }} />
+      )}
+      {bulk && (
+        <BulkAdd onClose={() => setBulk(false)} onAdd={(items) => {
+          up((x) => addInventoryItems(x, items))
+          toast(`Added ${items.length} item${items.length === 1 ? '' : 's'} to Inventory`)
+          setBulk(false)
+        }} />
+      )}
+      {edit && (
+        <Sheet title={edit.name || 'Equip item'} onClose={() => setEdit(null)}>
+          <GearEditor
+            c={c}
+            item={c.gear.find((g) => g.uid === edit.uid) ?? edit}
+            onSave={(g) => { saveGear(g); setEdit(null) }}
+            onUnequip={c.gear.some((g) => g.uid === edit.uid) ? (g) => { unequip(g); setEdit(null) } : undefined}
+            onDelete={c.gear.some((g) => g.uid === edit.uid) ? () => { up((x) => linkHotlistItems({ ...x, gear: x.gear.filter((y) => y.uid !== edit.uid) })); setEdit(null) } : undefined}
+            hotlistSlot={c.gear.some((g) => g.uid === edit.uid) ? hotlistSlotOfGear(c, edit.uid) : undefined}
+            onHotlist={() => { const g = c.gear.find((y) => y.uid === edit.uid); if (g) toggleGearHotlist(g) }}
+          />
+        </Sheet>
+      )}
+      {inv && (
+        <Sheet title={inv.name || 'Inventory item'} onClose={() => setInv(null)}>
+          <InvEditor c={c} item={c.inventory.find((i) => i.uid === inv.uid) ?? inv}
+            hotlistSlot={c.inventory.some((i) => i.uid === inv.uid) ? hotlistSlotOfInventory(c, inv.uid) : undefined}
+            onHotlist={() => { const cur = c.inventory.find((i) => i.uid === inv.uid); if (cur) toggleInvHotlist(cur) }}
+            onSave={(it) => { saveInv(it); setInv(null) }}
+            onDelete={() => { up((x) => linkHotlistItems({ ...x, inventory: x.inventory.filter((y) => y.uid !== inv.uid) })); setInv(null) }}
+            onEquip={(slot) => {
+              if (!slotFree(c, slot)) { toast(`${GEAR_SLOTS.find((x) => x.key === slot)?.label} is full. Unequip something first`); return }
+              up((x) => equipItem(x, inv.uid, slot))
+              setInv(null)
+            }}
+            onRead={() => { const r = readSpellbook(c, inv.uid); up(() => r.c); toast(r.message); setInv(null) }}
+            onDrink={(skillUid) => { const r = drinkSkillPotion(c, inv.uid, skillUid); up(() => r.c); toast(r.message); setInv(null) }}
+            onCast={() => { const cur = c.inventory.find((i) => i.uid === inv.uid); if (cur) castScroll(ctx, cur); setInv(null) }}
+          />
+        </Sheet>
+      )}
+      </div>
+    )
+  }
+
   return (
     <div className="cols2">
-      <section className="card">
-        <div className="card-head"><h2>Gear slots</h2><span className="small muted">only equipped gear gives bonuses</span></div>
-        <div className="list">
-          {GEAR_SLOTS.map((s) => {
-            const items = c.gear.filter((g) => g.slot === s.key)
-            return (
-              <div key={s.key} style={{ padding: '8px 0' }}>
-                <div className="row between">
-                  <span className="label">{s.label}{s.max > 1 ? ` (${items.length}/${s.max})` : ''}</span>
-                  {items.length < s.max && <button className="btn small ghost" onClick={() => addGear(s.key)}>+ Equip</button>}
-                </div>
-                {items.map((g) => {
-                  const sp = slotProps(GEAR_BASE + c.gear.indexOf(g), g.name || 'Unnamed')
-                  return (
-                  <button key={g.uid} {...sp} className={`option${sp.className}`} style={{ marginTop: 4 }} onClick={() => setEdit(g)}>
-                    <div className="grow">
-                      <div className="t">{g.name || 'Unnamed'} {hotlistSlotOfGear(c, g.uid) >= 0 && <span className="pill accent">Hotlist #{hotlistSlotOfGear(c, g.uid) + 1}</span>}</div>
-                      <div className="small muted">{[weaponLine(g.skillId, g), ...g.mods.map(describeMod), g.notes].filter(Boolean).join(' · ') || 'No bonuses'}</div>
-                    </div>
-                  </button>
-                  )
-                })}
-              </div>
-            )
-          })}
-        </div>
-        <p className="small faint">Press and hold an item, then drag it to reorder (within the same slot).</p>
-        <p className="small faint">One item per slot; up to 10 Accessories plus one belt and one cape. A Shield uses a Hands slot; Two-Handed weapons use both (Core p.98).</p>
-      </section>
-
-      <div>
         <section className="card">
           <div className="card-head"><h2>Wealth</h2></div>
           <div className="row between"><span>Gold</span><Stepper value={c.gold} min={0} max={9999999} step={1} editable onChange={(v) => up((x) => ({ ...x, gold: v }))} /></div>
@@ -160,9 +277,12 @@ export function Gear(ctx: Ctx) {
           <p className="small faint">Press and hold an item, then drag it to reorder.</p>
           <p className="small faint">You can lift up to Strength × 15 lb to store it (Core p.98).</p>
         </section>
-      </div>
-
       {ghost}
+      {pick && (
+        <EquipPicker c={c} slot={pick} onClose={() => setPick(null)}
+          onEquip={(invUid) => { up((x) => equipItem(x, invUid, pick)); setPick(null) }}
+          onNew={() => { setPick(null); addGear(pick) }} />
+      )}
       {loot && (
         <LootPicker c={c} onClose={() => setLoot(false)} onAdd={(item, equip) => {
           const added = addItem(c, item)
@@ -215,6 +335,63 @@ export function Gear(ctx: Ctx) {
         </Sheet>
       )}
     </div>
+  )
+}
+
+/** A simple crawler outline; slots with gear light up, and tapping a part opens that slot. */
+function BodyFigure({ filled, onSlot }: { filled: Set<GearSlot>; onSlot: (k: GearSlot) => void }) {
+  const part = (k: GearSlot) => ({
+    className: `bf-part${filled.has(k) ? ' on' : ''}`,
+    onClick: () => onSlot(k),
+    role: 'button',
+    'aria-label': GEAR_SLOTS.find((s) => s.key === k)!.label,
+  })
+  return (
+    <svg className="bodyfig" viewBox="0 0 100 220" aria-label="Body map">
+      <path {...part('cape')} d="M30 50 L70 50 L80 150 L20 150 Z" opacity="0.55" />
+      <circle {...part('head')} cx="50" cy="24" r="16" />
+      <rect {...part('torso')} x="32" y="44" width="36" height="58" rx="8" />
+      <rect {...part('arms')} x="14" y="46" width="14" height="52" rx="7" />
+      <rect {...part('arms')} x="72" y="46" width="14" height="52" rx="7" />
+      <circle {...part('hands')} cx="21" cy="108" r="8" />
+      <circle {...part('hands')} cx="79" cy="108" r="8" />
+      <rect {...part('belt')} x="31" y="102" width="38" height="9" rx="3" />
+      <rect {...part('legs')} x="33" y="112" width="15" height="74" rx="7" />
+      <rect {...part('legs')} x="52" y="112" width="15" height="74" rx="7" />
+      <rect {...part('feet')} x="29" y="188" width="20" height="11" rx="5" />
+      <rect {...part('feet')} x="51" y="188" width="20" height="11" rx="5" />
+    </svg>
+  )
+}
+
+/** Equip something from Inventory into a slot (it moves to the Gear tab; unequipping puts it back). */
+function EquipPicker({ c, slot, onClose, onEquip, onNew }: { c: Character; slot: GearSlot; onClose: () => void; onEquip: (invUid: string) => void; onNew: () => void }) {
+  const label = GEAR_SLOTS.find((s) => s.key === slot)!.label
+  const fits = (it: InventoryItem) => it.slot === slot || (slot === 'hands' && it.kind === 'weapon') || (!it.slot && it.kind === 'gear')
+  const best = c.inventory.filter((it) => it.qty > 0 && fits(it))
+  const rest = c.inventory.filter((it) => it.qty > 0 && !fits(it) && it.kind !== 'ammo' && it.kind !== 'scroll' && it.kind !== 'book' && it.kind !== 'skillPotion')
+  const row = (it: InventoryItem) => (
+    <button key={it.uid} className="option" onClick={() => onEquip(it.uid)}>
+      <div className="grow">
+        <div className="t">{it.name}{it.qty > 1 ? ` ×${it.qty}` : ''}</div>
+        <div className="small muted">{[itemLinkLabel(it), ...(it.mods ?? []).map(describeMod), it.notes].filter(Boolean).join(' · ') || 'No bonuses'}</div>
+      </div>
+    </button>
+  )
+  return (
+    <Sheet title={`Equip: ${label}`} onClose={onClose}>
+      <div className="stack">
+        {best.length > 0 && <><div className="label">From Inventory</div><div className="list">{best.map(row)}</div></>}
+        {rest.length > 0 && (
+          <details>
+            <summary className="small muted">Other Inventory items ({rest.length})</summary>
+            <div className="list" style={{ marginTop: 6 }}>{rest.map(row)}</div>
+          </details>
+        )}
+        {!best.length && !rest.length && <div className="empty">Nothing in Inventory fits here.</div>}
+        <button className="btn" onClick={onNew}>+ New item for this slot</button>
+      </div>
+    </Sheet>
   )
 }
 
