@@ -189,6 +189,8 @@ export interface Character {
   step: number
   aiFavor: number
   popularity: number
+  /** this round's Actions (2) and Move (1) already spent; reset each round */
+  turn?: { a1?: boolean; a2?: boolean; move?: boolean }
   /** Boss kill stars (one per Boss defeated) */
   bossKills?: number
   /** Player killer skulls (one per crawler killed) */

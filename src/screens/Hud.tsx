@@ -110,6 +110,8 @@ export function Hud(ctx: Ctx) {
         </div>
       </section>
 
+      <TurnTracker {...ctx} />
+
       <section className="card span2 mana-card">
         <div className="mana-row">
           <span className="mana-label">Mana</span>
@@ -311,4 +313,26 @@ function buffText(e: ActiveEffect): string {
   const mods = e.mods.filter((m) => m.value || m.target.includes(':')).map(describeMod)
   if (mods.length) return mods.join(' · ')
   return BUFFS.find((b) => b.id === e.refId)?.summary ?? ''
+}
+
+/** This round: 2 Actions (Interrupts like Evade count against them) and 1 Move (Core p.81). Tap to mark spent. */
+function TurnTracker({ c, up }: Ctx) {
+  const t = c.turn ?? {}
+  const flip = (k: 'a1' | 'a2' | 'move') => up((x) => ({ ...x, turn: { ...x.turn, [k]: !x.turn?.[k] } }))
+  const spent = [t.a1, t.a2, t.move].filter(Boolean).length
+  const pip = (k: 'a1' | 'a2' | 'move', label: string) => (
+    <button className={`turn-pip ${k === 'move' ? 'move' : 'action'}${t[k] ? ' used' : ''}`} aria-pressed={!!t[k]} onClick={() => flip(k)}
+      title={t[k] ? `${label} spent: tap to undo` : `Tap when you spend this ${label}`}>
+      {label}
+    </button>
+  )
+  return (
+    <section className="card span2 turn-card">
+      <span className="turn-label">Round</span>
+      {pip('a1', 'Action')}
+      {pip('a2', 'Action')}
+      {pip('move', 'Move')}
+      <button className="btn small ghost turn-reset" disabled={!spent} onClick={() => up((x) => ({ ...x, turn: {} }))} title="Start a new round">↺ New round</button>
+    </section>
+  )
 }

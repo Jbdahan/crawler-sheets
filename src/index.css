@@ -439,3 +439,12 @@ html.slot-drag-active, html.slot-drag-active body { overscroll-behavior: none; }
 .hb-effects { display: flex; align-items: flex-start; gap: 8px; }
 .hb-effects .effect-lines { flex: 1; min-width: 0; align-self: center; }
 .effect-add { display: flex; gap: 6px; flex-shrink: 0; }
+
+/* HUD: this round's 2 Actions and 1 Move */
+.turn-card { display: flex; align-items: center; gap: 6px; padding: 8px 10px; }
+.turn-label { font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-right: 2px; }
+.turn-pip { flex: 1; min-width: 0; min-height: 34px; border-radius: 99px; font-weight: 800; font-size: 0.82rem; border: 1px solid; -webkit-user-select: none; user-select: none; }
+.turn-pip.action { background: color-mix(in srgb, var(--accent) 22%, var(--surface-2)); border-color: var(--accent); color: var(--accent); }
+.turn-pip.move { background: color-mix(in srgb, var(--mana) 22%, var(--surface-2)); border-color: var(--mana); color: var(--mana); }
+.turn-pip.used { background: var(--surface-2); border-color: var(--border); color: var(--faint, var(--muted)); text-decoration: line-through; opacity: 0.6; }
+.turn-reset { flex-shrink: 0; white-space: nowrap; }
