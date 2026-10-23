@@ -2,10 +2,11 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { create } from 'zustand'
 import { attackCalc, rollDamage, type DamageRoll, type WeaponRef } from '../engine/attacks'
 import { spendAmmo, usesAmmo } from '../engine/ammo'
+import { damageEffectMod, damageEffectsFor, effectFormula, rollDamageWithEffects } from '../engine/damageEffects'
 import { canAdvance } from '../engine/advancement'
 import { checkBonus, derive, effectiveRank, type Part } from '../engine/derived'
 import { DEGREE_LABEL, degreeOf, isSuccess, netMode, parseDice, rollD20, rollDie, rollPool, type D20Roll } from '../engine/dice'
-import { findSkill } from '../data'
+import { findDebuff, findSkill } from '../data'
 import type { CharSkill } from '../engine/types'
 import { useStore } from '../store/characters'
 import { Breakdown, Seg, Sheet, signed } from './ui'
@@ -125,11 +126,20 @@ function CheckRoll({ req, onClose }: { req: Exclude<RollRequest, { kind: 'dice' 
     reroll()
   }
 
+  // Damage Effects this crawler has for this Attack Skill (e.g. Smush on Foot Soldier): toggle to apply
+  const linked = atk && c && skill && d && req.kind === 'skill' && !req.skill ? damageEffectsFor(c, skill) : []
+  const [fx, setFx] = useState<string[]>([])
+  const fxMods = c && d ? linked.filter((s) => fx.includes(s.uid)).map((s) => damageEffectMod(s, effectiveRank(c, s, d), d)) : []
+
   const rollDmg = () => {
     if (!atk) return
     const crit = roll.kept === 20
     const amazing = !crit && !Number.isNaN(diffNum) && total - diffNum >= 10
-    setDmg(rollDamage(atk, { crit, amazing }))
+    setDmg(fxMods.length ? rollDamageWithEffects(atk, fxMods, { crit, amazing }) : rollDamage(atk, { crit, amazing }))
+    // Damage Effects are marked for advancement separately from their attack (Core p.169)
+    if (c && fxMods.length) {
+      store.update(c.id, (x) => ({ ...x, skills: x.skills.map((k) => (fx.includes(k.uid) && !k.marked && canAdvance(k) ? { ...k, marked: true } : k)) }))
+    }
   }
 
   const canHit = atk && (roll.kept !== 1) && (Number.isNaN(diffNum) || isSuccess(degreeOf(roll.kept, total, diffNum)))
@@ -176,11 +186,30 @@ function CheckRoll({ req, onClose }: { req: Exclude<RollRequest, { kind: 'dice' 
           <div className="row between">
             <div>
               <div className="label">Damage</div>
-              <div className="num" style={{ fontWeight: 800 }}>{roll.kept === 20 ? atk.critFormula : atk.formula} {atk.types.join('/')}</div>
+              <div className="num" style={{ fontWeight: 800 }}>{fxMods.length ? effectFormula(atk, fxMods, roll.kept === 20) : roll.kept === 20 ? atk.critFormula : atk.formula} {atk.types.join('/')}</div>
               {roll.kept === 20 && <div className="small" style={{ color: 'var(--accent)' }}>Critical Hit: base dice doubled</div>}
             </div>
             <button className="btn primary" disabled={!canHit} onClick={rollDmg}>Roll damage</button>
           </div>
+          {linked.length > 0 && (
+            <div className="fx-pick">
+              <div className="label">Damage Effects</div>
+              <div className="chips">
+                {linked.map((s) => {
+                  const m = c && d ? damageEffectMod(s, effectiveRank(c, s, d), d) : null
+                  const on = fx.includes(s.uid)
+                  return (
+                    <button key={s.uid} className={`chip fx${on ? ' on' : ''}`} aria-pressed={on}
+                      onClick={() => { setFx((x) => (on ? x.filter((u) => u !== s.uid) : [...x, s.uid])); setDmg(null) }}>
+                      {on ? '✓ ' : ''}{s.name} <span className="muted">{m?.tag}</span>
+                    </button>
+                  )
+                })}
+              </div>
+              {fxMods.map((m) => [m.condition && `${m.name}: only on a ${m.condition}`, ...m.notes.map((n) => `${m.name}: ${n}`), m.debuffs.length > 0 && `${m.name}: target gains ${m.debuffs.map((x) => findDebuff(x)?.name ?? x).join(', ')}`])
+                .flat().filter(Boolean).map((t) => <div key={t as string} className="small" style={{ color: 'var(--accent)' }}>{t}</div>)}
+            </div>
+          )}
           {dmg && (
             <div className="roll-result">
               <div className="total">{dmg.total}</div>

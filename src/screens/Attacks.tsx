@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { STAT_ABBR, findSkill, normName } from '../data'
+import { STAT_ABBR, findSkill } from '../data'
 import { castSpell } from '../engine/actions'
+import { damageEffectsFor } from '../engine/damageEffects'
 import { effectiveRank } from '../engine/derived'
 import { attackCalc, isAttackSkill } from '../engine/attacks'
 import { ammoKey, ammoNoun, basicCount, describeAmmo, loadedAmmo, specialAmmo, usesAmmo } from '../engine/ammo'
@@ -39,10 +40,8 @@ export function Attacks(ctx: Ctx) {
             const a = attackCalc(c, s, d)
             const def = a.def
             const isSpell = s.kind === 'spell'
-            const myEffects = effects.filter((e) => {
-              const ed = findSkill(e.skillId)
-              return !!ed?.damageEffectOf && !!def && normName(ed.damageEffectOf).includes(normName(def.name))
-            })
+            // Damage Effects that ride on this attack (offered as toggles when you roll it)
+            const myEffects = damageEffectsFor(c, s)
             return (
               <article className="attack" key={s.uid}>
                 <div className="row between">

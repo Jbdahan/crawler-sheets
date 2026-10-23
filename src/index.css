@@ -448,3 +448,6 @@ html.slot-drag-active, html.slot-drag-active body { overscroll-behavior: none; }
 .turn-pip.move { background: color-mix(in srgb, var(--mana) 22%, var(--surface-2)); border-color: var(--mana); color: var(--mana); }
 .turn-pip.used { background: var(--surface-2); border-color: var(--border); color: var(--faint, var(--muted)); text-decoration: line-through; opacity: 0.6; }
 .turn-reset { flex-shrink: 0; white-space: nowrap; }
+.fx-pick { margin-top: 10px; display: grid; gap: 6px; }
+.chip.fx { cursor: pointer; }
+.chip.fx.on { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 18%, var(--surface-2)); color: var(--accent); }
