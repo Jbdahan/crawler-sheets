@@ -772,7 +772,7 @@
     "text": "Choke Out activates at 80% Health Bar or less, and deals ×8 the total damage."
    }
   },
-  "summary": "Damage Effect: double total damage against a foe at 10% Health or less."
+  "summary": "Damage Effect: ×2 total damage against a foe at 10% Health Bar or less (more at higher Ranks)."
  },
  {
   "id": "dirty-fighting",
@@ -799,7 +799,7 @@
     "text": "Also apply an immediate Minor Injury Debuff to the target."
    }
   },
-  "summary": "Damage Effect: cheap shots that make the target Woozy."
+  "summary": "Damage Effect: every hit makes the target Woozy; a Critical Fail costs you 1 Popularity."
  },
  {
   "id": "iron-punch",
@@ -828,7 +828,7 @@
     "rankDie": true
    }
   },
-  "summary": "Damage Effect: extra base damage on punches."
+  "summary": "Damage Effect: +1d2 base damage on punches."
  },
  {
   "id": "powerful-strike",
@@ -858,7 +858,7 @@
     "text": "The cooldown is 2 hours."
    }
   },
-  "summary": "Damage Effect: multiply the base dice result by this Skill's Rank."
+  "summary": "Damage Effect: multiply the base dice result by your Rank in this Skill, then add modifiers (30-hour cooldown)."
  },
  {
   "id": "skullcracker",
@@ -891,7 +891,7 @@
     "rankDie": true
    }
   },
-  "summary": "Damage Effect: extra base damage against a same-size foe."
+  "summary": "Damage Effect: +1d4 base damage against a foe the same size as you."
  },
  {
   "id": "smush",
@@ -920,7 +920,7 @@
     "text": "Smush activates at 40% Health Bar or less and deals ×4 the total damage."
    }
   },
-  "summary": "Damage Effect: multiply total damage against a badly hurt foe."
+  "summary": "Damage Effect: ×2 total damage against a foe at 20% Health Bar or less (once per round)."
  },
  {
   "id": "toss",
