@@ -12,9 +12,11 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 RAW = ROOT / "raw"
-BOOKS = ["Core", "Survival", "Crawlers", "Par"]
+BOOKS = ["Core", "Survival", "Crawlers", "Par", "Toolkit", "Tutorial"]
 # printed page = pdf index - offset
-PAGE_OFFSET = {"Core": 1, "Survival": 1, "Crawlers": 1, "Par": 1}
+PAGE_OFFSET = {"Core": 1, "Survival": 1, "Crawlers": 1, "Par": 1}  # newer dumps use the printed page labels
+# books not in the rules index: Floor and section come from their own headings (see toolkit_sections)
+OWN_SECTIONS = {"Toolkit", "Tutorial"}
 
 HEADER_RE = re.compile(r"^((?:Neighborhood|Borough|City|Quest|Province|Country|Floor) Boss|Boss|Mob|Elite|NPC|Pet|Minion|Crawler|Vehicle)\s*[;,]\s*(.*)$")
 SIZE_RE = re.compile(r"(Tiny|Small|Medium|Large|Huge|Gargantuan|Colossal|Titanic)\s*\((\d+)\)", re.I)
@@ -22,9 +24,11 @@ ATTACK_RE = re.compile(r"^(?P<name>[^:]{1,60}):\s*(?P<rest>.*\bto hit\b.*)$")
 STATS = ["str", "int", "con", "dex", "cha"]
 
 
-def junk(line, h):
+def junk(line, h, book=""):
     f, s, y = line["font"], line["size"], line["y"]
-    if f.startswith(("Arial", "CCSmash", "Potato")):
+    if book in OWN_SECTIONS and f.startswith("CCSmash") and s >= 19:
+        return False  # the Toolkit's "NEIGHBORHOOD: BOGBRICKS" titles
+    if f.startswith(("Arial", "CCSmash", "Potato", "Helvetica")):
         return True
     if f.startswith("NeueKabel-Black") and (y < 30 or y > h - 60) and s <= 12:
         return True
@@ -39,8 +43,9 @@ def stream(book):
     for p in pages:
         w = p["w"]
         h = 792
-        page = p["pdf"] - PAGE_OFFSET[book]
-        lines = [l for l in p["lines"] if not junk(l, h)]
+        label = p.get("label") or ""
+        page = int(label) if label.isdigit() else p["pdf"] - PAGE_OFFSET.get(book, 1)
+        lines = [l for l in p["lines"] if not junk(l, h, book)]
         left = sorted([l for l in lines if l["x"] < w / 2 - 10], key=lambda l: l["y"])
         right = sorted([l for l in lines if l["x"] >= w / 2 - 10], key=lambda l: l["y"])
         for l in left + right:
@@ -127,12 +132,12 @@ def parse_body(m):
         slabels.append(body[k]["text"].strip())
         k += 1
     svals = []
-    while k < len(body) and len(svals) < len(slabels) and re.fullmatch(r"[\d,]+\s*\([+-−]?\d+\)|—|-", body[k]["text"].strip()):
+    while k < len(body) and len(svals) < len(slabels) and re.fullmatch(r"[\d,]+\s*\([+-−]?\d+\)?|—|-", body[k]["text"].strip()):
         svals.append(body[k]["text"].strip())
         k += 1
     m["stats"] = {}
     for key, v in zip(STATS, svals):
-        mm = re.match(r"([\d,]+)\s*\(([+-−]?\d+)\)", v)
+        mm = re.match(r"([\d,]+)\s*\(([+-−]?\d+)\)?", v)
         if mm:
             m["stats"][key] = {"score": int(mm.group(1).replace(",", "")), "mod": int(mm.group(2).replace("−", "-"))}
     # attacks and notes
@@ -236,14 +241,53 @@ def extract(book):
             m["_ctx"] = [h[2] for h in ctx[s]]
             m["character"] = character(m["name"], ctx[s][-1] if ctx[s] else None, s)
             m["_at"] = s
+            if book in OWN_SECTIONS:
+                m["part"], m["section"] = own_sections(lines, s)
             found.append(parse_body(m))
             i = j
             continue
         i += 1
-    attach_ai(found, ai_boxes(lines))
+    attach_ai(found, ai_boxes(lines) + (inset_boxes(lines) if book in OWN_SECTIONS else []))
     for m in found:
         m.pop("_at", None)
     return found
+
+
+FLOOR_PARTS = {"the first floor": "The First Floor (Tutorial)", "the second floor": "The Second Floor (Tutorial)",
+               "threat appendix": "Threat Appendix (Floors 1–2)"}
+
+
+def _title(t):
+    small = {"of", "and", "the", "a", "an", "in", "on", "is"}
+    words = re.sub(r"\s+", " ", t).strip().split(" ")
+    cap = lambda w: re.sub(r"^([^\w]*)(\w)", lambda m: m.group(1) + m.group(2).upper(), w.lower())
+    return " ".join(cap(w) if i == 0 or w.lower() not in small else w.lower() for i, w in enumerate(words))
+
+
+def own_sections(lines, at):
+    """(part, section) for a stat block in a book with no rules index: the latest Floor chapter,
+    NEIGHBORHOOD:/QUEST: title, or Threat Appendix heading above line `at`."""
+    part, section = "Game Master’s Toolkit", None
+    k = 0
+    while k <= at:
+        l = lines[k]
+        t = l["text"].strip()
+        if l["font"].startswith("CitrusGothic") and l["size"] >= 24 and t.lower() in FLOOR_PARTS:
+            part, section = FLOOR_PARTS[t.lower()], None
+        elif l["font"].startswith("CitrusGothic") and l["size"] >= 19 and t.upper() == "ADVERSARIES":
+            part, section = "Running the Game", "Stat block example"
+        elif l["font"].startswith("CitrusGothic") and l["size"] >= 19 and part.startswith("Threat Appendix"):
+            section = _title(t.lower())
+        elif l["font"].startswith("CCSmash") and l["size"] >= 19 and re.match(r"^(NEIGHBORHOOD|QUEST)\s*:", t):
+            # a title can wrap onto the next display line ("QUEST:" / "PASSIVE (AGGRESSIVE) PERCEPTION")
+            while k + 1 <= at and lines[k + 1]["font"].startswith("CCSmash") and lines[k + 1]["size"] >= 19 \
+                    and lines[k + 1]["page"] == l["page"]:
+                k += 1
+                t += " " + lines[k]["text"].strip()
+            kind, _, name = t.partition(":")
+            section = f"{kind.strip().title()}: {_title(name.strip().lower()).replace('™', '').strip()}"
+        k += 1
+    return part, section or part
 
 
 AI_TITLE_RE = re.compile(r"^\s*(.+?)\.\s*Level\s+([\d,]+)\.?\s*$")
@@ -309,6 +353,43 @@ def ai_boxes(lines):
     return out
 
 
+def inset_boxes(lines):
+    """The Toolkit's AI boxes: a run of regular 10.5pt lines inset ~5pt into the column. The title is
+    its first line(s) through "Level N" ("Gobblin’ Gator, Level 2", or "The Bar Render. Former Lawyer…"
+    / "Level 8 Neighborhood Boss!")."""
+    inset = lambda l: (l["font"].startswith("TextbookNew-Regular") and 10.3 <= l["size"] <= 10.7
+                       and 2 <= _col_offset(l) <= 12)
+    out, i = [], 0
+    while i < len(lines):
+        if not inset(lines[i]):
+            i += 1
+            continue
+        j = i
+        while j < len(lines) and inset(lines[j]) and (j == i or lines[j]["page"] == lines[j - 1]["page"]):
+            j += 1
+        run = lines[i:j]
+        k = next((n for n, l in enumerate(run[:3]) if re.search(r"\bLevel\s+\d+", l["text"])), None)
+        if k is not None:
+            title_lines, body = run[:k + 1], run[k + 1:]
+            t = join([l["text"].strip() for l in title_lines])
+            paras, cur, prev_y = [], [], None
+            for x in body:
+                if cur and (x["y"] - prev_y > 15 or x["y"] < prev_y):
+                    paras.append(join(cur))
+                    cur = []
+                cur.append(x["text"].strip())
+                prev_y = x["y"]
+            if cur:
+                paras.append(join(cur))
+            lv = re.search(r"Level\s+([\d,]+)", t)
+            head = re.sub(r"[.,]?\s*Level\s+[\d,]+.*$", "", t)
+            names = [x.strip(" “”\"") for x in re.split(r"[.,—]\s*|\(|\)", head) if x.strip(" .“”")]
+            out.append({"at": i, "names": [head.strip(" .,")] + names if head.strip() else [t], "level": int(lv.group(1).replace(",", "")),
+                        "title": t, "text": "\n".join(paras)})
+        i = j
+    return out
+
+
 def _norm(s):
     s = re.sub(r"[^a-z ]", "", s.lower())
     return " ".join(w[:-1] if w.endswith("s") and len(w) > 3 else w for w in s.split())
@@ -337,6 +418,8 @@ def attach_ai(monsters, boxes):
                         r = max(r, 0.9)
                     sim = max(sim, r)
             level_ok = b["level"] is not None and str(b["level"]) == re.sub(r"\D", "", m["core"].get("level", ""))
+            if b["level"] is not None and not level_ok and sim < 0.95:
+                continue  # a different Level needs an exact name ("Rat" is not "Mordecai—Rat Hooligan. Level 50.")
             score = sim + (0.3 if level_ok else 0) - abs(gap) / 4000
             if (sim >= 0.6 or (level_ok and sim >= 0.35 and 0 <= gap < 150)) and score > best_score:
                 best, best_score = k, score

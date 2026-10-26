@@ -12,7 +12,7 @@ import re
 import sqlite3
 from pathlib import Path
 
-from build_monster_manual import RULES_DB, BOOK_ORDER, is_boss, key, locate, slug
+from build_monster_manual import RULES_DB, book_sort, is_boss, key, locate, slug
 
 ROOT = Path(__file__).resolve().parent
 RAW = ROOT / "raw"
@@ -100,10 +100,12 @@ def health(slots):
 def build():
     ms = json.loads((RAW / "monsters.json").read_text())
     db = sqlite3.connect(RULES_DB)
-    ms.sort(key=lambda m: (BOOK_ORDER.index(m["book"]), m["page"]))
+    for m in ms:
+        m["part"], m["section"] = locate(db, m)
+    ms.sort(key=book_sort)
     seen, out = {}, []
     for m in ms:
-        part, section = locate(db, m)
+        part, section = m["part"], m["section"]
         k = key(m)
         if k in seen:
             seen[k].setdefault("alsoPages", []).append(m["page"])

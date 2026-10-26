@@ -18,6 +18,8 @@ BOOKS = {
     "Survival": "rules_for_survival_digital_hi-res_watermarked.pdf",
     "Crawlers": "crawlers_digital_hi-res_watermarked.pdf",
     "Par": "par_for_the_course_digital_hi-res_watermarked.pdf",
+    "Toolkit": "Gamemasters Toolkit_Digital_Hi-Res_081226.pdf",
+    "Tutorial": "Atlas-Tutorial Floors_Digital_Hi-Res_081226.pdf",
 }
 
 
@@ -39,7 +41,7 @@ def dump(book):
                     "bold": any("Bold" in s["font"] for s in spans[:1]),
                     "text": "".join(s["text"] for s in l["spans"]),
                 })
-        pages.append({"pdf": i, "w": page.rect.width, "lines": lines})
+        pages.append({"pdf": i, "w": page.rect.width, "h": page.rect.height, "label": page.get_label(), "lines": lines})
     (RAW / f"lines_{book}.json").write_text(json.dumps(pages))
     print(book, len(pages), "pages")
 

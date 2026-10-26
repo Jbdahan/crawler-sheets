@@ -24,8 +24,26 @@ EDITIONS = {
 }
 RULES_DB = Path("/Users/judahan/Documents/Claude projects/dcc-rules/data/rules.db")
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-BOOK_TITLES = {"Core": "Core Rulebook", "Par": "Par for the Course"}
-BOOK_ORDER = ["Core", "Survival", "Crawlers", "Par"]
+BOOK_TITLES = {"Core": "Core Rulebook", "Par": "Par for the Course", "Toolkit": "GM’s Toolkit"}
+BOOK_ORDER = ["Core", "Survival", "Crawlers", "Par", "Toolkit", "Tutorial"]
+FLOOR_WORDS = ["First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth", "Ninth", "Tenth"]
+
+
+def part_rank(part):
+    """Where a part sits in the dungeon: the stat block examples first, then Floor by Floor
+    (the Toolkit's Threat Appendix after the Second Floor), Par for the Course last."""
+    if part == "Running the Game":
+        return 0
+    if part.startswith("Threat Appendix"):
+        return 2.5
+    mm = re.match(r"The (\w+) Floor", part)
+    if mm and mm.group(1) in FLOOR_WORDS:
+        return FLOOR_WORDS.index(mm.group(1)) + 1
+    return 50
+
+
+def book_sort(m):
+    return (part_rank(m["part"]), BOOK_ORDER.index(m["book"]), m["page"])
 BOSS_TIERS = ["Quest Boss", "Neighborhood Boss", "Borough Boss", "City Boss", "Province Boss",
               "Country Boss", "Floor Boss", "Boss"]
 STATS = [("str", "Str"), ("int", "Int"), ("con", "Con"), ("dex", "Dex"), ("cha", "Cha")]
@@ -48,6 +66,8 @@ def locate(db, m):
     ("Third Floor: The Over City", "Neighborhood: Heavensworth")."""
     if m["book"] == "Par":
         return "Par for the Course", "Par for the Course"
+    if m.get("part"):
+        return m["part"], m["section"]  # books with no rules index carry their own headings
     row = db.execute("select heading_path from chunks where book=? and page_start<=? "
                      "order by page_start desc, id desc limit 1", (m["book"], m["page"])).fetchone()
     path = row[0].split(" › ")
@@ -188,10 +208,10 @@ def level(m):
 def load():
     ms = json.loads((RAW / "monsters.json").read_text())
     db = sqlite3.connect(RULES_DB)
-    ms.sort(key=lambda m: (BOOK_ORDER.index(m["book"]), m["page"]))
     for m in ms:
         m["part"], m["section"] = locate(db, m)
         m["id"] = slug(f'{m["name"]}-{m["book"]}-{m["page"]}')
+    ms.sort(key=book_sort)
 
     # identical stat blocks printed twice (e.g. Par's quick reference) are kept once,
     # preferring the printing that has the AI's flavor box
@@ -209,7 +229,7 @@ def load():
                 refs.append((m, f))
             continue
         first[k] = m
-    uniq = sorted(first.values(), key=lambda m: (BOOK_ORDER.index(m["book"]), m["page"]))
+    uniq = sorted(first.values(), key=book_sort)
     return uniq, also, refs
 
 
@@ -519,7 +539,7 @@ TEMPLATE = """<!doctype html>
   <h1>Monster<span>Manual</span></h1>
   <div class="edition">{edition} edition</div>
   <div class="rule"></div>
-  <p>Every Mob, NPC, rival crawler and Boss stat block from the Core Rulebook and <i>Par for the Course</i>, gathered in one place.</p>
+  <p>Every Mob, NPC, rival crawler and Boss stat block from the Core Rulebook, the Game Master’s Toolkit and <i>Par for the Course</i>, gathered in one place.</p>
   <div class="counts"><div><b>{n_mobs}</b>Mobs</div><div><b>{n_npcs}</b>NPCs &amp; Crawlers</div><div><b>{n_boss}</b>Bosses</div></div>
   <div class="fine">A GM table reference compiled from your own books. Unofficial; not for distribution. Page numbers point to the source book.</div>
 </section>
