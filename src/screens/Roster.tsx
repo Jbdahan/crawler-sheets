@@ -113,6 +113,7 @@ export function Roster() {
         <p className="small faint center" style={{ margin: 0 }}>On a computer you can also drag a <b>.dcc.json</b> file onto this page.</p>
         <button className="btn ghost" onClick={() => go('/rolls')}><Icon name="dice" size={18} /> Roll log</button>
         <button className="btn ghost" onClick={() => go('/loot')}><Icon name="bag" size={18} /> GM: Loot Box Maker</button>
+        <button className="btn ghost" onClick={() => go('/encounter')}><Icon name="sword" size={18} /> GM: Encounter Builder</button>
       </div>
       <p className="small faint center" style={{ marginTop: 24 }}>
         Unofficial fan tool. Rules summaries cite the Dungeon Crawler Carl RPG Core Rulebook (Renegade Game Studios); use your book for full text.

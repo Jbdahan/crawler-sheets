@@ -5,6 +5,8 @@ import { go, useRoute } from './router'
 import { Catalog } from './screens/Catalog'
 import { CharacterView } from './screens/CharacterView'
 import { CreateWizard } from './screens/CreateWizard'
+import { EncounterBuilder, EncounterSheet } from './screens/Encounter'
+import { CustomMobEditor } from './screens/CustomMob'
 import { LootBox } from './screens/LootBox'
 import { LootClaimScreen } from './screens/LootClaim'
 import { Print } from './screens/Print'
@@ -28,6 +30,9 @@ export default function App() {
     case 'catalog': screen = <Catalog />; break
     case 'rolls': screen = <RollLog />; break
     case 'loot': screen = <LootBox />; break
+    case 'encounter': screen = <EncounterBuilder />; break
+    case 'encounter-sheet': screen = <EncounterSheet />; break
+    case 'encounter-custom': screen = <CustomMobEditor key={`${route.id}-${route.from ?? ''}`} id={route.id} from={route.from} />; break
     case 'claim': screen = <LootClaimScreen data={route.data} />; break
     case 'import': screen = <><Roster /><ImportPrompt data={route.data} /></>; break
     default: screen = <Roster />

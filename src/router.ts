@@ -8,6 +8,9 @@ export type Route =
   | { name: 'catalog' }
   | { name: 'rolls' }
   | { name: 'loot' }
+  | { name: 'encounter' }
+  | { name: 'encounter-sheet' }
+  | { name: 'encounter-custom'; id: string; from?: string }
   | { name: 'claim'; data: string }
   | { name: 'import'; data: string }
 
@@ -22,6 +25,9 @@ export function parseHash(hash: string): Route {
   if (parts[0] === 'catalog') return { name: 'catalog' }
   if (parts[0] === 'rolls') return { name: 'rolls' }
   if (parts[0] === 'loot') return { name: 'loot' }
+  if (parts[0] === 'encounter' && parts[1] === 'custom' && parts[2] === 'from') return { name: 'encounter-custom', id: 'new', from: parts[3] }
+  if (parts[0] === 'encounter' && parts[1] === 'custom') return { name: 'encounter-custom', id: parts[2] ?? 'new' }
+  if (parts[0] === 'encounter') return { name: parts[1] === 'sheet' ? 'encounter-sheet' : 'encounter' }
   return { name: 'roster' }
 }
 

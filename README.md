@@ -36,6 +36,7 @@ npm run lint
 
 ## GM tools
 - **Loot Box Maker** (Home → GM: Loot Box Maker, or `#/loot`): build an achievement + loot box with dropdowns, then Copy and paste it into Google Docs. Nothing to install.
+- **Encounter Builder** (Home → GM: Encounter Builder, or `#/encounter`): pick any Mobs, NPCs and Bosses from the books (grouped by Floor and Neighborhood/Quest, Bosses separate), set how many of each, then print one condensed sheet with Health Bar trackers. Pick a Floor to fill in the +F values. Built by `tools/build_monsters.py` (mechanics and short effect tags only, with page references). **+ Custom Mob** makes your own Mob or Boss with the book's creation rules (Core pp.270–273): pick a tier, Floor and role, and it suggests the Level, spreads the Stat points, sizes the Health Bar and fills in Table 51 attack dice. Everything stays editable, and custom Mobs are saved on the device. To start from an existing stat block, open it in the list and tap **Customize a copy** (or **Duplicate** on your own); the copy prints exactly like the original until you change it.
 - [`gdocs-lootbox/`](gdocs-lootbox/): the same generator as a Google Docs sidebar (Apps Script), for GMs who want it inside the Doc.
 
 ## Rules data
