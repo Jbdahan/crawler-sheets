@@ -235,11 +235,119 @@ def extract(book):
             m["book"] = book
             m["_ctx"] = [h[2] for h in ctx[s]]
             m["character"] = character(m["name"], ctx[s][-1] if ctx[s] else None, s)
+            m["_at"] = s
             found.append(parse_body(m))
             i = j
             continue
         i += 1
+    attach_ai(found, ai_boxes(lines))
+    for m in found:
+        m.pop("_at", None)
     return found
+
+
+AI_TITLE_RE = re.compile(r"^\s*(.+?)\.\s*Level\s+([\d,]+)\.?\s*$")
+
+
+def _col_offset(l):
+    return l["x"] - (58 if l["x"] < 300 else 315)
+
+
+def _ai_title_line(l):
+    """Box titles are bold body-size lines indented ~40pt into their column."""
+    t = l["text"].strip()
+    if not (9.5 <= l["size"] <= 10.6 and 25 <= _col_offset(l) <= 60):
+        return False
+    if l["font"].startswith("TextbookNew-Regular"):
+        # Par for the Course sets its titles in regular weight: “Derrick Qu. Level 7.
+        return bool(re.match(r"^\W*[\w’' ]+\.\s*Level\s+\d+\.?$", t))
+    return (l["font"].startswith("TextbookNew-Bold")
+            and not re.match(r"^(Notes?|Level|Surprise|Evade|Move|DR)\b", t) and " to hit" not in t)
+
+
+def ai_boxes(lines):
+    """The System AI's flavor boxes: an indented bold title ("Brain Boiler. Level 10.", or
+    "Jack Screecher. Centurion Skyfowl." + "Level 25 Neighborhood Boss!"), then its text."""
+    out = []
+    i = 0
+    while i < len(lines):
+        l = lines[i]
+        if not _ai_title_line(l):
+            i += 1
+            continue
+        title = [l["text"].strip()]
+        j = i + 1
+        # a title wrapped onto following bold lines
+        while j < len(lines) and lines[j]["font"].startswith("TextbookNew-Bold") and lines[j]["size"] <= 10.6 \
+                and 0 < lines[j]["y"] - lines[j - 1]["y"] < 20 and not re.match(r"^Notes?:", lines[j]["text"].strip()):
+            title.append(lines[j]["text"].strip())
+            j += 1
+        paras, cur, prev_y = [], [], None
+        while j < len(lines):
+            x = lines[j]
+            xt = x["text"].strip()
+            if xt == "AI":
+                j += 1
+                continue  # the "AI" badge
+            if not x["font"].startswith("TextbookNew") or is_name(x) or x["size"] > 10.6 or x["size"] < 9 \
+                    or _ai_title_line(x) or HEADER_RE.match(xt) or xt in ("Level", "Level Surprise Evade Move DR"):
+                break
+            if cur and (prev_y is None or x["y"] - prev_y > 15 or x["y"] < prev_y):
+                paras.append(join(cur))
+                cur = []
+            cur.append(xt)
+            prev_y = x["y"]
+            j += 1
+        if cur:
+            paras.append(join(cur))
+        t = join(title)
+        lv = re.search(r"Level\s+([\d,]+)", t)
+        names = [x.strip(" “”\"") for x in re.split(r"\.\s+|\(|\)", re.sub(r"\s*Level\s+[\d,]+.*$", "", t)) if x.strip(" .“”")]
+        out.append({"at": i, "names": names or [t], "level": int(lv.group(1).replace(",", "")) if lv else None,
+                    "title": t, "text": "\n".join(paras)})
+        i = j
+    return out
+
+
+def _norm(s):
+    s = re.sub(r"[^a-z ]", "", s.lower())
+    return " ".join(w[:-1] if w.endswith("s") and len(w) > 3 else w for w in s.split())
+
+
+def attach_ai(monsters, boxes):
+    """Give each stat block the nearest AI box with its name (or its Level) close before it."""
+    used = set()
+    for m in monsters:
+        best, best_score = None, 0.0
+        for k, b in enumerate(boxes):
+            if k in used:
+                continue
+            gap = m["_at"] - b["at"]
+            if not (-80 < gap < 1200):
+                continue  # boxes sit before their stat block, sometimes pages before a Boss
+            names = [m["name"]] + ([m["character"]] if m.get("character") else [])
+            sim = 0.0
+            for bn in b["names"]:
+                for n in names:
+                    x, y = _norm(bn), _norm(n)
+                    if not x or not y:
+                        continue
+                    r = difflib.SequenceMatcher(None, x, y).ratio()
+                    if x in y or y in x:
+                        r = max(r, 0.9)
+                    sim = max(sim, r)
+            level_ok = b["level"] is not None and str(b["level"]) == re.sub(r"\D", "", m["core"].get("level", ""))
+            score = sim + (0.3 if level_ok else 0) - abs(gap) / 4000
+            if (sim >= 0.6 or (level_ok and sim >= 0.35 and 0 <= gap < 150)) and score > best_score:
+                best, best_score = k, score
+        if best is None:
+            # a box set right above its stat block, titled with a character name ("Steph. Cool Kid.")
+            near = [k for k, b in enumerate(boxes) if k not in used and 0 <= m["_at"] - b["at"] < 40
+                    and b["text"] and "." in b["title"]]
+            best = near[-1] if near else None
+        if best is not None:
+            used.add(best)
+            m["ai"] = {"title": boxes[best]["title"], "text": boxes[best]["text"]}
 
 
 if __name__ == "__main__":
