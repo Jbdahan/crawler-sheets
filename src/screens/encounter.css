@@ -1,6 +1,9 @@
 /* Encounter builder (app theme) */
 .enc-builder { padding-bottom: calc(var(--safe-b) + 84px); }
 .enc-group { padding: 4px 2px 6px; }
+.enc-cat { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); margin-top: 8px; }
+.enc-cat.npcs { color: var(--good); }
+.enc-cat.bosses { color: var(--danger); }
 .enc-pick.on { background: color-mix(in srgb, var(--accent) 7%, transparent); }
 .enc-name { background: none; border: 0; padding: 0; text-align: left; color: inherit; }
 .enc-step { display: flex; align-items: center; gap: 6px; }

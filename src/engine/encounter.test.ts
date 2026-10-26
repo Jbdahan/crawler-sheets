@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { MONSTERS } from '../data/monsters'
-import { groupMonsters, hbTotal, pickedList, withFloor } from './encounter'
+import { categoryOf, groupMonsters, hbTotal, pickedList, withFloor } from './encounter'
 
 describe('encounter sheet', () => {
   it('resolves +F for the chosen Floor', () => {
@@ -17,12 +17,24 @@ describe('encounter sheet', () => {
     expect(hbTotal(bugaboo)).toBe(50)
   })
 
-  it('keeps Bosses in their own groups after the Mobs', () => {
-    const groups = groupMonsters(MONSTERS)
-    const firstBoss = groups.findIndex((g) => g.part === 'Bosses')
-    expect(firstBoss).toBeGreaterThan(0)
-    expect(groups.slice(firstBoss).every((g) => g.part === 'Bosses' && g.items.every((m) => m.boss))).toBe(true)
-    expect(groups.slice(0, firstBoss).every((g) => g.items.every((m) => !m.boss))).toBe(true)
+  it('groups Mobs, then NPCs & Crawlers, then Bosses, each in its own groups', () => {
+    for (const order of ['book', 'level'] as const) {
+      const groups = groupMonsters(MONSTERS, order)
+      const cats = groups.map((g) => g.category)
+      expect(cats.indexOf('npcs')).toBeGreaterThan(cats.lastIndexOf('mobs'))
+      expect(cats.indexOf('bosses')).toBeGreaterThan(cats.lastIndexOf('npcs'))
+      for (const g of groups) expect(g.items.every((m) => categoryOf(m) === g.category)).toBe(true)
+      expect(groups.reduce((a, g) => a + g.items.length, 0)).toBe(MONSTERS.length)
+    }
+    expect(MONSTERS.filter((m) => categoryOf(m) === 'npcs').every((m) => m.tier === 'NPC' || m.tier === 'Crawler')).toBe(true)
+  })
+
+  it('orders by Level inside Table 51 bands (Bugaboo, Level 22, in 10–29)', () => {
+    const groups = groupMonsters(MONSTERS, 'level')
+    const band = groups.find((g) => g.items.some((m) => m.name === 'Bugaboo'))!
+    expect(band).toMatchObject({ category: 'mobs', title: 'Level 10–29', sub: 'Floors 3–4' })
+    const levels = band.items.map((m) => m.level)
+    expect(levels).toEqual([...levels].sort((a, b) => a - b))
   })
 
   it('lists picks with Bosses last', () => {

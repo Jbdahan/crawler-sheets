@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
 import { MONSTERS, type MonsterDef } from '../data/monsters'
-import { emptyEncounter, groupMonsters, hbSlots, hbTotal, pickedList, withFloor, type Encounter } from '../engine/encounter'
+import {
+  CATEGORIES, categoryOf, emptyEncounter, groupMonsters, hbSlots, hbTotal, pickedList, withFloor,
+  type Category, type Encounter, type MonsterGroup, type Order,
+} from '../engine/encounter'
 import { loadCustomMobs, toMonster } from '../engine/customMob'
 import { PageRef, Seg, signed } from '../components/ui'
 import { go } from '../router'
@@ -37,7 +40,12 @@ function useCustomDefs(): MonsterDef[] {
   return useMemo(() => loadCustomMobs().map(toMonster), [])
 }
 
-type Filter = 'all' | 'mobs' | 'bosses' | 'picked'
+type Filter = 'all' | Category | 'picked'
+
+const ORDER_KEY = 'encounter.order'
+function loadOrder(): Order {
+  try { return localStorage.getItem(ORDER_KEY) === 'level' ? 'level' : 'book' } catch { return 'book' }
+}
 
 /** GM tool: pick Mobs and Bosses, then print them all on one condensed sheet. */
 export function EncounterBuilder() {
@@ -45,19 +53,28 @@ export function EncounterBuilder() {
   const custom = useCustomDefs()
   const [q, setQ] = useState('')
   const [filter, setFilter] = useState<Filter>('all')
+  const [order, setOrderState] = useState<Order>(loadOrder)
+  const setOrder = (o: Order) => {
+    setOrderState(o)
+    try { localStorage.setItem(ORDER_KEY, o) } catch { /* the choice just isn't remembered */ }
+  }
   const [part, setPart] = useState('')
   const parts = useMemo(() => [...new Set([...custom, ...MONSTERS].map((m) => m.part))], [custom])
   const n = q.trim().toLowerCase()
   const list = [...custom, ...MONSTERS].filter((m) =>
-    (filter === 'all' || (filter === 'mobs' && !m.boss) || (filter === 'bosses' && m.boss) || (filter === 'picked' && e.picks[m.id]))
+    (filter === 'all' || (filter === 'picked' ? !!e.picks[m.id] : categoryOf(m) === filter))
     && (!part || m.part === part)
     && (!n || [m.name, m.character, m.type, m.section, m.tier].some((s) => s?.toLowerCase().includes(n))))
   // the GM's own Mobs and Bosses stay together at the top
   const mine = list.filter((m) => m.book === 'Custom')
-  const groups = [
-    ...(mine.length ? [{ key: 'custom', part: 'Custom', section: 'Custom', items: mine }] : []),
-    ...groupMonsters(list.filter((m) => m.book !== 'Custom')),
+  const groups: (MonsterGroup & { custom?: boolean })[] = [
+    ...(mine.length ? [{
+      key: 'custom', category: 'mobs' as Category, title: 'Your custom Mobs', custom: true,
+      items: order === 'level' ? [...mine].sort((a, b) => a.level - b.level || a.name.localeCompare(b.name)) : mine,
+    }] : []),
+    ...groupMonsters(list.filter((m) => m.book !== 'Custom'), order),
   ]
+  const count = (c: Category) => [...custom, ...MONSTERS].filter((m) => categoryOf(m) === c).length
   const picked = pickedList(e, custom)
   const creatures = picked.reduce((a, x) => a + x.qty, 0)
 
@@ -72,9 +89,14 @@ export function EncounterBuilder() {
         <div className="row wrap">
           <Seg value={filter} onChange={setFilter} options={[
             { value: 'all', label: `All (${MONSTERS.length + custom.length})` },
-            { value: 'mobs', label: 'Mobs & NPCs' },
-            { value: 'bosses', label: 'Bosses' },
+            ...CATEGORIES.map((c) => ({ value: c.value as Filter, label: `${c.label} (${count(c.value)})` })),
             { value: 'picked', label: `Picked (${picked.length})` },
+          ]} />
+        </div>
+        <div className="row wrap">
+          <Seg value={order} onChange={setOrder} options={[
+            { value: 'book', label: 'Book order' },
+            { value: 'level', label: 'By Level' },
           ]} />
           <select value={part} onChange={(ev) => setPart(ev.target.value)} style={{ width: 'auto', flex: 1, minWidth: 180 }} aria-label="Floor">
             <option value="">Every Floor</option>
@@ -83,16 +105,21 @@ export function EncounterBuilder() {
           <button className="btn" onClick={() => go('/encounter/custom/new')}>+ Custom Mob</button>
         </div>
         {!groups.length && <div className="empty">{filter === 'picked' ? 'Nothing picked yet.' : 'No matches.'}</div>}
-        {groups.map((g) => (
-          <div key={g.key} className="card list">
+        {groups.map((g, i) => (
+          <div key={g.key} className="stack">
+            {!g.custom && (i === 0 || groups[i - 1].custom || groups[i - 1].category !== g.category) && (
+              <h2 className={`enc-cat ${g.category}`}>{CATEGORIES.find((c) => c.value === g.category)!.label}</h2>
+            )}
+            <div className="card list">
             <div className="enc-group">
-              <b>{g.key === 'custom' ? 'Your custom Mobs' : g.part === 'Bosses' ? `Bosses · ${g.section}` : g.section === g.part ? g.part : g.section}</b>
-              {g.part !== 'Bosses' && g.section !== g.part && <span className="small muted"> {g.part}</span>}
+              <b>{g.title}</b>
+              {g.sub && <span className="small muted"> {g.sub}</span>}
             </div>
             {g.items.map((m) => (
               <PickRow key={m.id} m={m} qty={e.picks[m.id] ?? 0} setQty={(v) => setQty(m.id, v)}
                 onEdit={m.book === 'Custom' ? () => go(`/encounter/custom/${m.id}`) : undefined} />
             ))}
+            </div>
           </div>
         ))}
       </div>
